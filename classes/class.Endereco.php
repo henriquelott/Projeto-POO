@@ -1,8 +1,9 @@
 <?php
   require_once "global.php";
 
-  class Endereco
+  class Endereco extends persist
   {
+    protected static $local_filename = "Endereco.txt";
     private $rua;
     private $numero;
     private $bairro;
@@ -16,6 +17,36 @@
       $this->bairro = $bairro;
       $this->complemento = $complemento;
       $this->cep = $cep;
+    }
+
+    static public function getFilename()
+    {
+      return get_called_class()::$local_filename;
+    }
+
+    public function get_rua()
+    {
+      return $this->rua;
+    }
+
+    public function get_numero()
+    {
+      return $this->numero;
+    }
+
+    public function get_bairro()
+    {
+      return $this->bairro;
+    }
+
+    public function get_complemento()
+    {
+      return $this->complemento;
+    }
+
+    public function get_cep()
+    {
+      return $this->cep;
     }
   }
 

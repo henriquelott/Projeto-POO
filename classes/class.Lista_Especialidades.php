@@ -1,0 +1,42 @@
+<?php
+  require_once "global.php";
+
+  class Lista_Especialidades extends persist
+  {
+    protected static $local_filename = "Lista_Especialidades.txt";
+    private Especialidade $especialidades = array();
+
+    function __construct()
+    {
+      $this->especialidades = Especialidade::getRecords();
+    }
+
+    static public function getFilename()
+    {
+      return get_called_class()::$local_filename;
+    }
+
+    public function encontrar_especialidade($nome_especialidade)
+    {
+      foreach ($this->especialidades as $nome)
+      {
+        if ($nome->get_nome() == $nome_especialidade)
+        {
+          return $nome;
+        }
+      }
+    }
+
+    public function get_especialidades_cadastradas()
+    {
+      return $this->especialidades;
+    }
+
+    public function cadastrar_especialidade($especialidade)
+    {
+      array_push($this->especialidades,$especialidade);
+      $this->save();
+    }
+    
+  }
+?>

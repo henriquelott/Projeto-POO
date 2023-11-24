@@ -1,68 +1,39 @@
 <?php
   require_once "global.php";
-  $bancoDeDados = new BancoDeDados();
-  $user = new Usuario('admin', 'admin', $bancoDeDados);
-  
+
+  Usuario::completar_atributos();
+
+/* Declaração de Variáveis */
+  $user = @$_REQUEST['user'];
+  $pass = @$_REQUEST['pass'];
+  $submit = @$_REQUEST['submit'];
+
+  /* Testa se o botão submit foi ativado */
+  if($submit)
+    Usuario::realizar_login($user, $pass);
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="pt-br">
   <head>
-    <meta charset="UTF-8"/>
-    <title>Clínica Odontológica</title>
+    <title>Sistema de Login :: Toolmmer</title>
+    <meta charset="UTF-8" />
+    <!-- Estilos da Index.php -->
     <style type="text/css">
-      *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      header {
-        background-color: white;
-        padding:8px 10px;
-        text-align: center;
-      }
-
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        background-image: linear-gradient(45deg, cyan, yellow);
-      }
-
-      .telaLogin {
-        background-color: rgba(100, 100, 100, 0.8);
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 50px;
-        border-radius: 15px;
-        color: #fff;
-      }
-
-      input {
-        padding: 8px;
-        border: none;
-      }
-
-      button {
-        padding: 4px;
-        cursor: pointer;
-      }
     </style>
   </head>
   <body>
-    <header>
-      <h1><center>Clínica Odontológica</center></h1>
-    </header>
+      <!-- Aqui temos o formulário
+        *Action é vazia por que vamos fazer a validação e o redirecionamento nesta mesma página.
+      -->
+      <form name="" method="post" action="">
+        <label>usuário: <input type="text" name="user" /></label><br /><br />
+        <label>senha: <input type="password" name="pass" /></label><br /><br />
+        <input type="submit" name="submit" value="entrar" />
+      </form>
 
-    <div class="telaLogin">
-      <h1><center>Login</center</h1>
-      <br><br>
-      <input type="text" placeholder="usuário">
-      <br><br>
-      <input type="password" placeholder="senha">
-      <br><br>
-      <button>entrar</button>
-    </div>
-    
+      <p>
+          <a href="_criar_perfil.php">criar perfil</a>
+      </p>
   </body>
-</html>
+</html>	
