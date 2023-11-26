@@ -7,9 +7,9 @@ class Especialidade extends persist
   protected static $local_filename = "Especialidade.txt";
   private string $nome_especialidade;
   private $procedimentos_possiveis = array();
-  private double $percentual;
+  private float $percentual;
 
-  public function __construct(string $nome_especialidade, Procedimento $procedimentos_possiveis, Lista_Especialidades &$lista, double $percentual)
+  public function __construct(string $nome_especialidade, Procedimento $procedimentos_possiveis, Lista_Especialidades &$lista, float $percentual)
   {
     foreach ($lista->get_especialidades_cadastradas() as $especialidade_cadastrada)
     {
@@ -24,7 +24,7 @@ class Especialidade extends persist
     $lista->cadastrar_especialidade($this);
   }
 
-  static public function getFilename()
+  public static function getFilename()
   {
     return get_called_class()::$local_filename;
   }

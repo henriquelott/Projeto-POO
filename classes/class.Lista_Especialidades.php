@@ -18,13 +18,14 @@
 
     public function encontrar_especialidade($nome_especialidade)
     {
-      foreach ($this->especialidades as $nome)
+      foreach ($this->especialidades as $especialidade)
       {
-        if ($nome->get_nome() == $nome_especialidade)
+        if ($especialidade->get_nome() == $nome_especialidade)
         {
-          return $nome;
+          return $especialidade;
         }
       }
+      throw(new Exception("A especialidade $nome_especialidade não foi cadastrada"));
     }
 
     public function get_especialidades_cadastradas()

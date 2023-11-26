@@ -16,7 +16,7 @@ class Procedimento extends persist
       {
           if($this->tipo_procedimento == $procedimento->get_tipo_procedimento())
           {
-            throw (new Exception('Procedimento ja esta cadastrado'));
+            throw (new Exception("Procedimento ja esta cadastrado"));
           }
       }
     $this->descricao = $descricao;
@@ -81,7 +81,7 @@ class Procedimento extends persist
 
   public function cadastrar_consulta($data, $dentista, $duracao)
   {
-    foreach($this->consultas as consultas_existentes)
+    foreach($this->consultas as $consultas_existentes)
     {
       $ano = $consultas_existentes->get_data_consulta()->get_ano();
       $mes = $consultas_existentes->get_data_consulta()->get_mes();
@@ -91,7 +91,7 @@ class Procedimento extends persist
 
       if($ano == $data->get_ano() && $mes == $data->get_mes() && $dia == $data->get_dia() && $data->get_horario() >= $horario && $data->get_horario() <= $horario + $duracao_existente)
       {
-        throw (new Exception('Ja existe uma consulta cadastrada nessa data'));
+        throw (new Exception("Ja existe uma consulta cadastrada nessa data"));
       }
       
     }
@@ -115,7 +115,7 @@ class Procedimento extends persist
           }
       }
     
-      throw (new Exception('Consulta nao consta no procedimento'));
+      throw (new Exception("Consulta nao consta no procedimento"));
   }
 
   public function cancelar_consulta_dentista(Consulta $consulta)
@@ -129,7 +129,7 @@ class Procedimento extends persist
           }
       }
 
-      throw (new Exception('Consulta nao consta no procedimento'));
+      throw (new Exception("Consulta nao consta no procedimento"));
   }
 
   public function get_consulta()

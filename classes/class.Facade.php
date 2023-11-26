@@ -54,16 +54,18 @@ class Facade extends persist
 
   public function criar_perfil($tipo_perfil, $funcionalidades, $usuario)
   {
-      try
-      {
-        $this->possui_funcionalidade($usuario, "Criar perfil");
-        new Perfil($tipo_perfil, $funcionalidades);
-      }
-      catch(Throwable $t)
-      {
-        $t->getMessage();
-        return false;
-      }
+    try
+    {
+      $this->possui_funcionalidade($usuario, "Criar perfil");
+      new Perfil($tipo_perfil, $funcionalidades);
+    }
+    catch(Throwable $t)
+    {
+      $t->getMessage();
+      return false;
+    }
+
+    return true;
   }
 
   public function criar_usuario($login, $senha, $email, $tipo_perfil, $usuario)

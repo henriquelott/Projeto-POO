@@ -8,13 +8,12 @@
     private Especialidade $especialidades = array();
     private Agenda $agenda;
     
-    function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario, $cro, Especialidade $especialidade, Data $datas_disponiveis, Data $datas_marcadas)
+    function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario, $cro, string $especialidades = array(), Lista_Especialidades $lista)
     {
       parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario);
       
       $this->cro = $cro;
-      $this->cadastrar_especialidade($especialidade);
-      $this->criar_agenda($datas_disponiveis, $datas_marcadas);
+      $this->cadastrar_especialidade($especialidades, $lista);
     }
 
     static public function getFilename()
@@ -27,17 +26,10 @@
       return $this->especialidades;
     }
 
-    public function cadastrar_especialidade(Especialidade $especialidade,Lista_Especialidades &$lista)
+    public function cadastrar_especialidade(string $nome_especialidade, Lista_Especialidades $lista)
     {
-      foreach($lista->get_especialidades_cadastradas() as $especialidade_cadastrada)
-        {
-          if($especialidade_cadastrada == $especialidade)
-          {
-            array_push($this->especialidades,$especialidade);
-            return;
-          }
-        }
-      throw(new Exception('Essa especialidade ainda nao foi cadastrada'));
+      $especialidade = $lista->encontrar_especialidade($nome_especialidade);
+      array_push($especialidades, $especialidade);
     }
 
     public function criar_agenda(Data $datas_disponiveis, Data $datas_marcadas)
@@ -47,7 +39,7 @@
         $today = getdate();
         foreach($datas_marcadas as $datas)
         {
-          if(today->tm_mday != $datas->)
+          
         }
       }
       else
@@ -55,15 +47,15 @@
         $this->agenda = new Agenda ($datas_disponiveis);
       }
     }
-    public function editar_agenda()
+    public function editar_agenda($comando)
     {
       $comando; //ler comando
       $this->agenda->editar_agenda($comando);
     }
 
-    public function get_agenda()
+    public function &get_agenda()
     {
-      return &$this->agenda;
+      return $this->agenda;
     }
   }
 

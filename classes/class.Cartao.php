@@ -1,5 +1,5 @@
 <?php
-require_once "global.php"
+require_once "global.php";
 
 class Cartao extends Forma_De_Pagamento
 {
@@ -22,21 +22,19 @@ class Cartao extends Forma_De_Pagamento
   public function cadastrar_taxa_cartao($valortotal)
   {
     
-    $taxa;
-    
     if($this->get_forma_pagamento() == "Debito")
     {
-      $taxa = 0,03*valortotal;
+      $taxa = 0.03*$valortotal;
     }
     else
     {
       if($this->parcelas <= 3)
       {
-        $taxa = 0,04*valortotal;
+        $taxa = 0.04*$valortotal;
       }
       else if($this->parcelas <= 6)
       {
-        $taxa = 0,07*valortotal;
+        $taxa = 0.07*$valortotal;
       }
     }
     
@@ -45,7 +43,7 @@ class Cartao extends Forma_De_Pagamento
   
   public function calcular_valor($valortotal)
     {
-      return $valortotal - $this->taxaCartao; 
+      return $valortotal - $this->taxa_cartao; 
     }
 
   public function get_taxa()

@@ -5,19 +5,18 @@ require_once "global.php";
   class Agenda extends persist
   {
     protected static $local_filename = "Agenda.txt";
-    private Data $data_disponiveis = array();
-    private Data $datas_marcadas = array();
+    private $datas_disponiveis = array();
+    private $datas_marcadas = array();
 
-    function __construct($datas_disponiveis, $datas_marcadas)
+    function __construct($datas_disponiveis)
     {
-      $this->datas_disponiveis = $datas_disponiveis;
-      $this->datas_marcadas = $datas_marcadas; 
+      $this->construir_agenda_padrao($datas_disponiveis);
     }
 
     function construir_agenda_padrao($datas_disponiveis)
     {
       $this->datas_disponiveis = $datas_disponiveis;
-      $this->datas_marcadas = array();
+      $this->datas_marcadas = NULL;
     }
     
     static public function getFilename()
@@ -38,11 +37,11 @@ require_once "global.php";
           break;
 
         case 'Adicionar Data' :
-          $this->adicionar_data($parametro, $this->);
+          $this->adicionar_data($parametro, $this->datas_disponiveis);
           break;
 
         case 'Remover Data' :
-          $this->remover_data($parametro);
+          $this->remover_data($parametro, $this->datas_disponiveis);
           break;
 
         default: 
@@ -84,7 +83,7 @@ require_once "global.php";
     {
       if (($key = array_search($data, $datas)) !== NULL) 
       {
-        throw(new Exception('Data já cadastrada'));
+        throw(new Exception("Data já cadastrada"));
       }
       else
       {

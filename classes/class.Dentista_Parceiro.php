@@ -8,7 +8,7 @@ class Dentista_Parceiro extends Trabalhador
   private $cro;
   private Especialidade $especialidades = array();
   private Agenda $agenda;
-  private double $comissao;
+  private float $comissao;
 
   function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $preco_consulta)
   {
@@ -26,9 +26,7 @@ class Dentista_Parceiro extends Trabalhador
 
   public function calc_comissao(Procedimento $procedimento)
   {
-    double $valor_comissao;
-
-    foreach($this->especialidades as $especialidade))
+    foreach($this->especialidades as $especialidade)
       {
         foreach($especialidade->get_procedimentos_possiveis() as $procedimento_possivel)
           {
@@ -41,7 +39,7 @@ class Dentista_Parceiro extends Trabalhador
             }
           }
       }
-    throw(new Exception('Esse procedimento nao pode ter sido realizado por esse dentista pois ele nao possui a especialidade requisitada'));
+    throw(new Exception("Esse procedimento nao pode ter sido realizado por esse dentista pois ele nao possui a especialidade requisitada"));
   }
 
   public function cadastrar_especialidade(Especialidade $especialidade,Lista_Especialidades &$lista)
@@ -54,13 +52,13 @@ class Dentista_Parceiro extends Trabalhador
           return;
         }
       }
-    throw(new Exception('Essa especialidade ainda nao foi cadastrada'));
+    throw(new Exception("Essa especialidade ainda nao foi cadastrada"));
   }
 
   public function criar_agenda(Data $datas_disponiveis, Data $datas_marcadas)
-    {
-      $this->agenda = new Agenda ($datas_disponiveis,$datas_marcadas);
-    }
+  {
+    $this->agenda = new Agenda ($datas_disponiveis,$datas_marcadas);
+  }
 
   public function editar_agenda()
   {
@@ -72,9 +70,9 @@ class Dentista_Parceiro extends Trabalhador
     return $this->especialidades;
   }
 
-  public function get_agenda()
+  public function &get_agenda()
   {
-    return &$this->agenda;
+    return $this->agenda;
   }
 }
 

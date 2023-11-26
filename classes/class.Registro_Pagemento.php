@@ -1,5 +1,5 @@
 <?php
-require_once "global.php"
+require_once "global.php";
 
 class Registro_Pagamento extends persist
 {
@@ -13,7 +13,7 @@ class Registro_Pagamento extends persist
   {
     $this->Forma_De_Pagamento = $forma_de_pagamento;
     $this->calc_valor_faturado();
-    $this->impostos = $valor_faturado * 0,2;
+    $this->impostos = $this->valor_faturado * 0.2;
     $this->calc_receita();
   }
 

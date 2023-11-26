@@ -70,7 +70,7 @@
       return $this->login;
     }
     
-    static function get_instance($login, $senha, $email, $perfil) : Usuario
+    static function get_instance($login, $senha, $email, $perfil) : ?Usuario
     {
       if (!isset(self::$instance)) 
       {

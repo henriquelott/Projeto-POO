@@ -31,7 +31,7 @@ class Perfil extends persist
     foreach ($lista_funcionalidades as $funcionalidade)
     {
       $achou = false;
-      foreach ($this->lista_funcionalidades as $key=>$index)
+      foreach ($this->lista_funcionalidades as $key=>$value)
       {
         if ($funcionalidade == $key)
         {
@@ -41,7 +41,7 @@ class Perfil extends persist
       }
       if($achou == false)
       {
-        throw (new Exception("Funcionalidade $funcionalidade não encontrada"));
+        throw (new Exception("\nFuncionalidade $funcionalidade não encontrada\n"));
       }
     }
     $this->tipo_perfil = $tipo_perfil;
@@ -68,7 +68,7 @@ class Perfil extends persist
     }
     else
     {
-      throw (new Exception("Funcionalidade não encontrada"));
+      throw (new Exception("\nFuncionalidade $funcionalidade não encontrada\n"));
     }
   }
 

@@ -7,14 +7,14 @@ class Users extends persist
     public $login;
     public $senha;
     public $email;
-    public $tipo_perfil;
+    public Perfil $perfil;
 
-    public function __construct($login, $senha, $email, $tipo_perfil)
+    public function __construct($login, $senha, $email, $perfil)
     {
       $this->login = $login;
       $this->senha = $senha;
       $this->email = $email;
-      $this->tipo_perfil = $tipo_perfil;
+      $this->perfil = $perfil;
     }
 
     static public function getFilename()
@@ -32,14 +32,14 @@ class Users extends persist
       return $this->senha;
     }
 
-    public funtion get_email()
+    public function get_email()
     {
       return $this->email;
     }
 
     public function get_perfil()
     {
-      return $this->tipo_perfil;
+      return $this->perfil;
     }
   }
 ?>
