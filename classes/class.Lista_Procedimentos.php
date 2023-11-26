@@ -10,6 +10,11 @@ class Lista_Procedimentos extends persist
     $this->procedimentos = Procedimentos::getRecords();
   }
 
+  static public function getFilename()
+    {
+      return get_called_class()::$local_filename;
+    }
+
   public function cadastrar_procedimento($procedimento)
   {
     array_push($this->procedimentos,$procedimento);

@@ -8,24 +8,15 @@
     private $senha;
     private $email;
     private Perfil $perfil;
-    
-    static private Perfil $lista_perfis = array();
-    static private Users $lista_usuarios = array();
-    static private Perfil $lista_perfis = array();
-    static private Orcamento $lista_orcamentos = array();
-    static private Tratamento $lista_tratamentos = array();
-    static private Lista_Taxas_Cartao $lista_taxas_cartao;
-    static private Trabalhador $lista_dentistas = array();
-    static private Lista_Especialidades $lista_especialidades;
-    static private Lista_Procedimentos $lista_procedimentos;
     private static ?Usuario $instance;
   
-    private function __construct($login, $senha, $email, $tipo_perfil)
+    private function __construct($login, $senha, $email, $perfil)
     {
       $this->login = $login;
       $this->senha = $senha;
       $this->email = $email;
-      $this->tipo_perfil = $perfil;
+      $this->perfil = $perfil;
+      $this->save();
     }
 
     static public function getFilename()
@@ -73,124 +64,31 @@
           echo "<script>alert('Usuário e/ou senha inválido(s), Tente novamente!');</script>";
       }
     }
+
+    public function get_login()
+    {
+      return $this->login;
+    }
     
-    static function get_instance($login, $senha, $email, $tipo_perfil) : Usuario
+    static function get_instance($login, $senha, $email, $perfil) : Usuario
     {
       if (!isset(self::$instance)) 
       {
-        self::$instance = new static($login, $senha, $email, $tipo_perfil);
+        self::$instance = new static($login, $senha, $email, $perfil);
         return self::$instance;
       }
 
       return null;
     }
 
+    public function get_perfil()
+    {
+      return $this->perfil;
+    }
+
     public function get_tipo_perfil()
     {
-      return $this->tipo_perfil;
-    }
-
-    public function criar_perfil($tipo_perfil, $funcionalidades)
-    {
-      if ($this->tipo_perfil->possui_funcionalidade($funcionalidade))
-      {
-        array_push($this->lista_perfis, new Perfil($tipo_perfil, $funcionalidades));
-      }
-      else
-      {
-        throw (new Exception("Este perfil não possui essa funcionalidade"));
-      }
-    }
-
-    //$descricao, $tipo_procedimento, $preco, &$lista
-    public function cadastrar_orcamento(Paciente $paciente, Trabalhador $dentista_responsavel, array $tipo_procedimentos)
-    {
-      
-    }
-
-    public function encontrar_procedimento(string $tipo_procedimento)
-    {
-      return $this->lista_procedimentos->get_procedimento_pelo_tipo($tipo_procedimento);
-    }
-    
-    public function aprovar_tratamento()
-    {
-      
-    }
-    
-    public function cadastrar_consulta_de_avaliacao()
-    {
-      
-    }
-
-    public function cadastrar_consulta()
-    {
-      
-    }
-
-    public function editar_agenda()
-    {
-      
-    }
-
-    public function editar_informacoes()
-    {
-      
-    }
-
-    public function cadastrar_auxiliar()
-    {
-      
-    }
-
-    public function cadastrar_secretaria()
-    {
-      
-    }
-
-    public function cadastrar_dentista()
-    {
-      
-    }
-
-    public function cadastrar_dentista_parceiro()
-    {
-
-    }
-
-    public function cadastrar_cliente()
-    {  
-      
-    }
-
-    public function cadastrar_paciente()
-    {
-      
-    }
-
-    public function cadastrar_procedimento()
-    {
-      
-    }
-
-    public function criar_procedimento()
-    {
-      
-    }
-    
-    public function cadastrar_especialidade()
-    {
-      
-    }
-
-    public function realizar_pagamento()
-    {
-      
-    }
-
-    public function criar_cadastro()
-    {
-      
+      return $this->perfil->get_tipo_perfil();
     }
     
   }

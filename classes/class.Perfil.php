@@ -7,7 +7,7 @@ class Perfil extends persist
   private $lista_funcionalidades = array
   (
     "Criar perfil" => false,
-    "Criar Cadastro" => false,
+    "Criar usuario" => false,
     "Cadastrar orcamento" => false,
     "Aprovar tratamento" => false,
     "Cadastrar consulta de avaliacao" => false,
@@ -23,15 +23,14 @@ class Perfil extends persist
     "Cadastrar procedimento" => false,
     "Criar procedimento" => false,
     "Cadastrar especialidade" => false,
-    "Cadastrar consulta de avaliacao" => false,
     "Realizar pagamento" => false
   );
 
   function __construct($tipo_perfil, $lista_funcionalidades)
   {
-    $achou = false;
     foreach ($lista_funcionalidades as $funcionalidade)
     {
+      $achou = false;
       foreach ($this->lista_funcionalidades as $key=>$index)
       {
         if ($funcionalidade == $key)
@@ -42,10 +41,16 @@ class Perfil extends persist
       }
       if($achou == false)
       {
-        throw (new Exception("Funcionalidade não encontrada"));
+        throw (new Exception("Funcionalidade $funcionalidade não encontrada"));
       }
     }
-    $this->save()
+    $this->tipo_perfil = $tipo_perfil;
+    $this->save();
+  }
+
+  static public function getFilename()
+  {
+    return get_called_class()::$local_filename;
   }
 
   public function possui_funcionalidade($funcionalidade)
@@ -54,7 +59,7 @@ class Perfil extends persist
     {
       if($this->lista_funcionalidades[$funcionalidade] == true)
       {
-        return true
+        return true;
       }
       else
       {
@@ -66,7 +71,11 @@ class Perfil extends persist
       throw (new Exception("Funcionalidade não encontrada"));
     }
   }
-  
+
+  public function get_tipo_perfil()
+  {
+    return $this->tipo_perfil;
+  }
 }
 
 ?>

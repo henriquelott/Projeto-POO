@@ -1,6 +1,7 @@
 <?php
 
-require_once "global.php"
+require_once "global.php";
+
   class Agenda extends persist
   {
     protected static $local_filename = "Agenda.txt";
@@ -37,10 +38,10 @@ require_once "global.php"
           break;
 
         case 'Adicionar Data' :
-          $this->adicionar_data($parametro);
+          $this->adicionar_data($parametro, $this->);
           break;
 
-        case 'Remover Data'
+        case 'Remover Data' :
           $this->remover_data($parametro);
           break;
 
@@ -105,14 +106,14 @@ require_once "global.php"
         }
       }
 
-    public function get_datas_marcadas()
+    public function &get_datas_marcadas()
     {
-      return &$this->datas_marcadas;
+      return $this->datas_marcadas;
     }
 
-    public function get_datas_disponiveis()
+    public function &get_datas_disponiveis()
     {
-      return &$this->datas_disponiveis;
+      return $this->datas_disponiveis;
     }
   }
 

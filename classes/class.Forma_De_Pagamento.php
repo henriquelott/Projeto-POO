@@ -16,10 +16,7 @@ abstract class Forma_De_Pagamento extends persist
       return get_called_class()::$local_filename;
     }
 
-    abstract public function calcular_valor($valortotal)
-    {
-      
-    }
+    abstract public function calcular_valor($valortotal);
     
     public function get_forma_pagamento()
     {

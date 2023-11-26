@@ -6,7 +6,7 @@ class Dentista_Parceiro extends Trabalhador
 {
   protected static $local_filename = "Dentista_Parceiro.txt";
   private $cro;
-  private Especialidade $especialidades = array()
+  private Especialidade $especialidades = array();
   private Agenda $agenda;
   private double $comissao;
 
