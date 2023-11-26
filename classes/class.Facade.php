@@ -61,7 +61,8 @@ class Facade extends persist
       }
       catch(Throwable $t)
       {
-          return false;
+        $t->getMessage();
+        return false;
       }
   }
 
@@ -82,7 +83,8 @@ class Facade extends persist
     }
     catch(Throwable $t)
     {
-      return;
+      $t->getMessage();
+      return false;
     }  
   }
 
@@ -95,7 +97,8 @@ class Facade extends persist
     }
     catch(Throwable $t)
     {
-      return;
+      $t->getMessage();
+      return false;
     }
   }
 
@@ -106,40 +109,43 @@ class Facade extends persist
   
   public function aprovar_tratamento(Usuario $usuario)
   {
-    $this->possui_funcionalidade($usuario, "Aprovar tratamento");
+    
       try
       {
-
+        $this->possui_funcionalidade($usuario, "Aprovar tratamento");
       }
       catch(Throwable $t)
       {
-        return;
+        $t->getMessage();
+        return false;
       }
   }
   
   public function cadastrar_consulta_de_avaliacao(Usuario $usuario)
   {   
-      $this->possui_funcionalidade($usuario, "Cadastrar consulta de avalicao");
+      
       try
       {
-
+        $this->possui_funcionalidade($usuario, "Cadastrar consulta de avalicao");
       }
       catch(Throwable $t)
       {
-        return;
+        $t->getMessage();
+        return false;
       }
   }
 
   public function cadastrar_consulta(Usuario $usuario)
   {
-      $this->possui_funcionalidade($usuario, "Cadastrar consulta");
+      
       try
       {
-
+        $this->possui_funcionalidade($usuario, "Cadastrar consulta");
       }
       catch(Throwable $t)
       {
-        return;
+        $t->getMessage();
+        return false;
       }
   }
 
@@ -151,7 +157,8 @@ class Facade extends persist
       }
       catch(Throwable $t)
       {
-        return;
+        $t->getMessage();
+        return false;
       }
   }
 
@@ -163,7 +170,8 @@ class Facade extends persist
       }
       catch(Throwable $t)
       {
-        return;
+        $t->getMessage();
+        return false;
       }
   }
 
@@ -175,7 +183,8 @@ class Facade extends persist
       }
       catch(Throwable $t)
       {
-        return;
+        $t->getMessage();
+        return false;
       }
   }
 
@@ -187,22 +196,21 @@ class Facade extends persist
       }
       catch(Throwable $t)
       {
-        return;
+        $t->getMessage();
+        return false;
       }
   }
 
   public function cadastrar_dentista(Usuario $usuario)
   {
-    if()
+    try
     {
-      try
-      {
-        $this->possui_funcionalidade($usuario, "Cadastrar dentista");
-      }
-      catch(Throwable $t)
-      {
-        return;
-      }
+      $this->possui_funcionalidade($usuario, "Cadastrar dentista");
+    }
+    catch(Throwable $t)
+    {
+      $t->getMessage();
+      return false;
     }
   }
 
@@ -214,7 +222,8 @@ class Facade extends persist
       }
       catch(Throwable $t)
       {
-        return;
+        $t->getMessage();
+        return false;
       }
   }
 
@@ -226,7 +235,8 @@ class Facade extends persist
     }
     catch(Throwable $t)
     {
-      return;
+      $t->getMessage();
+      return false;
     }
   }
 
@@ -238,7 +248,8 @@ class Facade extends persist
     }
     catch(Throwable $t)
     {
-      return;
+      $t->getMessage();
+      return false;
     }
   }
 
@@ -250,7 +261,8 @@ class Facade extends persist
     }
     catch(Throwable $t)
     {
-      return;
+      $t->getMessage();
+      return false;
     }
   }
 
@@ -262,7 +274,8 @@ class Facade extends persist
     }
     catch(Throwable $t)
     {
-      return;
+      $t->getMessage();
+      return false;
     }
   }
   
@@ -274,7 +287,8 @@ class Facade extends persist
     }
     catch(Throwable $t)
     {
-      return;
+      $t->getMessage();
+      return false;
     }
   }
 
@@ -286,7 +300,8 @@ class Facade extends persist
     }
     catch(Throwable $t)
     {
-      return;
+      $t->getMessage();
+      return false;
     }
   }
 }
