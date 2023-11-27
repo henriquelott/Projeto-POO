@@ -3,7 +3,7 @@ require_once "global.php";
 
 class Perfil extends persist 
 {
-  private $tipo_perfil;
+  private $nome_perfil;
   private $lista_funcionalidades = array
   (
     "Criar perfil" => false,
@@ -26,25 +26,21 @@ class Perfil extends persist
     "Realizar pagamento" => false
   );
 
-  function __construct($tipo_perfil, $lista_funcionalidades)
+  function __construct($nome_perfil, $lista_funcionalidades)
   {
     foreach ($lista_funcionalidades as $funcionalidade)
     {
-      $achou = false;
       foreach ($this->lista_funcionalidades as $key=>$value)
       {
         if ($funcionalidade == $key)
         {
           $this->lista_funcionalidades[$key] = true;
-          $achou = true;
+          break;
         }
-      }
-      if($achou == false)
-      {
         throw (new Exception("\nFuncionalidade $funcionalidade não encontrada\n"));
       }
     }
-    $this->tipo_perfil = $tipo_perfil;
+    $this->nome_perfil = $nome_perfil;
     $this->save();
   }
 
@@ -72,9 +68,9 @@ class Perfil extends persist
     }
   }
 
-  public function get_tipo_perfil()
+  public function get_nome_perfil()
   {
-    return $this->tipo_perfil;
+    return $this->nome_perfil;
   }
 }
 
