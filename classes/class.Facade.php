@@ -340,7 +340,7 @@ class Facade extends persist
     try
     {
       $this->possui_funcionalidade($usuario, "Realizar consulta");
-      self::getRecordsByField()
+      self::getRecordsByField();
       
     }
     catch(Throwable $t)

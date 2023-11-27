@@ -37,6 +37,7 @@ class Dentista_Parceiro extends Dentista
       }
     throw(new Exception("Esse procedimento nao pode ter sido realizado por esse dentista pois ele nao possui a especialidade requisitada"));
   }
+}
 
 ?>
 

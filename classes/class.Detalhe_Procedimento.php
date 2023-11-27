@@ -5,7 +5,7 @@ class Detalhe_Procedimento extends persist
   {
     protected static $local_filename = "Detalhe_Procedimento.txt";
     private string $detalhamento_procedimento;
-    private Orcamento $orcamentos = array();
+    private $orcamentos = array();
 
     function __construct($detalhamento_procedimento)
     {
