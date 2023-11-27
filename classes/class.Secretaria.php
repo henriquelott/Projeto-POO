@@ -8,8 +8,9 @@ class Secretaria extends Trabalhador
   
   function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario)
   {
-    parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, true);
+    parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep);
     $this->salario = $salario;
+    $this->save();
   }
 
   static public function getFilename()

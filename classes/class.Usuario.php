@@ -16,6 +16,8 @@
       $this->senha = $senha;
       $this->email = $email;
       $this->perfil = $perfil;
+
+      $this->save();
     }
 
     static public function getFilename()
@@ -51,7 +53,6 @@
           if(!isset($_SESSION)) {
              session_start();
           }
-          //$_SESSION['Usuario'] = $user;
 
           $Usuario = Usuario::get_instance($perfil[0]->login, $perfil[0]->senha, $perfil[0]->email);
           $Usuario->save();
@@ -73,6 +74,11 @@
       return null;
     }
 
+    static function is_instance() : bool
+    {
+      return
+    }
+
     public function get_login()
     {
       return $this->login;
@@ -85,4 +91,4 @@
     
   }
 
-?>
+?> 

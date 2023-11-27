@@ -17,7 +17,7 @@ class Perfil extends persist
     "Editar informacoes" => false,
     "Cadastrar auxiliar" => false, 
     "Cadastrar secretaria" => false,
-    "Cadastrar dentista" => false,
+    "Cadastrar dentista funcionario" => false,
     "Cadastrar dentista parceiro" => false,
     "Cadastrar cliente" => false, 
     "Cadastrar paciente" => false,
@@ -52,21 +52,13 @@ class Perfil extends persist
 
   public function possui_funcionalidade($funcionalidade)
   {
-    if(isset($this->lista_funcionalidades[$funcionalidade]))
-    {
-      if($this->lista_funcionalidades[$funcionalidade] == true)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+    foreach(array_keys($this->lista_funcionalidades) as $key))
+    {  
+      if($key == $funcionalidade)
+        return $this->lista_funcionalidades[$funcionalidade];
     }
-    else
-    {
-      throw (new Exception("\nFuncionalidade $funcionalidade não encontrada\n"));
-    }
+    
+    throw (new Exception("\nFuncionalidade $funcionalidade não encontrada\n"));
   }
 
   public function get_nome_perfil()

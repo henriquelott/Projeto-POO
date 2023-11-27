@@ -5,16 +5,17 @@
   {
     protected static $local_filename = "Orcamento.txt";
     protected Paciente $paciente;
-    protected $dentista_responsavel;
+    protected  Dentista $dentista_responsavel;
     protected $procedimentos = array();
     protected float $valor_total;
 
-    function __construct(Paciente $paciente, $dentista_responsavel, array $procedimentos)
+    function __construct(Paciente $paciente, Dentista $dentista_responsavel, array $procedimentos, ?$valor_total)
     {
       $this->paciente = $paciente;
       $this->dentista_responsavel = $dentista_responsavel;
       $this->procedimentos = $procedimentos;
       $this->calcular_orcamento();
+      $this->save();
     }
 
     static public function getFilename()
@@ -64,9 +65,19 @@
       $this->save();
     }
 
-    public function realizar_consulta()
+    public function realizar_consulta(Datetime $data, Consulta $consulta)
     {
       
+    }
+
+    public function get_paciente()
+    {
+      return $this->paciente;
+    }
+
+    public function get_dentista_responsavel()
+    {
+      return $this->dentista_responsavel;
     }
     
     public function get_procedimentos()
@@ -74,9 +85,9 @@
       return $this->procedimentos;
     }
 
-    public function get_paciente()
+    public function get_valor_total()
     {
-      return $this->paciente;
+      return $this->valor_total;
     }
   }
 ?>

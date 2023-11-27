@@ -7,11 +7,12 @@ class Dentista_Parceiro extends Dentista
   protected static $local_filename = "Dentista_Parceiro.txt";
   protected float $comissao;
 
-  function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista,)
+  function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista)
   {
-    parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista, false);
+    parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista);
     
     $this->comissao = 0.0;
+    $this->save();
     
   }
 

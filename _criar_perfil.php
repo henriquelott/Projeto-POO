@@ -14,26 +14,7 @@ $email = @$_REQUEST['email'];
 //$perfil = @$_REQUEST['perfil'];
 
 if($submit1) {
-  if(null != ($user && $pass && $email))
-    {
-      $nome_usuario = Users::getRecordsByField("usuario", $user);
-      if($nome_usuario != null)
-      {
-        echo "<script>alert('Nome de usuário já existe!');</script>";
-      }
-    
-      else
-      {
-        $perfil = new Perfil($nome_perfil, $lista_funcionalidades);
-        new Users($user, $pass, $email, $perfil);
-
-        echo "<script>alert('Perfil criado com sucesso!');</script>";
-      }
-    
-  }
-  else {
-    echo "<script>alert('Preencha todos os campos!');</script>";    
-  }
+  
 }
 
 ?>

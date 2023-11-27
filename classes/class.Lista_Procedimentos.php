@@ -37,7 +37,7 @@ class Lista_Procedimentos extends persist
     return $this->procedimentos;
   }
 
-  public function get_procedimento_pelo_tipo($tipo_procedimento)
+  public function get_procedimento_pelo_tipo($tipo_procedimento) : Procedimento
   {
     foreach($this->procedimentos as $procedimento)
     {

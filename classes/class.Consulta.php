@@ -30,7 +30,7 @@
       return $this->dentista_responsavel;
     }
 
-    public function get_data_consulta()
+    public function get_data()
     {
       return $this->data_consulta;
     }

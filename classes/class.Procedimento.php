@@ -79,7 +79,7 @@ class Procedimento extends persist
     return $this->preco;
   }
 
-  public function cadastrar_consulta($data, $dentista, $duracao)
+  public function &cadastrar_consulta($data, &$dentista, $duracao)
   {
     foreach($this->consultas as $consultas_existentes)
     {
@@ -132,7 +132,7 @@ class Procedimento extends persist
       throw (new Exception("Consulta nao consta no procedimento"));
   }
 
-  public function get_consulta()
+  public function &get_consulta()
   {
    return $this->consultas;   
   }

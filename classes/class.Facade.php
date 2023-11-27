@@ -22,21 +22,18 @@ class Facade extends persist
     *iniciamos uma sessão e redirecionamos o usuário para o painel */
     else
     {
-      $perfil = Users::getRecordsByField("login", $user);
-      $tipo_perfil = $perfil[0]->tipo_perfil;
+      $cadastro = Users::getRecordsByField("login", $user);
+      $nome_perfil = $cadastro[0]->perfil->nome_perfil;
 
-      if($perfil[0]->senha == $pass) 
+      if($cadastro[0]->senha == $pass) 
       {
         if(!isset($_SESSION)) {
             session_start();
         }
-        //$_SESSION['Usuario'] = $user;
 
-        $Usuario = Usuario::get_instance($perfil[0]->login, $perfil[0]->senha, $perfil[0]->email, $perfil[0]->tipo_perfil);
-        $Usuario->save();
+        Usuario::get_instance($cadastro[0]->login, $cadastro[0]->senha, $cadastro[0]->email, $cadastro[0]->perfil->nome_perfil);
 
-        //header("Location: _painel.php");
-        header("Location: _painel.php?usuario=$user&tipo_perfil=$tipo_perfil");
+        header("Location: _painel.php");
         }
         echo "<script>alert('Usuário e/ou senha inválido(s), Tente novamente!');</script>";
     }
@@ -59,7 +56,7 @@ class Facade extends persist
     try
     {
       $this->possui_funcionalidade($usuario, "Criar perfil");
-      $novo_perfil = new Perfil($tipo_perfil, $funcionalidades);
+      new Perfil($tipo_perfil, $funcionalidades);
     }
     catch(Throwable $t)
     {
@@ -70,15 +67,32 @@ class Facade extends persist
     return true;
   }
 
-  public function criar_usuario($login, $senha, $email, $tipo_perfil, $usuario)
+  public function criar_usuario($login, $senha, $email, $nome_perfil, $usuario)
   {
     try
     {  
       $this->possui_funcionalidade($usuario, "Criar usuario");
-      $perfil = self::getRecordsByField("tipo_perfil", $tipo_perfil);
+      $perfil = Perfil::getRecordsByField("nome_perfil", $nome_perfil);
       if(!empty($perfil))
       {
-       $novo_usuario = new Usuario ($login, $senha, $email, $perfil[0]);
+        if(null != ($login && $senha && $email))
+          {
+            $user = Users::getRecordsByField("usuario", $usuario);
+            if($user != null)
+            {
+              echo "<script>alert('Nome de usuário já existe!');</script>";
+              throw (new Exception("Nome de usuário já existe"));
+            }
+
+            else
+            {
+              new Users($usuario, $senha, $email, $perfil);
+              echo "<script>alert('Cadastro criado com sucesso!');</script>";
+            }
+          }
+        else {
+          echo "<script>alert('Preencha todos os campos!');</script>";    
+        }
       }
       else
       {
@@ -128,7 +142,9 @@ class Facade extends persist
 
   public function encontrar_procedimento(string $tipo_procedimento)
   {
-    $procedimento = self::getRecordsByField("tipo_procedimento", $tipo_procedimento);
+    $lista_procedimentos = Lista_Procedimentos::getRecords();
+    $procedimento = $lista_procedimentos[0]->get_procedimento_pelo_tipo(tipo_procedimento);
+    
     if(!empty($procedimento))
     {
       return $procedimento[0];
@@ -141,30 +157,30 @@ class Facade extends persist
   
   public function aprovar_orcamento(Usuario $usuario, Orcamento $orcamento)
   {
-    
-      try
-      {
-        $this->possui_funcionalidade($usuario, "Aprovar orcamento");
-      }
-      catch(Throwable $t)
-      {
-        $t->getMessage();
-        return false;
-      }
+    try
+    {
+      $this->possui_funcionalidade($usuario, "Aprovar orcamento");
+      new Tratamento($orcamento->get_paciente(), $orcamento->get_dentista_responsavel(), $orcamento->get_procedimentos(), $orcamento->get_valor_total());
+    }
+    catch(Throwable $t)
+    {
+      $t->getMessage();
+      return false;
+    }
   }
   
-  public function cadastrar_consulta_de_avaliacao(Usuario $usuario)
-  {   
-      
-      try
-      {
-        $this->possui_funcionalidade($usuario, "Cadastrar consulta de avalicao");
-      }
-      catch(Throwable $t)
-      {
-        $t->getMessage();
-        return false;
-      }
+  public function cadastrar_consulta_de_avaliacao(, Paciente, Usuario $usuario)
+  {    
+    try
+    {
+      $this->possui_funcionalidade($usuario, "Cadastrar consulta de avalicao");
+      $
+    }
+    catch(Throwable $t)
+    {
+      $t->getMessage();
+      return false;
+    }
   }
 
   public function cadastrar_consulta(Usuario $usuario)
@@ -207,72 +223,124 @@ class Facade extends persist
       }
   }
 
-  public function cadastrar_auxiliar(Usuario $usuario)
+  public function cadastrar_auxiliar(Usuario $usuario, $nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario)
   {
       try
       {
         $this->possui_funcionalidade($usuario, "Cadastrar auxiliar");
+
+        $cpf_cadastrados = Auxiliar::getRecordsByField("cpf",$cpf);
+
+        if(!empty($cpf_cadastrados))
+        {
+          throw(new Exception("Esse auxiliar já está cadastrado"));
+        }
+        $novo_auxiliar = new Auxiliar($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario);
+        
       }
       catch(Throwable $t)
       {
         $t->getMessage();
         return false;
       }
+    return true;
   }
 
-  public function cadastrar_secretaria(Usuario $usuario)
-  {
-      try
-      {
-        $this->possui_funcionalidade($usuario, "Cadastrar secretaria");
-      }
-      catch(Throwable $t)
-      {
-        $t->getMessage();
-        return false;
-      }
-  }
-
-  public function cadastrar_dentista(Usuario $usuario)
+  public function cadastrar_secretaria(Usuario $usuario,$nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario)
   {
     try
     {
-      $this->possui_funcionalidade($usuario, "Cadastrar dentista");
+        $this->possui_funcionalidade($usuario, "Cadastrar secretaria");
+
+        $cpf_cadastrados = Secretaria::getRecordsByField("cpf",$cpf);
+
+        if(!empty($cpf_cadastrados))
+        {
+          throw(new Exception("Essa secretária já está cadastrado"));
+        }
+        $nova_secretaria = new Secretaria($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario);
+
     }
-    catch(Throwable $t)
-    {
-      $t->getMessage();
-      return false;
-    }
+      catch(Throwable $t)
+      {
+        $t->getMessage();
+        return false;
+      }
+    return true;
   }
 
-  public function cadastrar_dentista_parceiro(Usuario $usuario)
+  public function cadastrar_dentista_funcionario(Usuario $usuario, $nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista)
   {
-      try
-      {
-        $this->possui_funcionalidade($usuario, "Cadastrar dentista parceiro");
+    try
+    {
+        $this->possui_funcionalidade($usuario, "Cadastrar dentista funcionario");
+
+        $cpf_cadastrados = Dentista_Funcionario::getRecordsByField("cpf",$cpf);
+
+        if(!empty($cpf_cadastrados))
+        {
+          throw(new Exception("Esse dentista funcionario já está cadastrado"));
+        }
+        $novo_dentista_funcionario = new Dentista_Funcionario($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $especialidades, Lista_Especialidades $lista);
+
       }
       catch(Throwable $t)
       {
         $t->getMessage();
         return false;
       }
+    return true;
   }
 
-  public function cadastrar_cliente(Usuario $usuario)
+  public function cadastrar_dentista_parceiro(Usuario $usuario, $nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista)
+  {
+    try
+      {
+          $this->possui_funcionalidade($usuario, "Cadastrar dentista parceiro");
+
+          $cpf_cadastrados = Dentista_Parceiro::getRecordsByField("cpf",$cpf);
+
+          if(!empty($cpf_cadastrados))
+          {
+            throw(new Exception("Esse dentista parceiro já está cadastrado"));
+          }
+          $novo_dentista_parceiro = new Dentista_Parceiro($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $especialidades, $lista);
+
+        }
+        catch(Throwable $t)
+        {
+          $t->getMessage();
+          return false;
+        }
+      return true;
+    }
+  }
+
+  public function cadastrar_cliente(Usuario $usuario, $nome, $email, $telefone, $rg, $cpf)
   {  
     try
-    {
-      $this->possui_funcionalidade($usuario, "Cadastrar cliente");
-    }
-    catch(Throwable $t)
-    {
-      $t->getMessage();
-      return false;
+      {
+          $this->possui_funcionalidade($usuario, "Cadastrar cliente");
+
+          $cpf_cadastrados = Cliente::getRecordsByField("cpf",$cpf);
+
+          if(!empty($cpf_cadastrados))
+          {
+            throw(new Exception("Esse cliente já está cadastrado"));
+          }
+          $novo_cliente = new Cliente($nome, $email, $telefone, $rg, $cpf);
+
+        }
+        catch(Throwable $t)
+        {
+          $t->getMessage();
+          return false;
+        }
+      return true;
     }
   }
 
-  public function cadastrar_paciente(Usuario $usuario)
+  public function cadastrar_paciente(Usuario $usuario, $nome, $email, $telefone, $rg, Datetime $nascimento)
   {
     try
     {
@@ -342,14 +410,16 @@ class Facade extends persist
     try
     {
       $this->possui_funcionalidade($usuario, "Realizar consulta");
-      $paciente->realizar_consulta($data);
-      
+      $date_time = new DateTime($data);
+      $paciente->realizar_consulta($date_time);
     }
     catch(Throwable $t)
     {
       $t->getMessage();
       return false;
     }
+
+    return true;
   }
 }
 

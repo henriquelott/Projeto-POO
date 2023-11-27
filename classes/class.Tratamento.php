@@ -5,12 +5,12 @@ class Tratamento extends Orcamento
   {
     protected static $local_filename = "Tratamento.txt";
     private $registro_pagamento;
-
     private bool $foi_realizado = false;
 
-    function __construct($paciente, $dentista_responsavel, array $procedimentos)
+    function __construct($paciente, $dentista_responsavel, array $procedimentos, $valor_total)
     {
-      parent::__construct($paciente, $dentista_responsavel, $procedimentos);
+      parent::__construct($paciente, $dentista_responsavel, $procedimentos, $valor_total);
+      $this->save();
     }
 
     static public function getFilename()

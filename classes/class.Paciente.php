@@ -5,15 +5,16 @@
   {
     protected static $local_filename = "Paciente.txt";
     protected $rg;
-    protected $nascimento;
+    protected Datetime $nascimento;
     protected $clientes = array ();
     protected $consultas = array();
 
-    function __contruct($nome, $email, $telefone, $rg, $nascimento)
+    function __contruct($nome, $email, $telefone, $rg, Datetime $nascimento)
     {
       parent::__construct($nome, $email, $telefone);
       $this->rg = $rg;
       $this->nascimento = $nascimento;
+      $this->save();
     }
 
     public function remover_consultas_realizadas(Consulta $consulta)
@@ -56,14 +57,14 @@
     {
       foreach ($this->consultas as $key=>$consulta)
       {
-        if($consulta->get_data() == $data)
+        if($consulta->get_data()->get_data_inicio() == $data)
         {
           $consulta->foi_realizada();
           unset($this->consultas[$key]);
           return;
         }
       }
-      throw(new Exception("Nenhuma consulta marcada para este paciente nesta data"));
+      throw(new Exception("Nenhuma consulta marcada para este paciente nesta data e horário"));
     }
   }
 

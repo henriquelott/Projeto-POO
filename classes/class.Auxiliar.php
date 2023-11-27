@@ -7,8 +7,9 @@
     protected static $local_filename = "Auxiliar.txt";
     function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $salario)
     {
-      parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, true);
-      $this->salario = $salario
+      parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep);
+      $this->salario = $salario;
+      $this->save();
     }
 
     static public function getFilename()

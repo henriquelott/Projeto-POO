@@ -5,8 +5,8 @@ require_once "global.php";
 class Cliente extends Pessoa
 {
   protected static $local_filename = "Cliente.txt";
-  protected $rg;
-  protected $cpf;
+  private $rg;
+  private $cpf;
   
   function __construct($nome, $email, $telefone, $rg, $cpf)
   {
@@ -14,6 +14,7 @@ class Cliente extends Pessoa
     
     $this->rg = $rg;
     $this->cpf = $cpf;
+    $this->save();
   }
 
   static public function getFilename()
