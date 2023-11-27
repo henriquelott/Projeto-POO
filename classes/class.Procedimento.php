@@ -10,7 +10,7 @@ class Procedimento extends persist
   private $descricao;
   private Detalhe_Procedimento $detalhamento;
 
-  function __construct($descricao, $tipo_procedimento, $preco, &$lista)
+  function __construct($descricao, $tipo_procedimento, $preco, &$lista, string $detalhe)
   {
      foreach($lista->get_procedimentos_cadastrados() as $procedimento)
       {
@@ -23,7 +23,7 @@ class Procedimento extends persist
     $this->tipo_procedimento = $tipo_procedimento;      
     $this->preco = $preco;
     $lista->cadastrar_procedimento($this);
-
+    $this->detalhamento = new Detalhe_Procedimento($detalhe);
   }
 
   static public function getFilename()

@@ -11,10 +11,10 @@ $submit1 = @$_REQUEST['submit1'];
 $user = @$_REQUEST['user'];
 $pass = @$_REQUEST['pass'];
 $email = @$_REQUEST['email'];
-$tipo_perfil = @$_REQUEST['tipo_perfil'];
+//$perfil = @$_REQUEST['perfil'];
 
 if($submit1) {
-  if(null != ($user && $pass && $email && $tipo_perfil))
+  if(null != ($user && $pass && $email))
     {
       $nome_usuario = Users::getRecordsByField("usuario", $user);
       if($nome_usuario != null)
@@ -24,7 +24,9 @@ if($submit1) {
     
       else
       {
-        $users = new Users($user, $pass, $email, $tipo_perfil);
+        $lista_funcionalidades = array('Criar perfil');
+        $perfil = new Perfil('admin', $lista_funcionalidades);
+        $users = new Users($user, $pass, $email, $perfil);
         $users->save();
 
         echo "<script>alert('Perfil criado com sucesso!');</script>";

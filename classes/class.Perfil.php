@@ -9,7 +9,7 @@ class Perfil extends persist
     "Criar perfil" => false,
     "Criar usuario" => false,
     "Cadastrar orcamento" => false,
-    "Aprovar tratamento" => false,
+    "Aprovar orcamento" => false,
     "Cadastrar consulta de avaliacao" => false,
     "Cadastrar consulta" => false,
     "Editar agenda" => false,

@@ -10,13 +10,12 @@
     private Perfil $perfil;
     private static ?Usuario $instance;
   
-    private function __construct($login, $senha, $email, $perfil)
+    private function __construct($login, $senha, $email)
     {
       $this->login = $login;
       $this->senha = $senha;
       $this->email = $email;
-      $this->perfil = $perfil;
-      $this->save();
+      //$this->perfil = $perfil;
     }
 
     static public function getFilename()
@@ -46,7 +45,6 @@
       else
       {
         $perfil = Users::getRecordsByField("login", $user);
-        $tipo_perfil = $perfil[0]->tipo_perfil;
 
         if($perfil[0]->senha == $pass) 
         {
@@ -55,19 +53,13 @@
           }
           //$_SESSION['Usuario'] = $user;
 
-          $Usuario = Usuario::get_instance($perfil[0]->login, $perfil[0]->senha, $perfil[0]->email, $perfil[0]->tipo_perfil);
+          $Usuario = Usuario::get_instance($perfil[0]->login, $perfil[0]->senha, $perfil[0]->email);
           $Usuario->save();
 
-          //header("Location: _painel.php");
-          header("Location: _painel.php?usuario=$user&tipo_perfil=$tipo_perfil");
+          header("Location: _painel.php");
           }
           echo "<script>alert('Usuário e/ou senha inválido(s), Tente novamente!');</script>";
       }
-    }
-
-    public function get_login()
-    {
-      return $this->login;
     }
     
     static function get_instance($login, $senha, $email, $perfil) : ?Usuario
@@ -81,14 +73,14 @@
       return null;
     }
 
+    public function get_login()
+    {
+      return $this->login;
+    }
+
     public function get_perfil()
     {
       return $this->perfil;
-    }
-
-    public function get_tipo_perfil()
-    {
-      return $this->perfil->get_tipo_perfil();
     }
     
   }

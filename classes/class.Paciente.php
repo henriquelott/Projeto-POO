@@ -4,10 +4,10 @@
   class Paciente extends Pessoa
   {
     protected static $local_filename = "Paciente.txt";
-    private $rg;
-    private $nascimento;
-    private $clientes = array ();
-    private $consultas = array();
+    protected $rg;
+    protected $nascimento;
+    protected $clientes = array ();
+    protected $consultas = array();
 
     function __contruct($nome, $email, $telefone, $rg, $nascimento)
     {
@@ -16,6 +16,17 @@
       $this->nascimento = $nascimento;
     }
 
+    public function remover_consultas_realizadas(Consulta $consulta)
+    {
+      $key = array_search($consulta, $this->consultas);
+      if($key !== NULL)
+      {
+        unset($this->consultas[$key]);
+        return;
+      }
+      throw(new Exception("Consulta não encontrada"));
+    }
+    
     static public function getFilename()
     {
       return get_called_class()::$local_filename;

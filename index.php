@@ -1,8 +1,6 @@
 <?php
   require_once "global.php";
 
-  Usuario::completar_atributos();
-
 /* Declaração de Variáveis */
   $user = @$_REQUEST['user'];
   $pass = @$_REQUEST['pass'];

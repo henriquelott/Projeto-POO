@@ -2,19 +2,15 @@
 
 require_once "global.php";
 
-class Dentista_Parceiro extends Trabalhador 
+class Dentista_Parceiro extends Dentista 
 {
   protected static $local_filename = "Dentista_Parceiro.txt";
-  private $cro;
-  private Especialidade $especialidades = array();
-  private Agenda $agenda;
-  private float $comissao;
+  protected float $comissao;
 
-  function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $preco_consulta)
+  function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista,)
   {
-    parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, false);
+    parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista, false);
     
-    $this->cro = $cro;
     $this->comissao = 0.0;
     
   }
@@ -41,40 +37,6 @@ class Dentista_Parceiro extends Trabalhador
       }
     throw(new Exception("Esse procedimento nao pode ter sido realizado por esse dentista pois ele nao possui a especialidade requisitada"));
   }
-
-  public function cadastrar_especialidade(Especialidade $especialidade,Lista_Especialidades &$lista)
-  {
-    foreach($lista->get_especialidades_cadastradas() as $especialidade_cadastrada)
-      {
-        if($especialidade_cadastrada == $especialidade)
-        {
-          array_push($this->especialidades,$especialidade);
-          return;
-        }
-      }
-    throw(new Exception("Essa especialidade ainda nao foi cadastrada"));
-  }
-
-  public function criar_agenda(Data $datas_disponiveis, Data $datas_marcadas)
-  {
-    $this->agenda = new Agenda ($datas_disponiveis,$datas_marcadas);
-  }
-
-  public function editar_agenda()
-  {
-    $this->agenda->editar_agenda();
-  }
-  
-  public function get_especialidades()
-  {
-    return $this->especialidades;
-  }
-
-  public function &get_agenda()
-  {
-    return $this->agenda;
-  }
-}
 
 ?>
 

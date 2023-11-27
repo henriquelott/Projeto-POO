@@ -4,10 +4,10 @@
   class Consulta extends persist
   {
     protected static $local_filename = "Consulta.txt";
-    private Data $data_consulta;
-    private Horario $duracao;
-    private $dentista_responsavel;
-    private $foi_realizada = false;
+    protected Data $data_consulta;
+    protected Horario $duracao;
+    protected $dentista_responsavel;
+    protected $foi_realizada = false;
 
     function __construct(Data $data_consulta, $dentista_responsavel, $duracao)
     {

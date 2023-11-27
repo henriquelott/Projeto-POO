@@ -57,14 +57,14 @@ class Facade extends persist
     try
     {
       $this->possui_funcionalidade($usuario, "Criar perfil");
-      new Perfil($tipo_perfil, $funcionalidades);
+      $novo_perfil = new Perfil($tipo_perfil, $funcionalidades);
     }
     catch(Throwable $t)
     {
       $t->getMessage();
       return false;
     }
-
+    $this->save();
     return true;
   }
 
@@ -73,10 +73,10 @@ class Facade extends persist
     try
     {  
       $this->possui_funcionalidade($usuario, "Criar usuario");
-      $perfil = self::getRecordsByField($tipo_perfil, $tipo_perfil);
+      $perfil = self::getRecordsByField("tipo_perfil", $tipo_perfil);
       if(!empty($perfil))
       {
-        new Usuario ($login, $senha, $email, $perfil[0]);
+       $novo_usuario = new Usuario ($login, $senha, $email, $perfil[0]);
       }
       else
       {
@@ -87,7 +87,9 @@ class Facade extends persist
     {
       $t->getMessage();
       return false;
-    }  
+    } 
+    $this->save();
+    return true;
   }
 
   //$descricao, $tipo_procedimento, $preco, &$lista
@@ -96,25 +98,51 @@ class Facade extends persist
     try
     {
       $this->possui_funcionalidade($usuario, "Cadastrar orcamento");
+      foreach($paciente->get_consultas() as $consultas_nao_realizadas)
+        {
+          if(get_class($consultas_nao_realizadas) == "Consulta_Avaliacao")
+          {
+            throw(new Exception("A consulta de avaliacao do paciente ainda nao foi realizada"));
+          }
+        }
+
+      $procedimentos = array();
+      $lista = array();
+
+      foreach($tipo_procedimentos as $tipo_procedimento)
+        {
+          array_push($lista,$this->encontrar_procedimento($tipo_procedimento));
+        }
+      $novo_orcamento = new Orcamento($paciente, $dentista_responsavel, $lista);
     }
     catch(Throwable $t)
     {
       $t->getMessage();
       return false;
     }
+    $this->save();
+    return true;
   }
 
   public function encontrar_procedimento(string $tipo_procedimento)
   {
-    
+    $procedimento = self::getRecordsByField("tipo_procedimento", $tipo_procedimento);
+    if(!empty($procedimento))
+    {
+      return $procedimento[0];
+    }
+    else 
+    {
+      throw (new Exception("\nProcedimento $tipo_procedimento não encontrado\n"));
+    }
   }
   
-  public function aprovar_tratamento(Usuario $usuario)
+  public function aprovar_orcamento(Usuario $usuario, Orcamento $orcamento)
   {
     
       try
       {
-        $this->possui_funcionalidade($usuario, "Aprovar tratamento");
+        $this->possui_funcionalidade($usuario, "Aprovar orcamento");
       }
       catch(Throwable $t)
       {
@@ -299,6 +327,21 @@ class Facade extends persist
     try
     {
       $this->possui_funcionalidade($usuario, "Realizar pagamento");
+    }
+    catch(Throwable $t)
+    {
+      $t->getMessage();
+      return false;
+    }
+  }
+
+  public function realizar_consulta(Paciente $paciente, string $tipo_procedimento, Usuario $usuario)
+  {
+    try
+    {
+      $this->possui_funcionalidade($usuario, "Realizar consulta");
+      self::getRecordsByField()
+      
     }
     catch(Throwable $t)
     {
