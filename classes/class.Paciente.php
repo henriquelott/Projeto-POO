@@ -42,25 +42,28 @@
       
     }
 
-    public function get_clientes()
+    public function &get_clientes()
     {
       return $this->clientes;
     }
 
-    public function get_consultas()
+    public function &get_consultas()
     {
       return $this->consultas;
     }
 
     public function realizar_consulta(DateTime $data)
     {
-      foreach ($this->consultas as $consulta)
+      foreach ($this->consultas as $key=>$consulta)
       {
         if($consulta->get_data() == $data)
         {
-          
+          $consulta->foi_realizada();
+          unset($this->consultas[$key]);
+          return;
         }
       }
+      throw(new Exception("Nenhuma consulta marcada para este paciente nesta data"));
     }
   }
 

@@ -342,7 +342,7 @@ class Facade extends persist
     try
     {
       $this->possui_funcionalidade($usuario, "Realizar consulta");
-      $paciente->get_consultas()
+      $paciente->realizar_consulta($data);
       
     }
     catch(Throwable $t)
