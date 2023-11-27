@@ -4,6 +4,13 @@ require_once "global.php";
 
 class Facade extends persist
 {
+  protected static $local_filename = "Facade.txt";
+  
+  static public function getFilename()
+  {
+    return get_called_class()::$local_filename;
+  }
+  
   public function realizar_login($user, $pass)
   {
     /* Se o campo usuário ou senha estiverem vazios geramos um alerta */
@@ -33,11 +40,6 @@ class Facade extends persist
         }
         echo "<script>alert('Usuário e/ou senha inválido(s), Tente novamente!');</script>";
     }
-  }
-
-  static public function getFilename()
-  {
-    return get_called_class()::$local_filename;
   }
 
   private function possui_funcionalidade($usuario, $funcionalidade)
@@ -335,12 +337,12 @@ class Facade extends persist
     }
   }
 
-  public function realizar_consulta(Paciente $paciente, string $tipo_procedimento, Usuario $usuario)
+  public function realizar_consulta(Paciente $paciente, string $data, Usuario $usuario)
   {
     try
     {
       $this->possui_funcionalidade($usuario, "Realizar consulta");
-      self::getRecordsByField();
+      $paciente->get_consultas()
       
     }
     catch(Throwable $t)

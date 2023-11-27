@@ -51,6 +51,17 @@
     {
       return $this->consultas;
     }
+
+    public function realizar_consulta(DateTime $data)
+    {
+      foreach ($this->consultas as $consulta)
+      {
+        if($consulta->get_data() == $data)
+        {
+          
+        }
+      }
+    }
   }
 
 ?>

@@ -14,6 +14,11 @@ class Data extends persist
     $this->data_fim = $data_fim;
   }
 
+  public function get_data_inicio()
+  {
+    return $this->data_inicio;
+  }
+
   static public function getFilename()
   {
     return get_called_class()::$local_filename;

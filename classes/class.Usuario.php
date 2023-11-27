@@ -10,12 +10,12 @@
     private Perfil $perfil;
     private static ?Usuario $instance;
   
-    private function __construct($login, $senha, $email)
+    private function __construct($login, $senha, $email, $perfil)
     {
       $this->login = $login;
       $this->senha = $senha;
       $this->email = $email;
-      //$this->perfil = $perfil;
+      $this->perfil = $perfil;
     }
 
     static public function getFilename()

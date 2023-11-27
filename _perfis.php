@@ -16,13 +16,13 @@
   require_once "global.php";
   //include('protect.php');
 
-  $perfis = Users::getRecords();
+  $cadastros = Users::getRecords();
 
-  foreach( $perfis as $perfil )
+  foreach( $cadastros as $cadastro )
   {
-    echo "<p>" . "Usuário: " . $perfil->login . "</p>";
-    echo "<p>" . "E-mail: " . $perfil->email . "</p>";
-    echo "<p>" . "Tipo de Perfil: " . $perfil->tipo_perfil . "</p>";
+    echo "<p>" . "Usuário: " . $cadastro->login . "</p>";
+    echo "<p>" . "E-mail: " . $cadastro->email . "</p>";
+    echo "<p>" . "Nome do Perfil: " . $cadastro->get_perfil()->get_nome_perfil() . "</p>";
     echo "</br>";
   }
 

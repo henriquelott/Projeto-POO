@@ -15,6 +15,8 @@ class Users extends persist
       $this->senha = $senha;
       $this->email = $email;
       $this->perfil = $perfil;
+
+      $this->save();
     }
 
     static public function getFilename()

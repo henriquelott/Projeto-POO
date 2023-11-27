@@ -3,6 +3,7 @@ require_once "global.php";
 
 class Perfil extends persist 
 {
+  protected static $local_filename = "Perfil.txt";
   private $nome_perfil;
   private $lista_funcionalidades = array
   (

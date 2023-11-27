@@ -5,7 +5,6 @@
   {
     protected static $local_filename = "Consulta.txt";
     protected Data $data_consulta;
-    protected Horario $duracao;
     protected $dentista_responsavel;
     protected $foi_realizada = false;
 
@@ -43,7 +42,12 @@
 
     public function get_duracao()
     {
-      return $this->duracao->get_horario_minutos();
+      
+    }
+
+    public function get_data_inicio()
+    {
+      return $this->data_consulta->get_data_inicio();
     }
 
     public function cancelar_consulta_dentista()

@@ -24,10 +24,8 @@ if($submit1) {
     
       else
       {
-        $lista_funcionalidades = array('Criar perfil');
-        $perfil = new Perfil('admin', $lista_funcionalidades);
-        $users = new Users($user, $pass, $email, $perfil);
-        $users->save();
+        $perfil = new Perfil($nome_perfil, $lista_funcionalidades);
+        new Users($user, $pass, $email, $perfil);
 
         echo "<script>alert('Perfil criado com sucesso!');</script>";
       }
