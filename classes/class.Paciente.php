@@ -16,8 +16,6 @@
       $this->nascimento = $nascimento;
       $this->rg = $rg;
       $this->nascimento = $nascimento;
-
-      echo "\nsalvou\n";
       $this->save();
     }
 

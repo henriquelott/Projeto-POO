@@ -4,10 +4,10 @@ require_once "global.php";
 class Procedimento extends persist
 {
   protected static $local_filename = "Procedimento.txt";
-  protected Consulta $consultas = array();
-  protected $preco;
-  protected $tipo_procedimento;
-  protected $descricao;
+  protected array $consultas;
+  protected float $preco;
+  protected string $tipo_procedimento;
+  protected string $descricao;
   protected Detalhe_Procedimento $detalhamento;
   protected Data $data;
 

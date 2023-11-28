@@ -94,13 +94,25 @@
 
     public function cadastrar_procedimento($lista, $tipo_procedimento)
     {
+      if (get_class($this) == "Orcamento")
+      {
+        $this->cadastrar_procedimento($lista, $tipo_procedimento);  
+      }
+      else
+      {
+        throw(new Exception("\nNão é possível cadastrar um procedimento em um tratamento\n"));
+      }
+    }
+
+    private function realizar_cadastro_procedimento($lista, $tipo_procedimento)
+    {
       $novo_procedimento = $lista->get_procedimento_pelo_tipo($tipo_procedimento);
       
       foreach($this->procedimentos as $procedimento)
       {
         if($procedimento == $novo_procedimento)
         {
-          throw (new Exception ('O procedimento ja esta cadastrado'));
+          throw (new Exception ("\nO procedimento já está cadastrado\n"));
         }
       }
 
