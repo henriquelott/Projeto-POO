@@ -4,8 +4,8 @@ require_once "global.php";
 class Data extends persist
 {
   protected static $local_filename = "Data.txt";
-  private DateTime $data_inicio;
-  private DateTime $data_fim;
+  protected DateTime $data_inicio;
+  protected DateTime $data_fim;
   
 
   function construct(DateTime $data_inicio, DateTime $data_fim)

@@ -5,8 +5,8 @@ require_once "global.php";
 class Cliente extends Pessoa
 {
   protected static $local_filename = "Cliente.txt";
-  private $rg;
-  private $cpf;
+  protected $rg;
+  protected $cpf;
   
   function __construct($nome, $email, $telefone, $rg, $cpf)
   {

@@ -4,8 +4,8 @@ require_once "global.php";
 class Tratamento extends Orcamento
   {
     protected static $local_filename = "Tratamento.txt";
-    private Registro_Pagamento $registro_pagamento;
-    private bool $foi_realizado = false;
+    protected Registro_Pagamento $registro_pagamento;
+    protected bool $foi_realizado = false;
 
     function __construct($paciente, $dentista_responsavel, array $procedimentos, Forma_De_Pagamento $forma_pagamento)
     {

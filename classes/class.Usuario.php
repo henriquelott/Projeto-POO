@@ -4,11 +4,11 @@
   class Usuario extends persist
   {
     protected static $local_filename = "Usuario.txt";
-    private $login;
-    private $senha;
-    private $email;
-    private Perfil $perfil;
-    private static ?Usuario $instance;
+    protected $login;
+    protected $senha;
+    protected $email;
+    protected Perfil $perfil;
+    protected static ?Usuario $instance;
   
     private function __construct($login, $senha, $email, $perfil)
     {
@@ -72,11 +72,6 @@
       }
 
       return null;
-    }
-
-    static function is_instance() : bool
-    {
-      return
     }
 
     public function get_login()

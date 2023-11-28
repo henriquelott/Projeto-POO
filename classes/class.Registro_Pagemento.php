@@ -4,11 +4,11 @@ require_once "global.php";
 class Registro_Pagamento extends persist
 {
   protected static $local_filename = "Registro_Pagamento.txt";
-  private Forma_De_Pagamento $forma_de_pagamento;
-  private $valor_faturado;
-  private $impostos;
-  private $receita;
-  private Data $data_pagamento;
+  protected Forma_De_Pagamento $forma_de_pagamento;
+  protected $valor_faturado;
+  protected $impostos;
+  protected $receita;
+  protected Data $data_pagamento;
 
   function construct (Forma_De_Pagamento $forma_de_pagamento)
   {

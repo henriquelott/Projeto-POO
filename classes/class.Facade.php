@@ -55,7 +55,7 @@ class Facade extends persist
   {
     try
     {
-      $this->possui_funcionalidade($usuario, "Criar perfil");
+      $this->possui_funcionalidade($usuario, __FUNCTION__);
       new Perfil($tipo_perfil, $funcionalidades);
     }
     catch(Throwable $t)
@@ -126,9 +126,10 @@ class Facade extends persist
       $lista = array();
 
       foreach($tipo_procedimentos as $tipo_procedimento)
-        {
-          array_push($lista,$this->encontrar_procedimento($tipo_procedimento));
-        }
+      {
+        array_push($lista,$this->encontrar_procedimento($tipo_procedimento));
+      }
+
       $novo_orcamento = new Orcamento($paciente, $dentista_responsavel, $lista);
     }
     catch(Throwable $t)
@@ -178,15 +179,11 @@ class Facade extends persist
     }
   }
   
-  public function cadastrar_consulta_de_avaliacao(int $dentista_cpf, int $rg_paciente, string $data, Usuario $usuario)
+  public function cadastrar_consulta_de_avaliacao(Dentista $dentista, Paciente $paciente, string $data, Usuario $usuario)
   {    
     try
     {
       $this->possui_funcionalidade($usuario, "Cadastrar consulta de avalicao");
-      
-      $dentista_f = Dentista_Funcionario::getRecordsByField("cpf", $dentista_cpf)[0];
-      $dentista_p = Dentista_Parceiro::getRecordsByField("cpf", $dentista_cpf)[0];
-      $paciente = Paciente::getRecordsByField("rg", $rg_paciente)[0];
 
       $data_inicio = new DateTime($data);
       $interval = DateInterval::createFromDateString('30 minutes');
@@ -195,20 +192,12 @@ class Facade extends persist
 
       if(!empty($paciente))
       {
-        if(!empty($dentista_p))
+        if(!empty($dentista))
         {
-          $dentista_p->editar_agenda("cadastrar consulta", $data_consulta);
-          $consulta_avaliacao = new Consulta_Avaliacao($data_consulta, $dentista_p);
-          $paciente->cadastar_consulta($consulta_avaliacao);
+          $dentista->editar_agenda("cadastrar consulta", $data_consulta);
+          $consulta_avaliacao = new Consulta_Avaliacao($data_consulta, $dentista);
+          $paciente->cadastrar_consulta($consulta_avaliacao);
           
-          return true;
-        }
-        else if(!empty($dentista_f))
-        {
-          $dentista_f->editar_agenda("cadastrar consulta", $data_consulta);
-          $consulta_avaliacao = new Consulta_Avaliacao($data_consulta, $dentista_p);
-          $paciente->cadastar_consulta($consulta_avaliacao);
-
           return true;
         }
         else
@@ -315,19 +304,21 @@ class Facade extends persist
     return true;
   }
 
-  public function cadastrar_dentista_funcionario(Usuario $usuario, $nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista)
+  public function cadastrar_dentista_funcionario(Usuario $usuario, Dentista_Funcionario $dentista_Funcionario)
   {
     try
     {
       $this->possui_funcionalidade($usuario, "Cadastrar dentista funcionario");
 
-      $cpf_cadastrados = Dentista_Funcionario::getRecordsByField("cpf",$cpf);
+      $dentistas = Dentista_Funcionario::getRecords();
 
-      if(!empty($cpf_cadastrados))
+      foreach($dentistas as $dentista)
       {
-        throw(new Exception("Esse dentista funcionario já está cadastrado"));
+        if($dentista == $dentista_Funcionario)
+        {
+          throw(new Exception("Este dentista já está cadastrado"));
+        }
       }
-      $novo_dentista_funcionario = new Dentista_Funcionario($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $especialidades, $lista);
 
     }
     catch(Throwable $t)

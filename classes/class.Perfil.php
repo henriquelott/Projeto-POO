@@ -3,9 +3,9 @@ require_once "global.php";
 
 class Perfil extends persist 
 {
-  protected static $local_filename = "Perfil.txt";
-  private $nome_perfil;
-  private $lista_funcionalidades = array
+  protected static string $local_filename = "Perfil.txt";
+  protected string $nome_perfil;
+  protected array $lista_funcionalidades = array
   (
     "Criar perfil" => false,
     "Criar usuario" => false,
@@ -52,7 +52,7 @@ class Perfil extends persist
 
   public function possui_funcionalidade($funcionalidade)
   {
-    foreach(array_keys($this->lista_funcionalidades) as $key))
+    foreach(array_keys($this->lista_funcionalidades) as $key)
     {  
       if($key == $funcionalidade)
         return $this->lista_funcionalidades[$funcionalidade];

@@ -4,12 +4,12 @@ require_once "global.php";
 class Cartao extends Forma_De_Pagamento
 {
   protected static $local_filename = "Cartao.txt";
-  private $taxa_cartao;
-  private $parcelas;
+  protected $taxa_cartao;
+  protected ?int $parcelas;
 
-  function construct($forma_pagamento, $parcelas)
+  function __construct(string $forma_pagamento, ?int $parcelas)
   {
-    parent::construct($forma_pagamento);
+    parent::__construct($forma_pagamento);
     $this->parcelas = $parcelas;
   }
 

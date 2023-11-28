@@ -5,8 +5,8 @@ require_once "global.php";
   class Agenda extends persist
   {
     protected static $local_filename = "Agenda.txt";
-    private $datas_disponiveis = array();
-    private $datas_marcadas = array();
+    protected array $datas_disponiveis;
+    protected array $datas_marcadas;
 
     function __construct($datas_disponiveis)
     {
@@ -16,7 +16,7 @@ require_once "global.php";
     function construir_agenda_padrao($datas_disponiveis)
     {
       $this->datas_disponiveis = $datas_disponiveis;
-      $this->datas_marcadas = NULL;
+      $this->datas_marcadas = array();
     }
     
     static public function getFilename()

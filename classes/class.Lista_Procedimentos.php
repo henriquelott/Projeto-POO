@@ -3,7 +3,7 @@ require_once "global.php";
 class Lista_Procedimentos extends persist
 {
   protected static $local_filename = "Lista_Procedimentos.txt";
-  private Procedimento $procedimentos = array();
+  protected Procedimento $procedimentos = array();
 
   function __construct()
   {

@@ -5,9 +5,9 @@ require_once "global.php";
 class Especialidade extends persist
 {
   protected static $local_filename = "Especialidade.txt";
-  private string $nome_especialidade;
-  private $procedimentos_possiveis = array();
-  private float $percentual;
+  protected string $nome_especialidade;
+  protected $procedimentos_possiveis = array();
+  protected float $percentual;
 
   public function __construct(string $nome_especialidade, Procedimento $procedimentos_possiveis, Lista_Especialidades &$lista, float $percentual)
   {

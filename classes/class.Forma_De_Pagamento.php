@@ -6,7 +6,7 @@ abstract class Forma_De_Pagamento extends persist
     protected static $local_filename = "Forma_De_Pagamento.txt";
     protected $forma_pagamento;
 
-    function construct ($forma_pagamento)
+    function __construct ($forma_pagamento)
     {
       $this->formaPagamento = $forma_pagamento;
     }

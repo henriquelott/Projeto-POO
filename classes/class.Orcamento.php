@@ -33,20 +33,41 @@
     
     public function aprovar_orcamento(string $forma_pagamento, ?int $num_parcelas)
     {
-      if($forma_pagamento == "Dinheiro" || $forma_pagamento == "Pix")
+      if(($forma_pagamento == "Dinheiro" || $forma_pagamento == "Pix") && $num_parcelas == NULL)
       {
         $pagamento = new A_Vista($forma_pagamento);
+        $pagamento->save(); 
       }
       else if ($forma_pagamento == "Cartão de crédito" || $forma_pagamento == "Cartão de débito")
       {
         switch($forma_pagamento)
         {
           case "Cartão de crédito":
-            $pagamento = new Cartao($forma_pagamento);
+            if($num_parcelas >= 1 && $num_parcelas <= 6)
+            {
+              $pagamento = new Cartao($forma_pagamento, $num_parcelas);
+              $pagamento->save();
+            }
+            else
+            {
+              throw(new Exception("\nNumero de Parcelas deve estar entre 1 e 0\n"));
+            }
             break;
           
           case "Cartão de débito":
-            
+            if($num_parcelas == NULL)
+            {
+              $pagamento = new Cartao($forma_pagamento, 1);
+              $pagamento->save();
+            }
+            else 
+            {
+              throw(new Exception("Cartão de débito não possui parcelas"));
+            }
+            break;
+
+          default:
+            throw(new Exception(""));
 
           
         }

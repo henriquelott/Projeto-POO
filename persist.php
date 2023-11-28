@@ -80,5 +80,8 @@
             return print_r($this);
         }
 
-        abstract static public function getFilename();
+        static public function getFilename()
+        {
+          return get_called_class() . ".txt";
+        }
     }

@@ -9,11 +9,15 @@
     protected $clientes = array ();
     protected $consultas = array();
 
-    function __contruct($nome, $email, $telefone, $rg, Datetime $nascimento)
+    function __construct($nome, $email, $telefone, $rg, string $nascimento)
     {
       parent::__construct($nome, $email, $telefone);
+      $nascimento = new DateTime($nascimento);
+      $this->nascimento = $nascimento;
       $this->rg = $rg;
       $this->nascimento = $nascimento;
+
+      echo "\nsalvou\n";
       $this->save();
     }
 
@@ -26,11 +30,6 @@
         return;
       }
       throw(new Exception("Consulta não encontrada"));
-    }
-    
-    static public function getFilename()
-    {
-      return get_called_class()::$local_filename;
     }
 
     public function cadastrar_cliente($cliente)

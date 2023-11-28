@@ -4,8 +4,8 @@ require_once "global.php";
 class Detalhe_Procedimento extends persist
   {
     protected static $local_filename = "Detalhe_Procedimento.txt";
-    private string $detalhamento_procedimento;
-    private $orcamentos = array();
+    protected string $detalhamento_procedimento;
+    protected $orcamentos = array();
 
     function __construct($detalhamento_procedimento)
     {

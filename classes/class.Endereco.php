@@ -4,11 +4,11 @@
   class Endereco extends persist
   {
     protected static $local_filename = "Endereco.txt";
-    private $rua;
-    private $numero;
-    private $bairro;
-    private $complemento;
-    private $cep;
+    protected $rua;
+    protected $numero;
+    protected $bairro;
+    protected $complemento;
+    protected $cep;
 
     function __construct($rua, $numero, $bairro, $complemento, $cep)
     {

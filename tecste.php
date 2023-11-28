@@ -1,14 +1,12 @@
 <?php 
 
-  $data = new DateTime('2023-10-8 14:00:00');
+require_once "global.php";
 
-  echo "\n", $data->format('Y-m-d H:i:s'), "\n";
+  $paciente = new Paciente('joao', 'joao@gmail.com', '33467847', '44i404332', '2000-11-12');
 
-  $interval = DateInterval::createFromDateString('30 minutes');
+  $pacientico = Paciente::getRecordsByField('nome', 'joao');
 
-  $nova_data = $data->add($interval);
-
-  echo "\n", $nova_data->format('Y-m-d H:i:s'), "\n";
+  var_dump($pacientico);
 
 
 ?>

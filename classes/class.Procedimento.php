@@ -4,14 +4,14 @@ require_once "global.php";
 class Procedimento extends persist
 {
   protected static $local_filename = "Procedimento.txt";
-  private Consulta $consultas = array();
-  private $preco;
-  private $tipo_procedimento;
-  private $descricao;
-  private Detalhe_Procedimento $detalhamento;
-  private Data $data;
+  protected Consulta $consultas = array();
+  protected $preco;
+  protected $tipo_procedimento;
+  protected $descricao;
+  protected Detalhe_Procedimento $detalhamento;
+  protected Data $data;
 
-  private bool $foi_realizado = false;
+  protected bool $foi_realizado = false;
 
   function __construct($descricao, $tipo_procedimento, $preco, &$lista, string $detalhe)
   {
@@ -22,7 +22,7 @@ class Procedimento extends persist
           throw (new Exception("Procedimento ja esta cadastrado"));
         }
     }
-    
+
     $this->descricao = $descricao;
     $this->tipo_procedimento = $tipo_procedimento;      
     $this->preco = $preco;
