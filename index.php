@@ -8,7 +8,20 @@
 
   /* Testa se o botão submit foi ativado */
   if($submit)
-    Usuario::realizar_login($user, $pass);
+  {
+    if(null == ($user && $pass))
+      echo "<script>alert('Por favor, preencha todos os campos!');</script>";
+    
+    else
+    {
+      if(Facade::realizar_login($user, $pass))
+        header("Location: _painel.php");
+
+      else
+        "<script>alert('Usuário e/ou senha inválido(s), Tente novamente!');</script>";
+    }
+
+  }
 ?>
 
 <!DOCTYPE html>

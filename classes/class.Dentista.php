@@ -3,7 +3,7 @@
 
   abstract class Dentista extends Trabalhador
   {
-    protected static $local_filename = "Funcionario.txt";
+    protected static $local_filename = "Dentista.txt";
     protected $cro;
     protected $especialidades = array();
     protected Agenda $agenda;

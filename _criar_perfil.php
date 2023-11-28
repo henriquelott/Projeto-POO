@@ -13,8 +13,13 @@ $pass = @$_REQUEST['pass'];
 $email = @$_REQUEST['email'];
 //$perfil = @$_REQUEST['perfil'];
 
-if($submit1) {
-  
+if($submit1)
+{
+  if(null != ($user && $pass && $email)) 
+    Facade::criar_usuario($user, $pass, $email, $nome_perfil, $Usuario);
+
+  else
+    echo "<script>alert('Preencha todos os campos!');</script>";
 }
 
 ?>
