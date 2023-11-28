@@ -34,7 +34,7 @@
         array_push($especialidades, $especialidade);
     }
 
-    public function criar_agenda(Data $datas_disponiveis, Data $datas_marcadas)
+    public function criar_agenda(array $datas_disponiveis, array $datas_marcadas)
     {
       if(count($datas_marcadas) != 0)
       {
@@ -49,10 +49,10 @@
         $this->agenda = new Agenda ($datas_disponiveis);
       }
     }
-    public function editar_agenda($comando)
+    public function editar_agenda($comando, $data)
     {
       $comando; //ler comando
-      $this->agenda->editar_agenda($comando);
+      $this->agenda->editar_agenda($comando, $data);
     }
 
     public function &get_agenda()

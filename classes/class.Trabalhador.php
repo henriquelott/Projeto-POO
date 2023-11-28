@@ -5,7 +5,6 @@
   {
     protected static $local_filename = "Trabalhador.txt";
     protected $cpf;
-    protected bool $is_funcionario;
     protected Endereco $endereco;
 
     function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep)

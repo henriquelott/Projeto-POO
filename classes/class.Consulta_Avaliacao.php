@@ -10,9 +10,9 @@ class Consulta_Avaliacao extends Consulta
       return get_called_class()::$local_filename;
     }
 
-    function __construct(Data $data_consulta, $dentista_responsavel, $duracao)
+    function __construct(Data $data_consulta, $dentista_responsavel)
     {
-      parent::__construct($data_consulta, $dentista_responsavel, $duracao);
+      parent::__construct($data_consulta, $dentista_responsavel);
     }
   }
 

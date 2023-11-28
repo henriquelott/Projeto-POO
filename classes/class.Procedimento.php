@@ -9,16 +9,20 @@ class Procedimento extends persist
   private $tipo_procedimento;
   private $descricao;
   private Detalhe_Procedimento $detalhamento;
+  private Data $data;
+
+  private bool $foi_realizado = false;
 
   function __construct($descricao, $tipo_procedimento, $preco, &$lista, string $detalhe)
   {
-     foreach($lista->get_procedimentos_cadastrados() as $procedimento)
-      {
-          if($this->tipo_procedimento == $procedimento->get_tipo_procedimento())
-          {
-            throw (new Exception("Procedimento ja esta cadastrado"));
-          }
-      }
+    foreach($lista->get_procedimentos_cadastrados() as $procedimento)
+    {
+        if($this->tipo_procedimento == $procedimento->get_tipo_procedimento())
+        {
+          throw (new Exception("Procedimento ja esta cadastrado"));
+        }
+    }
+    
     $this->descricao = $descricao;
     $this->tipo_procedimento = $tipo_procedimento;      
     $this->preco = $preco;

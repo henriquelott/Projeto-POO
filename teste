@@ -1,0 +1,5 @@
+<?php
+
+echo "\n funciona ou nao\nvamos ver agora\n";
+
+?>

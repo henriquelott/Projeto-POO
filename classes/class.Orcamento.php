@@ -9,7 +9,7 @@
     protected $procedimentos = array();
     protected float $valor_total;
 
-    function __construct(Paciente $paciente, Dentista $dentista_responsavel, array $procedimentos, ?$valor_total)
+    function __construct(Paciente $paciente, Dentista $dentista_responsavel, array $procedimentos)
     {
       $this->paciente = $paciente;
       $this->dentista_responsavel = $dentista_responsavel;
@@ -31,9 +31,32 @@
       }
     }
     
-    public function aprovar_orcamento()
+    public function aprovar_orcamento(string $forma_pagamento, ?int $num_parcelas)
     {
-      return new Tratamento($this->paciente, $this->dentista_responsavel,$this->procedimentos, $this->data_realizacao, $forma_pagamento);
+      if($forma_pagamento == "Dinheiro" || $forma_pagamento == "Pix")
+      {
+        $pagamento = new A_Vista($forma_pagamento);
+      }
+      else if ($forma_pagamento == "Cartão de crédito" || $forma_pagamento == "Cartão de débito")
+      {
+        switch($forma_pagamento)
+        {
+          case "Cartão de crédito":
+            $pagamento = new Cartao($forma_pagamento);
+            break;
+          
+          case "Cartão de débito":
+            
+
+          
+        }
+      }
+      else 
+      {
+        
+      }
+
+      return new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);
     }
 
     public function verificar_procedimento(Procedimento $procedimento)

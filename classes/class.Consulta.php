@@ -8,11 +8,10 @@
     protected $dentista_responsavel;
     protected $foi_realizada = false;
 
-    function __construct(Data $data_consulta, $dentista_responsavel, $duracao)
+    function __construct(Data $data_consulta, $dentista_responsavel)
     {
       $this->data_consulta = $data_consulta;
       $this->dentista_responsavel = $dentista_responsavel;
-      $this->duracao = $duracao;
     }
 
     static public function getFilename()

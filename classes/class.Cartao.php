@@ -7,10 +7,9 @@ class Cartao extends Forma_De_Pagamento
   private $taxa_cartao;
   private $parcelas;
 
-  function construct($forma_pagamento,$valor_total, $parcelas)
+  function construct($forma_pagamento, $parcelas)
   {
     parent::construct($forma_pagamento);
-    $this->taxa_cartao = $this->cadastrar_taxa_cartao($valor_total);
     $this->parcelas = $parcelas;
   }
 

@@ -53,6 +53,11 @@
       return $this->consultas;
     }
 
+    public function cadastrar_consulta(Consulta &$consulta)
+    {
+      array_push($this->consultas, $consulta);
+    }
+
     public function realizar_consulta(DateTime $data)
     {
       foreach ($this->consultas as $key=>$consulta)
@@ -61,6 +66,7 @@
         {
           $consulta->foi_realizada();
           unset($this->consultas[$key]);
+          $this->save();
           return;
         }
       }
