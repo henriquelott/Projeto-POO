@@ -9,13 +9,12 @@
     protected $procedimentos = array();
     protected float $valor_total;
 
-    function __construct(Paciente $paciente, Dentista $dentista_responsavel, array $procedimentos)
+    function __construct(Paciente $Paciente, Dentista $Dentista_Responsavel, array $procedimentos)
     {
-      $this->paciente = $paciente;
-      $this->dentista_responsavel = $dentista_responsavel;
+      $this->paciente = $Paciente;
+      $this->dentista_responsavel = $Dentista_Responsavel;
       $this->procedimentos = $procedimentos;
       $this->calcular_orcamento();
-      $this->save();
     }
 
     static public function getFilename()
@@ -50,7 +49,7 @@
             }
             else
             {
-              throw(new Exception("\nNumero de Parcelas deve estar entre 1 e 0\n"));
+              throw(new Exception("\nNumero de Parcelas deve estar entre 1 e 6\n"));
             }
             break;
           
@@ -62,7 +61,7 @@
             }
             else 
             {
-              throw(new Exception("Cartão de débito não possui parcelas"));
+              throw(new Exception("Cartão de débito não deve possuir parcelas"));
             }
             break;
 
