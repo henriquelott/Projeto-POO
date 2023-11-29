@@ -73,7 +73,7 @@
       }
       else 
       {
-        
+        throw (new Exception("Forma de pagamento inválida"));
       }
 
       return new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);

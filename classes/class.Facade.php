@@ -146,15 +146,15 @@ class Facade
   }
   
 
-  public static function aprovar_orcamento(Orcamento $Orcamento, string $forma_pagamento, ?int $num_parcelas)
+  public static function aprovar_orcamento(Orcamento $orcamento, string $forma_pagamento, ?int $num_parcelas)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
 
-      self::encontrar_instancia($Orcamento, false);
+      self::encontrar_instancia($orcamento, false);
 
-      $Orcamento->aprovar_orcamento($forma_pagamento, $num_parcelas);
+      $orcamento->aprovar_orcamento($forma_pagamento, $num_parcelas);
     }
     catch(Throwable $t)
     {
