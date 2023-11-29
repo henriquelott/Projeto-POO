@@ -2,23 +2,52 @@
 
 require_once "global.php";
 
-  $paciente = new Paciente('joao', 'joao@gmail.com', '33467847', '44i404332', '2000-11-12');
+  $pacientico = new Paciente('joao', 'joao@gmail.com', '33467847', '441404332', '2000-11-12');
 
-  $paciente->save();
+  $pacientico->save();
 
-  $pacientico = Paciente::getRecordsByField('nome', 'joao');
+  $pacienteco = new Paciente('niombre', 'nombre', 'nombre', 'nombre', '2000-11-12');
 
-  $pacientico[0]->save();
 
-  $pacientico[0]->save();
+  function &encontrar_instancia($instancia, bool $eh_cadastro = false)
+  {
+    $objeto = get_class($instancia);
 
-  $pacientico[0]->save();
+    $array = $objeto::getRecords();
 
-  $pacientico[0]->save();
+    foreach ($array as $record)
+    {
+      if (($record == $instancia) && (!$eh_cadastro))
+      {
+        return $record;
+      }
+      else if (($record == $instancia) && ($eh_cadastro))
+      {
+        throw (new Exception("\n$objeto já cadastrado\n"));
+      }
+    }
 
-  $pacientico[0]->save();
+    if(!$eh_cadastro)
+    {
+      throw (new Exception("\n$objeto não encontrado\n"));
+    }
+  }
 
-  var_dump($pacientico);
+  try
+  {
+    $paciente = encontrar_instancia($pacientico);
+    var_dump($paciente);
+    $pacientico->set_nome("Josimar Tog");
+    $paciente = encontrar_instancia($pacientico);
+    var_dump($paciente);
+    $paciente->set_nome("dodoqdaucu");
+  }
+  catch (Throwable $t)
+  {
+    echo $t->getMessage();
+  }
+
+  var_dump($paciente);
 
 
 ?>

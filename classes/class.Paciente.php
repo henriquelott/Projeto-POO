@@ -16,7 +16,6 @@
       $this->nascimento = $nascimento;
       $this->rg = $rg;
       $this->nascimento = $nascimento;
-      $this->save();
     }
 
     public function remover_consultas_realizadas(Consulta $consulta)
@@ -68,6 +67,13 @@
         }
       }
       throw(new Exception("Nenhuma consulta marcada para este paciente nesta data e horário"));
+    }
+
+    public function set_nome($nome)
+    {
+      $this->nome = $nome;
+
+      $this->save();
     }
   }
 

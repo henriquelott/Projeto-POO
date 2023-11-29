@@ -17,16 +17,16 @@ class Facade
         $Usuario = Usuario::construct($cadastro[0]->login, $cadastro[0]->senha, $cadastro[0]->email, $cadastro[0]->perfil->nome_perfil);
         
         if($Usuario == null)
-          throw (new Exeption("\nUsuário já logado\n"));
+          throw (new Exception("\nUsuário já logado\n"));
         
         else
           $Usuario->save();
       }
 
       else
-        throw (new Exeption("\nUsuário e/ou senha inválido(s), Tente novamente!\n"));
+        throw (new Exception("\nUsuário e/ou senha inválido(s), Tente novamente!\n"));
     }
-    catch(Trhowable $t)
+    catch(Throwable $t)
     {
       $t->getMessage();
       return false;
@@ -34,7 +34,7 @@ class Facade
   }
 
 
-  private static function possui_funcionalidade($usuario, $funcionalidade)
+  private static function possui_funcionalidade($usuario, string $funcionalidade)
   {
     if($usuario->get_perfil()->possui_funcionalidade($funcionalidade) == true)
     {
@@ -51,7 +51,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($usuario, __FUNCTION__);
+      self::possui_funcionalidade($usuario, __FUNCTION__);
       $Perfil = new Perfil($tipo_perfil, $funcionalidades);
     }
     catch(Throwable $t)
@@ -68,7 +68,7 @@ class Facade
   {
     try
     {  
-      $this->possui_funcionalidade($usuario, "Criar usuario");
+      self::possui_funcionalidade($usuario, "Criar usuario");
       $Perfil = Perfil::getRecordsByField("nome_perfil", $nome_perfil);
       if(!empty($Perfil))
       {
@@ -94,32 +94,30 @@ class Facade
     {
       $t->getMessage();
       return false;
-    } 
-    $this->save();
+    }
     return true;
   }
-
 
   //$descricao, $tipo_procedimento, $preco, &$lista
   public static function cadastrar_orcamento(Usuario $Usuario, Paciente $Paciente, Trabalhador $dentista_responsavel, array $tipo_procedimentos)
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar orcamento");
+      self::possui_funcionalidade($Usuario, "Cadastrar orcamento");
 
       foreach($Paciente->get_consultas() as $consultas_nao_realizadas)
+      {
+        if(get_class($consultas_nao_realizadas) == "Consulta_Avaliacao")
         {
-          if(get_class($consultas_nao_realizadas) == "Consulta_Avaliacao")
-          {
-            throw(new Exception("\nA consulta de avaliacao do paciente ainda nao foi realizada\n"));
-          }
+          throw(new Exception("\nA consulta de avaliacao do paciente ainda nao foi realizada\n"));
         }
+      }
 
       $lista = array();
       
       foreach($tipo_procedimentos as $tipo_procedimento)
       {
-        array_push($lista, $this->encontrar_procedimento($tipo_procedimento));
+        array_push($lista, self::encontrar_procedimento($tipo_procedimento));
       }
 
       $novo_orcamento = new Orcamento($Paciente, $dentista_responsavel, $lista);
@@ -129,7 +127,6 @@ class Facade
       $t->getMessage();
       return false;
     }
-    $this->save();
     return true;
   }
 
@@ -154,7 +151,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Aprovar orcamento");
+      self::possui_funcionalidade($Usuario, "Aprovar orcamento");
       $orcamentos_existentes = Orcamento::getRecords();
 
       foreach($orcamentos_existentes as $orcamento_atual)
@@ -176,35 +173,37 @@ class Facade
   }
   
 
-  public static function cadastrar_consulta_de_avaliacao(Usuario $Usuario, Dentista $Dentista, Paciente $Paciente, string $data)
+  public static function cadastrar_consulta_de_avaliacao(Usuario $usuario, Dentista $dentista, Paciente $paciente, string $data)
   {    
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar consulta de avalicao");
+      self::possui_funcionalidade($usuario, "Cadastrar consulta de avalicao");
+
+
 
       $data_inicio = new DateTime($data);
       $interval = DateInterval::createFromDateString('30 minutes');
       $data_fim = $data_inicio->add($interval);
       $data_consulta = new Data($data_inicio, $data_fim);
 
-      if(!empty($Paciente))
+      if(!empty($paciente))
       {
-        if(!empty($Dentista))
+        if(!empty($dentista))
         {
-          $Dentista->editar_agenda("cadastrar consulta", $data_consulta);
+          $dentista->editar_agenda("cadastrar consulta", $data_consulta);
           $consulta_avaliacao = new Consulta_Avaliacao($data_consulta, $dentista);
-          $Paciente->cadastrar_consulta($consulta_avaliacao);
+          $paciente->cadastrar_consulta($consulta_avaliacao);
           
           return true;
         }
         else
         {
-          throw(new Exception("Dentista não cadastrado"));
+          throw(new Exception("\nDentista não cadastrado\n"));
         }
       }
       else 
       {
-        throw(new Exception("Paciente não cadastrado"));
+        throw(new Exception("\nPaciente não cadastrado\n"));
       }
 
     }
@@ -220,7 +219,7 @@ class Facade
   {
     try
     {
-      /*$this->possui_funcionalidade($Usuario, "Cadastrar consulta");
+      self::possui_funcionalidade($Usuario, "Cadastrar consulta");
 
       $consultas = Consulta::getRecords();
 
@@ -232,7 +231,7 @@ class Facade
         }
       }
 
-      $Consulta->save();*/
+      $Consulta->save();
     }
 
     catch(Throwable $t)
@@ -249,7 +248,7 @@ class Facade
   {
       try
       {
-        $this->possui_funcionalidade($Usuario, "Editar Agenda");
+        self::possui_funcionalidade($Usuario, "Editar Agenda");
       }
       catch(Throwable $t)
       {
@@ -263,7 +262,7 @@ class Facade
   {
       try
       {
-        $this->possui_funcionalidade($Usuario, "Editar informações");
+        self::possui_funcionalidade($Usuario, "Editar informações");
       }
       catch(Throwable $t)
       {
@@ -277,7 +276,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar auxiliar");
+      self::possui_funcionalidade($Usuario, "Cadastrar auxiliar");
 
       $auxiliares = Auxiliar::getRecords();
 
@@ -307,7 +306,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar secretaria");
+      self::possui_funcionalidade($Usuario, "Cadastrar secretaria");
 
       $secretarias = Secretaria::getRecords();
 
@@ -336,7 +335,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar dentista funcionario");
+      self::possui_funcionalidade($Usuario, "Cadastrar dentista funcionario");
 
       $dentistas = Dentista_Funcionario::getRecords();
 
@@ -365,7 +364,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar dentista parceiro");
+      self::possui_funcionalidade($Usuario, "Cadastrar dentista parceiro");
 
       $dentistas = Dentista_Parceiro::getRecords();
 
@@ -394,7 +393,7 @@ class Facade
   {  
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar cliente");
+      self::possui_funcionalidade($Usuario, "Cadastrar cliente");
 
       $clientes = Cliente::getRecords();
 
@@ -422,7 +421,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar paciente");
+      self::possui_funcionalidade($Usuario, "Cadastrar paciente");
 
       $pacientes = Paciente::getRecords();
 
@@ -451,7 +450,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar procedimento");
+      self::possui_funcionalidade($Usuario, "Cadastrar procedimento");
 
       $procedimentos = Procedimento::getRecords();
 
@@ -480,7 +479,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Criar procedimento");
+      self::possui_funcionalidade($Usuario, "Criar procedimento");
     }
     catch(Throwable $t)
     {
@@ -494,7 +493,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($Usuario, "Cadastrar especialidade");
+      self::possui_funcionalidade($Usuario, "Cadastrar especialidade");
 
       $especialidades = Especialidade::getRecords();
 
@@ -523,7 +522,7 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($usuario, "Realizar pagamento");
+      self::possui_funcionalidade($usuario, "Realizar pagamento");
     }
     catch(Throwable $t)
     {
@@ -537,17 +536,41 @@ class Facade
   {
     try
     {
-      $this->possui_funcionalidade($usuario, "Realizar consulta");
+      self::possui_funcionalidade($usuario, "Realizar consulta");
       $date_time = new DateTime($data);
       $paciente->realizar_consulta($date_time);
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+       echo $t->getMessage();
       return false;
     }
 
     return true;
+  }
+
+  public static function &encontrar_instancia($instancia, bool $eh_cadastro = false)
+  {
+    $objeto = get_class($instancia);
+
+    $array = $objeto::getRecords();
+
+    foreach ($array as $record)
+    {
+      if (($record == $instancia) && (!$eh_cadastro))
+      {
+        return $record;
+      }
+      else if (($record == $instancia) && ($eh_cadastro))
+      {
+        throw (new Exception("\n$objeto já cadastrado\n"));
+      }
+    }
+
+    if(!$eh_cadastro)
+    {
+      throw (new Exception("\n$objeto não encontrado\n"));
+    }
   }
 }
 
