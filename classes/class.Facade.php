@@ -106,28 +106,30 @@ class Facade
   }
 
   //$descricao, $tipo_procedimento, $preco, &$lista
-  public static function cadastrar_orcamento(Usuario $Usuario, Paciente $Paciente, Trabalhador $dentista_responsavel, array $tipo_procedimentos)
+  public static function cadastrar_orcamento(Paciente $paciente_parametro, Dentista $dentista_responsavel_parametro, array $tipo_procedimentos)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
+      $paciente = self::encontrar_instancia($paciente_parametro);
+      $dentista_responsavel = self::encontrar_instancia($dentista_responsavel_parametro);
 
       foreach($Paciente->get_consultas() as $consultas_nao_realizadas)
       {
         if(get_class($consultas_nao_realizadas) == "Consulta_Avaliacao")
         {
-          throw(new Exception("\nA consulta de avaliacao do paciente ainda nao foi realizada\n"));
+          throw(new Exception("\nA consulta de avaliacao do paciente ainda não foi realizada\n"));
         }
       }
 
-      $lista = array();
+      array $lista;
       
       foreach($tipo_procedimentos as $tipo_procedimento)
       {
         array_push($lista, self::encontrar_procedimento($tipo_procedimento));
       }
 
-      $novo_orcamento = new Orcamento($Paciente, $dentista_responsavel, $lista);
+      $novo_orcamento = new Orcamento($paciente, $dentista_responsavel, $lista);
     }
     catch(Throwable $t)
     {
@@ -138,7 +140,7 @@ class Facade
   }
 
 
-  public static function encontrar_procedimento(string $tipo_procedimento)
+  private static function encontrar_procedimento(string $tipo_procedimento)
   {
     $lista_procedimentos = Lista_Procedimentos::getRecords();
     $procedimento = $lista_procedimentos[0]->get_procedimento_pelo_tipo($tipo_procedimento);
@@ -146,13 +148,13 @@ class Facade
   }
   
 
-  public static function aprovar_orcamento(Orcamento $orcamento, string $forma_pagamento, ?int $num_parcelas)
+  public static function aprovar_orcamento(Orcamento $orcamento_parametro, string $forma_pagamento, ?int $num_parcelas)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
 
-      self::encontrar_instancia($orcamento, false);
+      $orcamento = self::encontrar_instancia($orcamento_parametro);
 
       $orcamento->aprovar_orcamento($forma_pagamento, $num_parcelas);
     }
@@ -222,18 +224,21 @@ class Facade
   }
 
 
-  public static function editar_agenda()
+  public static function editar_agenda(Dentista $dentista, string $data, )
   {
-      try
-      {
-        self::possui_funcionalidade(__FUNCTION__);
-      }
-      catch(Throwable $t)
-      {
-        echo $t->getMessage();
-        return false;
-      }
+    try
+    {
+      self::possui_funcionalidade(__FUNCTION__);
+      
+    }
+    catch(Throwable $t)
+    {
+      echo $t->getMessage();
+      return false;
+    }
   }
+
+  public static function cadastrar_agenda_padrao(Dentista $dentista)
 
   public static function editar_informacoes()
   {
@@ -335,7 +340,6 @@ class Facade
 
       $dentista_parceiro->save();
     }
-    
     catch(Throwable $t)
     {
       echo $t->getMessage();

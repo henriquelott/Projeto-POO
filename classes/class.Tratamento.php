@@ -11,7 +11,6 @@ class Tratamento extends Orcamento
     {
       parent::__construct($paciente, $dentista_responsavel, $procedimentos);
       $this->registro_pagamento = new Registro_Pagamento($forma_pagamento);
-      $this->save();
     }
 
     static public function getFilename()

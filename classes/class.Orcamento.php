@@ -30,7 +30,7 @@
       }
     }
     
-    public function aprovar_orcamento(string $forma_pagamento, ?int $num_parcelas)
+    public function aprovar_orcamento(string $forma_pagamento, ?int $num_parcelas)  : void
     {
       if(($forma_pagamento == "Dinheiro" || $forma_pagamento == "Pix") && $num_parcelas == NULL)
       {
@@ -66,9 +66,7 @@
             break;
 
           default:
-            throw(new Exception(""));
-
-          
+            throw(new Exception("\nNão é pra entrar neste campo\n"));
         }
       }
       else 
@@ -76,7 +74,8 @@
         throw (new Exception("Forma de pagamento inválida"));
       }
 
-      return new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);
+      $tratamento = new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);
+      $tratamento->save();
     }
 
     public function verificar_procedimento(Procedimento $procedimento)
