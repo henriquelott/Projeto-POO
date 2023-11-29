@@ -28,7 +28,7 @@ class Facade
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
   }
@@ -56,7 +56,7 @@ class Facade
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
     $Perfil->save();
@@ -64,12 +64,14 @@ class Facade
   }
 
 
-  public static function criar_usuario($login, $senha, $email, $nome_perfil, $usuario)
+  public static function criar_usuario($usuario, $senha, $email, $nome_perfil)
   {
     try
     {  
       self::possui_funcionalidade($usuario, "Criar usuario");
+
       $Perfil = Perfil::getRecordsByField("nome_perfil", $nome_perfil);
+      
       if(!empty($Perfil))
       {
         $user = Users::getRecordsByField("usuario", $usuario);
@@ -92,7 +94,7 @@ class Facade
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
     return true;
@@ -124,7 +126,7 @@ class Facade
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
     return true;
@@ -152,20 +154,15 @@ class Facade
     try
     {
       self::possui_funcionalidade($Usuario, "Aprovar orcamento");
-      $orcamentos_existentes = Orcamento::getRecords();
 
-      foreach($orcamentos_existentes as $orcamento_atual)
-      {
-        if($orcamento_atual == $Orcamento)
-        {
-          $orcamento_atual->aprovar_orcamento();
-        }
+      self::encontrar_instancia($Orcamento, false);
 
-      }
+      $Orcamento->aprovar_orcamento();
     }
+
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -209,7 +206,7 @@ class Facade
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
   }
@@ -221,22 +218,14 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar consulta");
 
-      $consultas = Consulta::getRecords();
-
-      foreach($consultas as $consulta)
-      {
-        if($consulta == $Consulta)
-        {
-          throw(new Exception("Esta consulta já está cadastrada"));
-        }
-      }
+      self::encontrar_instancia($Consulta, true);
 
       $Consulta->save();
     }
 
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -252,7 +241,7 @@ class Facade
       }
       catch(Throwable $t)
       {
-        $t->getMessage();
+        echo $t->getMessage();
         return false;
       }
   }
@@ -266,7 +255,7 @@ class Facade
       }
       catch(Throwable $t)
       {
-        $t->getMessage();
+        echo $t->getMessage();
         return false;
       }
   }
@@ -278,15 +267,7 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar auxiliar");
 
-      $auxiliares = Auxiliar::getRecords();
-
-      foreach($auxiliares as $auxiliar)
-      {
-        if($auxiliar == $Auxiliar)
-        {
-          throw(new Exception("Este auxiliar já está cadastrado"));
-        }
-      }
+      self::encontrar_instancia($Auxiliar, true);
 
       $Auxiliar->save();
         
@@ -294,7 +275,7 @@ class Facade
 
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -308,22 +289,14 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar secretaria");
 
-      $secretarias = Secretaria::getRecords();
-
-      foreach($secretarias as $secretaria)
-      {
-        if($secretaria == $Secretaria)
-        {
-          throw(new Exception("Esta secretaria já está cadastrada"));
-        }
-      }
+      self::encontrar_instancia($Secretaria, true);
 
       $Secretaria->save();
     }
 
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -337,22 +310,14 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar dentista funcionario");
 
-      $dentistas = Dentista_Funcionario::getRecords();
-
-      foreach($dentistas as $dentista)
-      {
-        if($dentista == $Dentista_Funcionario)
-        {
-          throw(new Exception("Este dentista já está cadastrado"));
-        }
-      }
+      self::encontrar_instancia($Dentista_Funcionario, true);
 
       $Dentista_Funcionario->save();
     }
 
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -366,22 +331,14 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar dentista parceiro");
 
-      $dentistas = Dentista_Parceiro::getRecords();
-
-      foreach($dentistas as $dentista)
-      {
-        if($dentista == $Dentista_Parceiro)
-        {
-          throw(new Exception("Este dentista já está cadastrado"));
-        }
-      }
+      self::encontrar_instancia($Dentista_Parceiro, true);
 
       $Dentista_Parceiro->save();
     }
     
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -395,21 +352,13 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar cliente");
 
-      $clientes = Cliente::getRecords();
-
-      foreach($clientes as $cliente)
-      {
-        if($cliente == $Cliente)
-        {
-          throw(new Exception("Este cliente já está cadastrado"));
-        }
-      }
+      self::encontrar_instancia($Cliente, true);
 
       $Cliente->save();
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -423,22 +372,14 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar paciente");
 
-      $pacientes = Paciente::getRecords();
-
-      foreach($pacientes as $paciente)
-      {
-        if($paciente == $Paciente)
-        {
-          throw(new Exception("Este paciente já está cadastrado"));
-        }
-      }
+      self::encontrar_instancia($Paciente, true);
 
       $Paciente->save();
     }
 
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -452,22 +393,14 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar procedimento");
 
-      $procedimentos = Procedimento::getRecords();
-
-      foreach($procedimentos as $procedimento)
-      {
-        if($procedimento == $Procedimento)
-        {
-          throw(new Exception("Este procedimento já está cadastrado"));
-        }
-      }
+      self::encontrar_instancia($Procedimento, true);
 
       $Procedimento->save();
     }
 
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -483,7 +416,7 @@ class Facade
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
   }
@@ -495,22 +428,14 @@ class Facade
     {
       self::possui_funcionalidade($Usuario, "Cadastrar especialidade");
 
-      $especialidades = Especialidade::getRecords();
-
-      foreach($especialidades as $especialidade)
-      {
-        if($especialidade == $Especialidade)
-        {
-          throw(new Exception("Esta especialidade já está cadastrada"));
-        }
-      }
+      self::encontrar_instancia($Especialidade, true);
 
       $Especialidade->save();
     }
 
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
 
@@ -526,7 +451,7 @@ class Facade
     }
     catch(Throwable $t)
     {
-      $t->getMessage();
+      echo $t->getMessage();
       return false;
     }
   }
