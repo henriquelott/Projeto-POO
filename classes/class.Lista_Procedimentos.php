@@ -3,11 +3,11 @@ require_once "global.php";
 class Lista_Procedimentos extends persist
 {
   protected static $local_filename = "Lista_Procedimentos.txt";
-  protected Procedimento $procedimentos = array();
+  protected array $procedimentos;
 
   function __construct()
   {
-    $this->procedimentos = Procedimentos::getRecords();
+    $this->procedimentos = Procedimento::getRecords();
   }
 
   static public function getFilename()
@@ -46,7 +46,7 @@ class Lista_Procedimentos extends persist
         return $procedimento;
       }
     }
-    throw (new Exception('Procedimento nao cadastrado'));
+    throw (new Exception("\nProcedimento $tipo_procedimento não cadastrado\n"));
   }
 }
 

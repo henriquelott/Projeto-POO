@@ -9,7 +9,7 @@ class Especialidade extends persist
   protected $procedimentos_possiveis = array();
   protected float $percentual;
 
-  public function __construct(string $nome_especialidade, Procedimento $procedimentos_possiveis, Lista_Especialidades &$lista, float $percentual)
+  public function __construct(string $nome_especialidade, array $procedimentos_possiveis, Lista_Especialidades &$lista, float $percentual)
   {
     foreach ($lista->get_especialidades_cadastradas() as $especialidade_cadastrada)
     {

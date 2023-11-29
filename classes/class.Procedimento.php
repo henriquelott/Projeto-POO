@@ -101,7 +101,7 @@ class Procedimento extends persist
     }
     $dentista->get_agenda()->cadastrar_consulta($data);
 
-    $consulta_nova = new Consulta($data, $dentista, $duracao);
+    $consulta_nova = new Consulta($data, $dentista);
   
     array_push($this->consultas, $consulta_nova);
 

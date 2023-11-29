@@ -25,7 +25,7 @@ class Registro_Pagamento extends persist
   
   public function calc_valor_faturado()
     {
-      $this->valor_faturado = $this->forma_De_Pagamento->calcular_valor($this->valor_faturado);
+      $this->valor_faturado = $this->forma_de_pagamento->calcular_valor($this->valor_faturado);
     }
 
   public function calc_receita()

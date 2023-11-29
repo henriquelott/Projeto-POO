@@ -4,7 +4,7 @@
   class Lista_Especialidades extends persist
   {
     protected static $local_filename = "Lista_Especialidades.txt";
-    protected Especialidade $especialidades = array();
+    protected array $especialidades;
 
     function __construct()
     {

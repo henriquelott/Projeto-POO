@@ -53,7 +53,7 @@
 
     public function editar_informacoes(string $atributo, string $valor)
     {
-      switch $atributo
+      switch ($atributo)
       {
         case "login":
           $this->login = $valor;
@@ -69,6 +69,7 @@
 
         default:
           throw (new Exception("\nAtributo inválido\n"));
+      }
     }
 
     public function get_login()
