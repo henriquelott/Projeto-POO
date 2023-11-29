@@ -36,7 +36,11 @@ class Facade
 
   private static function possui_funcionalidade($usuario, string $funcionalidade)
   {
-    if($usuario->get_perfil()->possui_funcionalidade($funcionalidade) == true)
+    if(Usuario::get_instance() == NULL)
+    {
+      throw (new Exception("\nNenhum usuário logado\n"));
+    }
+    else if($usuario->get_perfil()->possui_funcionalidade($funcionalidade) == true)
     {
       return;
     }
@@ -68,7 +72,7 @@ class Facade
   {
     try
     {  
-      self::possui_funcionalidade($usuario, "Criar usuario");
+      self::possui_funcionalidade($usuario, __FUNCTION__);
 
       $Perfil = Perfil::getRecordsByField("nome_perfil", $nome_perfil);
       
@@ -105,7 +109,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar orcamento");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       foreach($Paciente->get_consultas() as $consultas_nao_realizadas)
       {
@@ -153,7 +157,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Aprovar orcamento");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Orcamento, false);
 
@@ -170,26 +174,26 @@ class Facade
   }
   
 
-  public static function cadastrar_consulta_de_avaliacao(Usuario $usuario, Dentista $dentista, Paciente $paciente, string $data)
+  public static function cadastrar_consulta_de_avaliacao(Usuario $Usuario, Dentista $Dentista, Paciente $Paciente, string $data)
   {    
     try
     {
-      self::possui_funcionalidade($usuario, "Cadastrar consulta de avalicao");
-
-
-
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
+      
+      self::encontrar_instancia($Paciente);
+      self::enconrtar_instancia($Dentista);
       $data_inicio = new DateTime($data);
       $interval = DateInterval::createFromDateString('30 minutes');
       $data_fim = $data_inicio->add($interval);
       $data_consulta = new Data($data_inicio, $data_fim);
 
-      if(!empty($paciente))
+      if(!empty($Paciente))
       {
-        if(!empty($dentista))
+        if(!empty($Dentista))
         {
-          $dentista->editar_agenda("cadastrar consulta", $data_consulta);
-          $consulta_avaliacao = new Consulta_Avaliacao($data_consulta, $dentista);
-          $paciente->cadastrar_consulta($consulta_avaliacao);
+          $Dentista->editar_agenda("cadastrar consulta", $data_consulta);
+          $Consulta_Avaliacao = new Consulta_Avaliacao($data_consulta, $Dentista);
+          $Paciente->cadastrar_consulta($Consulta_Avaliacao);
           
           return true;
         }
@@ -212,15 +216,39 @@ class Facade
   }
 
 
-  public static function cadastrar_consulta(Usuario $Usuario, Consulta $Consulta)
+  public static function cadastrar_consulta(Usuario $Usuario, Dentista $Dentista, Paciente $Paciente, string $data)
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar consulta");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
-      self::encontrar_instancia($Consulta, true);
+      self::encontrar_instancia($Paciente);
+      self::enconrtar_instancia($Dentista);
+      
+      $data_inicio = new DateTime($data);
+      $interval = DateInterval::createFromDateString('30 minutes');
+      $data_fim = $data_inicio->add($interval);
+      $data_consulta = new Data($data_inicio, $data_fim);
 
-      $Consulta->save();
+      if(!empty($Paciente))
+      {
+        if(!empty($Dentista))
+        {
+          $Dentista->editar_agenda("cadastrar consulta", $data_consulta);
+          $Consulta = new Consulta($data_consulta, $Dentista);
+          $Paciente->cadastrar_consulta($Consulta);
+
+          return true;
+        }
+        else
+        {
+          throw(new Exception("\nDentista não cadastrado\n"));
+        }
+      }
+      else 
+      {
+        throw(new Exception("\nPaciente não cadastrado\n"));
+      }
     }
 
     catch(Throwable $t)
@@ -237,7 +265,7 @@ class Facade
   {
       try
       {
-        self::possui_funcionalidade($Usuario, "Editar Agenda");
+        self::possui_funcionalidade($Usuario, __FUNCTION__);
       }
       catch(Throwable $t)
       {
@@ -247,17 +275,23 @@ class Facade
   }
 
 
-  public static function editar_informacoes(Usuario $Usuario)
+  public static function editar_informacoes(Usuario $Usuario, $atributo, $valor)
   {
-      try
-      {
-        self::possui_funcionalidade($Usuario, "Editar informações");
-      }
-      catch(Throwable $t)
-      {
-        echo $t->getMessage();
-        return false;
-      }
+    try
+    {
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
+
+      if($Usuario != Usuario::get_instance())
+        throw (new Exception ("Usuário não logado"));
+
+      $Usuario->editar_informacoes($atributo, $valor);
+    }
+      
+    catch(Throwable $t)
+    {
+      echo $t->getMessage();
+      return false;
+    }
   }
 
 
@@ -265,12 +299,11 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar auxiliar");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Auxiliar, true);
 
       $Auxiliar->save();
-        
     }
 
     catch(Throwable $t)
@@ -287,7 +320,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar secretaria");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Secretaria, true);
 
@@ -308,7 +341,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar dentista funcionario");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Dentista_Funcionario, true);
 
@@ -329,7 +362,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar dentista parceiro");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Dentista_Parceiro, true);
 
@@ -350,7 +383,7 @@ class Facade
   {  
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar cliente");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Cliente, true);
 
@@ -370,7 +403,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar paciente");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Paciente, true);
 
@@ -391,7 +424,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar procedimento");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Procedimento, true);
 
@@ -412,7 +445,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Criar procedimento");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
     }
     catch(Throwable $t)
     {
@@ -426,7 +459,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($Usuario, "Cadastrar especialidade");
+      self::possui_funcionalidade($Usuario, __FUNCTION__);
 
       self::encontrar_instancia($Especialidade, true);
 
@@ -447,7 +480,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade($usuario, "Realizar pagamento");
+      self::possui_funcionalidade($usuario, __FUNCTION__);
     }
     catch(Throwable $t)
     {
@@ -457,11 +490,11 @@ class Facade
   }
 
 
-  public static function realizar_consulta(Paciente $paciente, string $data, Usuario $usuario)
+  public static function realizar_consulta(Paciente $paciente, string $data, Usuario $usuario)  :  bool
   {
     try
     {
-      self::possui_funcionalidade($usuario, "Realizar consulta");
+      self::possui_funcionalidade($usuario, __FUNCTION__);
       $date_time = new DateTime($data);
       $paciente->realizar_consulta($date_time);
     }
@@ -474,7 +507,7 @@ class Facade
     return true;
   }
 
-  public static function &encontrar_instancia($instancia, bool $eh_cadastro = false)
+  private static function &encontrar_instancia($instancia, bool $eh_cadastro = false)
   {
     $objeto = get_class($instancia);
 

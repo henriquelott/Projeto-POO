@@ -45,7 +45,7 @@ require_once "global.php";
           break;
 
         default: 
-          throw(new Exception('Comando invalido'));
+          throw(new Exception("\nComando invalido\n"));
       }
     }
 
@@ -53,7 +53,7 @@ require_once "global.php";
     {
       if(($key = array_search($data,$this->datas_marcadas)) !== NULL)
       {
-        throw (new Exception ('Data ja cadastrada'));
+        throw (new Exception ("\nData ja cadastrada\n"));
       }
       else if (($key = array_search($data, $this->datas_disponiveis)) !== NULL)
       {
@@ -62,7 +62,7 @@ require_once "global.php";
       }
       else 
       {
-        throw (new Exception ('Data indisponivel'));
+        throw (new Exception ("\nData indisponivel\n"));
       }
     }
 
@@ -75,7 +75,7 @@ require_once "global.php";
       }
       else
       {
-        throw(new Exception('Consulta nao encontrada'));
+        throw(new Exception("\nConsulta nao encontrada\n"));
       }
     }
 
@@ -83,7 +83,7 @@ require_once "global.php";
     {
       if (($key = array_search($data, $datas)) !== NULL) 
       {
-        throw(new Exception("Data já cadastrada"));
+        throw(new Exception("\nData já cadastrada\n"));
       }
       else
       {
@@ -101,7 +101,7 @@ require_once "global.php";
         }
         else
         {
-          throw(new Exception('Data nao encontrada'));
+          throw(new Exception("\nData nao encontrada\n"));
         }
       }
 

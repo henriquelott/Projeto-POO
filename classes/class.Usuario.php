@@ -51,16 +51,41 @@
       return self::$instance;
     }
 
+    public function editar_informacoes(string $atributo, string $valor)
+    {
+      switch $atributo
+      {
+        case "login":
+          $this->login = $valor;
+          break;
+
+        case "senha":
+          $this->senha = $valor;
+          break;
+
+        case "email":
+          $this->email = $valor;
+          break;
+
+        default:
+          throw (new Exception("\nAtributo inválido\n"));
+    }
+
     public function get_login()
     {
       return $this->login;
+    }
+
+    public function get_email()
+    {
+      return $this->email;
     }
 
     public function get_perfil()
     {
       return $this->perfil;
     }
-    
+
   }
 
 ?> 

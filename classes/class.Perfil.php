@@ -7,24 +7,24 @@ class Perfil extends persist
   protected string $nome_perfil;
   protected array $lista_funcionalidades = array
   (
-    "Criar perfil" => false,
-    "Criar usuario" => false,
-    "Cadastrar orcamento" => false,
-    "Aprovar orcamento" => false,
-    "Cadastrar consulta de avaliacao" => false,
-    "Cadastrar consulta" => false,
-    "Editar agenda" => false,
-    "Editar informacoes" => false,
-    "Cadastrar auxiliar" => false, 
-    "Cadastrar secretaria" => false,
-    "Cadastrar dentista funcionario" => false,
-    "Cadastrar dentista parceiro" => false,
-    "Cadastrar cliente" => false, 
-    "Cadastrar paciente" => false,
-    "Cadastrar procedimento" => false,
-    "Criar procedimento" => false,
-    "Cadastrar especialidade" => false,
-    "Realizar pagamento" => false
+    "criar_perfil" => false,
+    "criar_usuario" => false,
+    "cadastrar_orcamento" => false,
+    "aprovar_orcamento" => false,
+    "cadastrar_consulta_avaliacao" => false,
+    "cadastrar_consulta" => false,
+    "editar_agenda" => false,
+    "editar_informacoes" => false,
+    "cadastrar_auxiliar" => false, 
+    "cadastrar_secretaria" => false,
+    "cadastrar_dentista_funcionario" => false,
+    "cadastrar_dentista_parceiro" => false,
+    "cadastrar_cliente" => false, 
+    "cadastrar_paciente" => false,
+    "cadastrar_procedimento" => false,
+    "criar_procedimento" => false,
+    "cadastrar_especialidade" => false,
+    "realizar_pagamento" => false
   );
 
   function __construct($nome_perfil, $lista_funcionalidades)
