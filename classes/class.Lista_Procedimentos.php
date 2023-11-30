@@ -11,13 +11,14 @@ class Lista_Procedimentos extends persist
   }
 
   static public function getFilename()
-    {
-      return get_called_class()::$local_filename;
-    }
-
-  public function cadastrar_procedimento($procedimento)
   {
-    array_push($this->procedimentos,$procedimento);
+    return get_called_class()::$local_filename;
+  }
+
+  public function cadastrar_procedimento(Procedimento &$procedimento)
+  {
+    array_push($this->procedimentos, $procedimento);
+    $procedimento->save();
     $this->save();
   }
 
@@ -32,21 +33,21 @@ class Lista_Procedimentos extends persist
     }
   }
 
-  public function get_procedimentos_cadastrados()
+  public function get_procedimentos_cadastrados()  :  array
   {
     return $this->procedimentos;
   }
 
-  public function get_procedimento_pelo_tipo($tipo_procedimento) : Procedimento
+  public function procedimento_existe(Procedimento $procedimento) : void
   {
-    foreach($this->procedimentos as $procedimento)
+    foreach($this->procedimentos as $procedimento_atual)
     {
-      if($procedimento->get_tipo_procedimentos() == $tipo_procedimento)
+      if(($procedimento_atual->get_tipo_procedimento() == $procedimento->get_tipo_procedimento()) && ($procedimento_atual->get_descricao() == $procedimento->get_descricao()) && ($procedimento_atual->get_valor() == $procedimento->get_descricao()))
       {
-        return $procedimento;
+        return;
       }
     }
-    throw (new Exception("\nProcedimento $tipo_procedimento não cadastrado\n"));
+    throw (new Exception("\nProcedimento " . $procedimento->get_tipo_procedimento() . " não cadastrado\n"));
   }
 }
 

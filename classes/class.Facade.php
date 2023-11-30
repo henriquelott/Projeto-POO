@@ -1,7 +1,6 @@
 <?php 
 require_once "global.php";
 
-
 class Facade
 {
 
@@ -38,7 +37,7 @@ class Facade
   {
     $usuario = Usuario::get_instance();
 
-    if($usuario)
+    if($usuario == NULL)
     {
       throw (new Exception("\nNenhum usuário logado\n"));
     }
@@ -53,19 +52,20 @@ class Facade
   }
 
 
-  public static function criar_perfil($tipo_perfil, $funcionalidades, $usuario)
+  public static function criar_perfil($tipo_perfil, $funcionalidades)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
-      $Perfil = new Perfil($tipo_perfil, $funcionalidades);
+      $perfil = new Perfil();
+      $perfil->criar_perfil( $tipo_perfil, $funcionalidades); 
     }
     catch(Throwable $t)
     {
       echo $t->getMessage();
       return false;
     }
-    $Perfil->save();
+    $perfil->save();
     return true;
   }
 
@@ -114,15 +114,13 @@ class Facade
       $paciente = self::encontrar_instancia($paciente_parametro);
       $dentista_responsavel = self::encontrar_instancia($dentista_responsavel_parametro);
 
-      foreach($Paciente->get_consultas() as $consultas_nao_realizadas)
+      foreach($paciente->get_consultas() as $consultas_nao_realizadas)
       {
         if(get_class($consultas_nao_realizadas) == "Consulta_Avaliacao")
         {
           throw(new Exception("\nA consulta de avaliacao do paciente ainda não foi realizada\n"));
         }
       }
-
-      array $lista;
       
       foreach($tipo_procedimentos as $tipo_procedimento)
       {
@@ -148,7 +146,7 @@ class Facade
   }
   
 
-  public static function aprovar_orcamento(Orcamento $orcamento_parametro, string $forma_pagamento, ?int $num_parcelas)
+  public static function aprovar_orcamento(Orcamento $orcamento_parametro, string $forma_pagamento, int $num_parcelas = 0)
   {
     try
     {
@@ -164,6 +162,7 @@ class Facade
       return false;
     }
 
+    echo "funcionas";
     return true;
   }
   
@@ -196,7 +195,7 @@ class Facade
   }
 
 
-  public static function cadastrar_consulta(Dentista $Dentista, Paciente $Paciente, string $data, int $duracao_minutos)
+  public static function cadastrar_consulta(Dentista $Dentista, Paciente $Paciente, Tratamento $Tratamento, Procedimento $procedimento, string $data, int $duracao_minutos)
   {
     try
     {
@@ -204,6 +203,7 @@ class Facade
 
       $paciente = self::encontrar_instancia($Paciente);
       $dentista = self::encontrar_instancia($Dentista);
+      $tratamento = self::encontrar_instancia($Tratamento);
       
       $data_inicio = new DateTime($data);
       $interval = DateInterval::createFromDateString("$duracao_minutos minutes");
@@ -224,12 +224,14 @@ class Facade
   }
 
 
-  public static function editar_agenda(Dentista $dentista, string $data, )
+  public static function editar_agenda(Dentista $dentista_parametro, string $data)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
-      
+      $dentista = self::encontrar_instancia($dentista_parametro);
+
+      $dentista->editar_agenda("", $data);
     }
     catch(Throwable $t)
     {
@@ -239,6 +241,9 @@ class Facade
   }
 
   public static function cadastrar_agenda_padrao(Dentista $dentista)
+  {
+
+  }
 
   public static function editar_informacoes()
   {
@@ -391,15 +396,16 @@ class Facade
   }
 
 
-  public static function cadastrar_procedimento(Procedimento $procedimento)
+  public static function criar_procedimento(Procedimento $procedimento)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
-
       self::encontrar_instancia($procedimento, true);
 
-      $procedimento->save();
+      $lista_procedimentos = Lista_Procedimentos::getRecords()[0];
+
+      $lista_procedimentos->cadastrar_procedimento($procedimento);
     }
 
     catch(Throwable $t)
@@ -412,11 +418,18 @@ class Facade
   }
 
 
-  public static function criar_procedimento(string $tipo_procedimento, string $especialidade_requerida)
+  public static function cadastrar_procedimento(Procedimento $procedimento_parametro, Orcamento $orcamento_parametro)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
+
+      $procedimento = self::encontrar_instancia($procedimento_parametro);
+      $orcamento = self::encontrar_instancia($orcamento_parametro);
+      $lista_procedimentos = Lista_Procedimentos::getRecords()[0];
+
+      $orcamento->cadastrar_procedimento($procedimento, $lista_procedimentos);
+
     }
     catch(Throwable $t)
     {
@@ -424,9 +437,8 @@ class Facade
       return false;
     }
   }
-  
 
-  public static function cadastrar_especialidade(Especialidade $especialidade)
+  public static function criar_especialidade(Especialidade $especialidade)
   {
     try
     {
@@ -434,7 +446,9 @@ class Facade
 
       self::encontrar_instancia($especialidade, true);
 
-      $especialidade->save();
+      $lista_especialidades = Lista_Especialidades::getRecords()[0];
+
+      $lista_especialidades->cadastrar_especialidade($especialidade);
     }
 
     catch(Throwable $t)
@@ -444,6 +458,26 @@ class Facade
     }
 
     return true;
+  }
+
+  public static function cadastrar_especialidade(Especialidade $especialidade_parametro, Dentista $dentista_parametro)
+  {
+    try
+    {
+      self::possui_funcionalidade(__FUNCTION__);
+
+      $especialidade = self::encontrar_instancia($especialidade_parametro);
+      $dentista = self::encontrar_instancia($dentista_parametro);
+      $lista_especialidades = Lista_Especialidades::getRecords()[0];
+
+      $dentista->cadastrar_especialidade($especialidade, $lista_especialidades);
+
+    }
+    catch(Throwable $t)
+    {
+      echo $t->getMessage();
+      return false;
+    }
   }
 
 
@@ -479,7 +513,7 @@ class Facade
     return true;
   }
 
-  private static function &encontrar_instancia($instancia, bool $eh_cadastro = false)
+  private static function &encontrar_instancia($instancia, bool $eh_cadastro = false)  :  ?object
   {
     $objeto = get_class($instancia);
 
@@ -501,6 +535,8 @@ class Facade
     {
       throw (new Exception("\n$objeto não encontrado\n"));
     }
+
+    return $instancia;
   }
 }
 

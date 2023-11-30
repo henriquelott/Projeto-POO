@@ -35,8 +35,7 @@ class Tratamento extends Orcamento
         }
      }
 
-      array_push($this->procedimentos, $procedimento);
-      return cadastrar_consulta($data, $tipo_procedimento,$lista);
+      throw (new Exception("\nProcedimento $tipo_procedimento não cadastrado"));
     }
     
     public function realizar_pagamento(Cliente $cliente_requerido)
@@ -51,6 +50,11 @@ class Tratamento extends Orcamento
           }
       }
       throw(new Exception('Esse cliente nao esta cadastrado'));
+    }
+
+    public function realizar_consulta(Datetime $data, Consulta $consulta)
+    {
+      
     }
 
     public function get_paciente()

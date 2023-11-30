@@ -13,20 +13,11 @@ class Procedimento extends persist
 
   protected bool $foi_realizado = false;
 
-  function __construct($descricao, $tipo_procedimento, $preco, &$lista, string $detalhe)
+  function __construct($descricao, $tipo_procedimento, $preco, string $detalhe)
   {
-    foreach($lista->get_procedimentos_cadastrados() as $procedimento)
-    {
-        if($this->tipo_procedimento == $procedimento->get_tipo_procedimento())
-        {
-          throw (new Exception("Procedimento ja esta cadastrado"));
-        }
-    }
-
     $this->descricao = $descricao;
     $this->tipo_procedimento = $tipo_procedimento;      
     $this->preco = $preco;
-    $lista->cadastrar_procedimento($this);
     $this->detalhamento = new Detalhe_Procedimento($detalhe);
   }
 
@@ -63,7 +54,7 @@ class Procedimento extends persist
       }
   }
 
-  public function get_tipo_procedimento()
+  public function get_tipo_procedimento()  :  string
   {
     return $this->tipo_procedimento;
   }

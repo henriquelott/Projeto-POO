@@ -5,7 +5,7 @@
   {
     protected static $local_filename = "Dentista.txt";
     protected $cro;
-    protected $especialidades = array();
+    protected array $especialidades;
     protected Agenda $agenda;
 
 
@@ -14,7 +14,7 @@
       parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep);
 
       $this->cro = $cro;
-      $this->cadastrar_especialidade($especialidades, $lista);
+      $this->especialidades = $especialidades;
     }
 
     static public function getFilename()
@@ -22,16 +22,18 @@
       return get_called_class()::$local_filename;
     }
 
-    public function get_especialidade()
+    public function get_especialidades()
     {
       return $this->especialidades;
     }
 
-    public function cadastrar_especialidade(array $nomes_especialidades, Lista_Especialidades $lista)
+    public function cadastrar_especialidade(Lista_Especialidades $lista, Especialidade &$especialidade)
     {
-      foreach($nomes_especialidades as $nome_especialidade)
-        $especialidade = $lista->encontrar_especialidade($nome_especialidade);
-        array_push($especialidades, $especialidade);
+      $lista->especialidade_existe($especialidade);
+
+      array_push($this->especialidades, $especialidade);
+      $especialidade->save();
+      $this->save();
     }
 
     public function criar_agenda(array $datas_disponiveis, array $datas_marcadas)

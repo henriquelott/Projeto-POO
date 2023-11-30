@@ -7,7 +7,7 @@ class Cartao extends Forma_De_Pagamento
   protected $taxa_cartao;
   protected ?int $parcelas;
 
-  function __construct(string $forma_pagamento, ?int $parcelas)
+  function __construct(string $forma_pagamento, int $parcelas = 1)
   {
     parent::__construct($forma_pagamento);
     $this->parcelas = $parcelas;

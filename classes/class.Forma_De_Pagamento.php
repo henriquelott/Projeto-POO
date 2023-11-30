@@ -8,7 +8,7 @@ abstract class Forma_De_Pagamento extends persist
 
     function __construct ($forma_pagamento)
     {
-      $this->formaPagamento = $forma_pagamento;
+      $this->forma_pagamento = $forma_pagamento;
     }
 
     static public function getFilename()

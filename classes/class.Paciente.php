@@ -6,8 +6,8 @@
     protected static $local_filename = "Paciente.txt";
     protected $rg;
     protected Datetime $nascimento;
-    protected $clientes = array ();
-    protected $consultas = array();
+    protected array $clientes;
+    protected array $consultas;
 
     function __construct($nome, $email, $telefone, $rg, string $nascimento)
     {
@@ -39,12 +39,12 @@
       
     }
 
-    public function &get_clientes()
+    public function get_clientes()
     {
       return $this->clientes;
     }
 
-    public function &get_consultas()
+    public function get_consultas()
     {
       return $this->consultas;
     }

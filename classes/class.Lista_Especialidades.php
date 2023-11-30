@@ -33,10 +33,23 @@
       return $this->especialidades;
     }
 
-    public function cadastrar_especialidade($especialidade)
+    public function cadastrar_especialidade(Especialidade &$especialidade)
     {
-      array_push($this->especialidades,$especialidade);
+      array_push($this->especialidades, $especialidade);
+      $especialidade->save();
       $this->save();
+    }
+
+    public function especialidade_existe(Especialidade $especialidade)  :  void
+    {
+      foreach($this->especialidades as $especialidade_atual)
+      {
+        if($especialidade_atual ==  $especialidade)
+        {
+          return;
+        }
+      }
+      throw (new Exception("\nEspecialidade " . $especialidade->get_nome() . " não cadastrada\n"));
     }
     
   }

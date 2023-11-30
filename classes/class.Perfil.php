@@ -27,19 +27,32 @@ class Perfil extends persist
     "realizar_pagamento" => false
   );
 
-  function __construct($nome_perfil, $lista_funcionalidades)
+  function __construct()
   {
+    
+  }
+
+  function criar_perfil($nome_perfil, $lista_funcionalidades)
+  {
+    if(Perfil::getRecordsByField("nome_perfil", $nome_perfil) != null)
+    {
+      throw(new Exception("Perfil $nome_perfil já cadastrado"));
+    }
+    
     foreach ($lista_funcionalidades as $funcionalidade)
     {
+      $achou = false;
       foreach ($this->lista_funcionalidades as $key=>$value)
       {
         if ($funcionalidade == $key)
         {
           $this->lista_funcionalidades[$key] = true;
+          $achou = true;
           break;
         }
-        throw (new Exception("\nFuncionalidade $funcionalidade não encontrada\n"));
       }
+      if (!$achou)
+        throw (new Exception("\nFuncionalidade $funcionalidade não cadastrada\n"));
     }
     $this->nome_perfil = $nome_perfil;
     $this->save();

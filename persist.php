@@ -77,7 +77,8 @@
 
         public function __toString()
         {
-            return print_r($this);
+            return get_class($this);
+            //return print_r($this);
         }
 
         static public function getFilename()
@@ -85,3 +86,4 @@
           return get_called_class() . ".txt";
         }
     }
+  ?>

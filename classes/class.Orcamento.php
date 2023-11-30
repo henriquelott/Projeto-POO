@@ -5,8 +5,8 @@
   {
     protected static $local_filename = "Orcamento.txt";
     protected Paciente $paciente;
-    protected  Dentista $dentista_responsavel;
-    protected $procedimentos = array();
+    protected Dentista $dentista_responsavel;
+    protected $procedimentos;
     protected float $valor_total;
 
     function __construct(Paciente $Paciente, Dentista $Dentista_Responsavel, array $procedimentos)
@@ -14,7 +14,6 @@
       $this->paciente = $Paciente;
       $this->dentista_responsavel = $Dentista_Responsavel;
       $this->procedimentos = $procedimentos;
-      $this->calcular_orcamento();
     }
 
     static public function getFilename()
@@ -24,15 +23,19 @@
 
     public function calcular_orcamento()
     {
+      $this->valor_total = 0;
+
       foreach($this->procedimentos as $procedimento)
       {
         $this->valor_total += $procedimento->get_valor();
       }
+
+      return $this->valor_total;
     }
     
-    public function aprovar_orcamento(string $forma_pagamento, ?int $num_parcelas)  : void
+    public function aprovar_orcamento(string $forma_pagamento, int $num_parcelas = 0)  : void
     {
-      if(($forma_pagamento == "Dinheiro" || $forma_pagamento == "Pix") && $num_parcelas == NULL)
+      if(($forma_pagamento == "Dinheiro" || $forma_pagamento == "Pix") && $num_parcelas == 0)
       {
         $pagamento = new A_Vista($forma_pagamento);
         $pagamento->save(); 
@@ -54,14 +57,14 @@
             break;
           
           case "Cartão de débito":
-            if($num_parcelas == NULL)
+            if($num_parcelas == 0)
             {
-              $pagamento = new Cartao($forma_pagamento, 1);
+              $pagamento = new Cartao($forma_pagamento);
               $pagamento->save();
             }
             else 
             {
-              throw(new Exception("Cartão de débito não deve possuir parcelas"));
+              throw(new Exception("\nCartão de débito não deve possuir parcelas\n"));
             }
             break;
 
@@ -75,6 +78,7 @@
       }
 
       $tratamento = new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);
+      $this->save();
       $tratamento->save();
     }
 
@@ -84,17 +88,17 @@
       {
         if($procedimento_atual == $procedimento)
         {
-          $procedimento_atual->orcamento_possui_procedimento($this);
-          break;
+          $procedimento_atual->adicionar_orcamento($this);
+          return;
         }
       }
      }
 
-    public function cadastrar_procedimento($lista, $tipo_procedimento)
+    public function cadastrar_procedimento(Lista_procedimentos $lista, &$procedimento)
     {
       if (get_class($this) == "Orcamento")
       {
-        $this->cadastrar_procedimento($lista, $tipo_procedimento);  
+        $this->realizar_cadastro_procedimento($lista, $procedimento);  
       }
       else
       {
@@ -102,26 +106,31 @@
       }
     }
 
-    private function realizar_cadastro_procedimento($lista, $tipo_procedimento)
+    private function realizar_cadastro_procedimento(Lista_procedimentos $lista, Procedimento &$procedimento)
     {
-      $novo_procedimento = $lista->get_procedimento_pelo_tipo($tipo_procedimento);
-      
-      foreach($this->procedimentos as $procedimento)
-      {
-        if($procedimento == $novo_procedimento)
-        {
-          throw (new Exception ("\nO procedimento já está cadastrado\n"));
-        }
-      }
+      $lista->procedimento_existe($procedimento);
 
-      array_push($this->procedimentos, $novo_procedimento);
-      $this->valor_total += $novo_procedimento->get_valor();
+      $this->dentista_pode_realizar_procedimento($procedimento);
+
+      array_push($this->procedimentos, $procedimento);
+      $procedimento->save();
       $this->save();
     }
 
-    public function realizar_consulta(Datetime $data, Consulta $consulta)
+    private function dentista_pode_realizar_procedimento(Procedimento $procedimento)
     {
-      
+      foreach($this->dentista_responsavel->get_especialidades() as $especialidade)
+      {
+        foreach($especialidade->get_procedimentos_possiveis() as $procedimento_possivel)
+        {
+          if($procedimento_possivel == $procedimento->get_tipo_procedimento())
+          {
+            return;
+          }
+        }
+      }
+
+      throw(new Exception("\nDentista responsável não é capacitado para realizar o procedimento " . $procedimento->get_tipo_procedimento() . "\n"));
     }
 
     public function get_paciente()
