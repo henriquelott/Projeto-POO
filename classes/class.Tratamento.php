@@ -18,24 +18,22 @@ class Tratamento extends Orcamento
       return get_called_class()::$local_filename;
     }
 
-    public function cadastar_consulta($data, $tipo_procedimento, $lista)
+    public function cadastar_consulta(Data $data, Procedimento &$procedimento, Consulta &$consulta)
     {
-      $procedimento = $lista->get_procedimento_pelo_tipo($tipo_procedimento);
-      foreach($this->procedimentos as $verificar)
+      if(in_array($procedimento, $this->procedimentos))
       {
-        if($verificar == $procedimento)
-        {
-          $consulta_cadastrada = $verificar->cadastrar_consulta($data,$this->dentista_responsavel);
+        $dentista = $this->get_dentista_responsavel();
+        $dentista->cadastrar_consulta($data, $procedimento);
 
-          array_push($this->paciente->get_consultas(), $consulta_cadastrada);
+        $paciente = $this->get_paciente();
+        $paciente->cadastrar_consulta($consulta);
 
-          $this->save();
-
-          return;
-        }
-     }
-
-      throw (new Exception("\nProcedimento $tipo_procedimento não cadastrado"));
+        $this->save();
+      }
+      else
+      {
+        throw (new Exception("\nProcedimento " . $procedimento->get_tipo_procedimento() . " não cadastrado"));
+      }
     }
     
     public function realizar_pagamento(Cliente $cliente_requerido)
@@ -55,11 +53,6 @@ class Tratamento extends Orcamento
     public function realizar_consulta(Datetime $data, Consulta $consulta)
     {
       
-    }
-
-    public function get_paciente()
-    {
-      return $this->paciente;
     }
 
   }

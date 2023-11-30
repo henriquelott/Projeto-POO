@@ -77,8 +77,7 @@
 
         public function __toString()
         {
-            return get_class($this);
-            //return print_r($this);
+            return print_r($this);
         }
 
         static public function getFilename()

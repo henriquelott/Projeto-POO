@@ -74,20 +74,12 @@ class Procedimento extends persist
     return $this->preco;
   }
 
-  public function &cadastrar_consulta($data, &$dentista, $duracao)
+  public function cadastrar_consulta($data, &$dentista, $duracao)
   {
     foreach($this->consultas as $consultas_existentes)
     {
-      $ano = $consultas_existentes->get_data_consulta()->get_ano();
-      $mes = $consultas_existentes->get_data_consulta()->get_mes();
-      $dia = $consultas_existentes->get_data_consulta()->get_dia();
-      $horario = $consultas_existentes->get_data_consulta()->get_horario();
-      $duracao_existente = $consultas_existentes->get_duracao();
+      
 
-      if($ano == $data->get_ano() && $mes == $data->get_mes() && $dia == $data->get_dia() && $data->get_horario() >= $horario && $data->get_horario() <= $horario + $duracao_existente)
-      {
-        throw (new Exception("Ja existe uma consulta cadastrada nessa data"));
-      }
       
     }
     $dentista->get_agenda()->cadastrar_consulta($data);

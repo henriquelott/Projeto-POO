@@ -133,12 +133,12 @@
       throw(new Exception("\nDentista responsável não é capacitado para realizar o procedimento " . $procedimento->get_tipo_procedimento() . "\n"));
     }
 
-    public function get_paciente()
+    public function &get_paciente()
     {
       return $this->paciente;
     }
 
-    public function get_dentista_responsavel()
+    public function &get_dentista_responsavel()
     {
       return $this->dentista_responsavel;
     }

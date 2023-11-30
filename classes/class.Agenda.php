@@ -8,16 +8,31 @@ require_once "global.php";
     protected array $datas_disponiveis;
     protected array $datas_marcadas;
 
-    function __construct($datas_disponiveis)
+    function __construct(array $datas_disponiveis)
     {
       $this->construir_agenda_padrao($datas_disponiveis);
     }
 
-    function construir_agenda_padrao($datas_disponiveis)
+    function construir_agenda_padrao(array $agenda, string $mes)
     {
-      $this->datas_disponiveis = $datas_disponiveis;
-      $this->datas_marcadas = array();
+      $intervalo = DateInterval::createFromDateString("1 day");
+      $data1 = new DateTime(date('Y') . "-$mes-01");
+
+      for ((int)$data1->format("w"); ((int)$data1->format("w")) < 7; $data1->add($intervalo))
+      {
+
+      }
+
+      foreach($this->datas_disponiveis as $data_disponivel)
+      {
+        foreach($agenda as $dia_semana => $data_a_cadastrar)
+        {
+          $data1 = new DateTime(date('Y') . "-$mes-01");
+        }
+      }
     }
+
+
     
     static public function getFilename()
     {
@@ -26,47 +41,49 @@ require_once "global.php";
     
     public function editar_agenda(string $comando, Data $parametro)
     {
-      switch ($comando)
-      {
-        case 'Cadastrar Consulta' :
-          $this->cadastrar_consulta($parametro);
-          break;
-
-        case 'Desmarcar Consulta' :
-          $this->desmarcar_consulta($parametro);
-          break;
-
-        case 'Adicionar Data' :
-          $this->adicionar_data($parametro, $this->datas_disponiveis);
-          break;
-
-        case 'Remover Data' :
-          $this->remover_data($parametro, $this->datas_disponiveis);
-          break;
-
-        default: 
-          throw(new Exception("\nComando invalido\n"));
-      }
+      $this->$comando($parametro);
     }
 
-    public function cadastrar_consulta($data)
+    public function cadastrar_consulta(Data $data)
     {
-      if(($key = array_search($data,$this->datas_marcadas)) !== NULL)
+      $data_inicio = $data->get_data_inicio();
+      $data_fim = $data->get_data_fim();
+      
+      foreach($this->datas_marcadas as $data_agenda)
       {
-        throw (new Exception ("\nData ja cadastrada\n"));
+        $data_agenda_inicio = $data_agenda->get_data_inicio();
+        $data_agenda_fim = $data_agenda->get_data_fim();
+
+        if($data_inicio->format('Y-m-d') == $data_agenda_inicio->format('Y-m-d')) 
+        {
+          if(($data_inicio >= $data_agenda_inicio && $data_inicio <= $data_agenda_fim) || ($data_fim >= $data_agenda_inicio && $data_fim <= $data_agenda_fim))
+          {           
+            throw(new Exception("\nJá existe uma consulta marcada com este dentista para esta data e horário\n"));
+          }
+        }
       }
-      else if (($key = array_search($data, $this->datas_disponiveis)) !== NULL)
+
+      foreach ($this->datas_disponiveis as $data_agenda)
       {
-        $this->remover_data($data, $this->datas_disponiveis);
-        $this->adicionar_data($data, $this->datas_marcadas);
+        $data_agenda_inicio = $data_agenda->get_data_inicio();
+        $data_agenda_fim = $data_agenda->get_data_fim();
+
+        if($data_inicio->format('Y-m-d') == $data_agenda_inicio->format('Y-m-d')) 
+        {
+          if($data_inicio >= $data_agenda_inicio && $data_fim <= $data_agenda_fim)
+          {
+            array_push($this->datas_marcadas, $data);
+            $this->save();
+
+            return;
+          }
+        }
       }
-      else 
-      {
-        throw (new Exception ("\nData indisponivel\n"));
-      }
+
+      throw (new Exception ("\nData e horário indisponíveis\n"));
     }
 
-    public function desmarcar_consulta($data)
+    /*public function desmarcar_consulta($data)
     {
       if (($key = array_search($data, $this->datas_marcadas)) !== NULL)
       {
@@ -77,33 +94,30 @@ require_once "global.php";
       {
         throw(new Exception("\nConsulta nao encontrada\n"));
       }
-    }
+    }*/
 
-    public function adicionar_data($data, &$datas)
+    public function adicionar_data($data)
     {
-      if (($key = array_search($data, $datas)) !== NULL) 
-      {
-        throw(new Exception("\nData já cadastrada\n"));
-      }
-      else
-      {
-        array_push($datas, $data);
-        $this->save();
-      }
+      array_push($this->datas_disponiveis, $data);
+      $this->save();
     }
 
-     public function remover_data($data, &$datas)
+    /*public function remover_data($data)
+    {
+      $data_inicio = $data->get_data_inicio();
+      $data_fim = $data->get_data_fim();
+
+      foreach($this->datas_disponiveis as $data_disponivel)
       {
-        if (($key = array_search($data, $datas)) !== NULL) 
+        $data_disponivel_inicio = $data_disponivel->get_data_inicio();
+        $data_disponivel_fim = $data_disponivel->get_data_fim();
+
+        if($data_inicio->format('Y-m-d') == $data_agenda_inicio->format('Y-m-d'))
         {
-          unset($datas[$key]);
-          $this->save();
-        }
-        else
-        {
-          throw(new Exception("\nData nao encontrada\n"));
+
         }
       }
+    }*/
 
     public function &get_datas_marcadas()
     {

@@ -110,7 +110,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade(__FUNCTION__);
+      //self::possui_funcionalidade(__FUNCTION__);
       $paciente = self::encontrar_instancia($paciente_parametro);
       $dentista_responsavel = self::encontrar_instancia($dentista_responsavel_parametro);
 
@@ -150,7 +150,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade(__FUNCTION__);
+      //self::possui_funcionalidade(__FUNCTION__);
 
       $orcamento = self::encontrar_instancia($orcamento_parametro);
 
@@ -195,15 +195,15 @@ class Facade
   }
 
 
-  public static function cadastrar_consulta(Dentista $Dentista, Paciente $Paciente, Tratamento $Tratamento, Procedimento $procedimento, string $data, int $duracao_minutos)
+  public static function cadastrar_consulta(Tratamento $Tratamento, Procedimento $procedimento, string $data, int $duracao_minutos)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
 
-      $paciente = self::encontrar_instancia($Paciente);
-      $dentista = self::encontrar_instancia($Dentista);
       $tratamento = self::encontrar_instancia($Tratamento);
+      $paciente = $tratamento->get_paciente();
+      $dentista = $tratamento->get_dentista();        
       
       $data_inicio = new DateTime($data);
       $interval = DateInterval::createFromDateString("$duracao_minutos minutes");
@@ -211,7 +211,7 @@ class Facade
       $data_consulta = new Data($data_inicio, $data_fim);
 
       $dentista->editar_agenda("cadastrar consulta", $data_consulta);
-      $consulta = new Consulta($data_consulta, $Dentista);
+      $consulta = new Consulta($data_consulta, $dentista);
       $paciente->cadastrar_consulta($consulta);
     }
     catch(Throwable $t)
@@ -400,7 +400,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade(__FUNCTION__);
+      //self::possui_funcionalidade(__FUNCTION__);
       self::encontrar_instancia($procedimento, true);
 
       $lista_procedimentos = Lista_Procedimentos::getRecords()[0];
@@ -442,7 +442,7 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade(__FUNCTION__);
+      //self::possui_funcionalidade(__FUNCTION__);
 
       self::encontrar_instancia($especialidade, true);
 

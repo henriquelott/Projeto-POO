@@ -53,13 +53,18 @@
     }
     public function editar_agenda($comando, $data)
     {
-      $comando; //ler comando
       $this->agenda->editar_agenda($comando, $data);
     }
 
     public function &get_agenda()
     {
       return $this->agenda;
+    }
+
+    public function cadastrar_consulta(Data $data, Procedimento &$procedimento)
+    {
+      $this->agenda->cadastrar_consulta($data);
+      $this->save();
     }
   }
   ?>

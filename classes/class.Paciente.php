@@ -52,6 +52,7 @@
     public function cadastrar_consulta(Consulta &$consulta)
     {
       array_push($this->consultas, $consulta);
+      $this->save();
     }
 
     public function realizar_consulta(DateTime $data)

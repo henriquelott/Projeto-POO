@@ -8,9 +8,9 @@ $data_inicio = new DateTime($data);
 $interval = DateInterval::createFromDateString("$duracao_minutos minutes");
 $data_fim = $data_inicio->add($interval);
 
-var_dump($data_fim);
+var_dump($data_fim);*/
 
-$lista_especialidades = new Lista_Especialidades();
+/*$lista_especialidades = new Lista_Especialidades();
 $lista_especialidades->save();
 
 $lista_procedimentos = new Lista_Procedimentos();
@@ -39,21 +39,64 @@ Facade::aprovar_orcamento($orcamento,"Cartão de débito");
 
 $orcamentor = Orcamento::getRecordsByField("paciente", $paciente);
 
-$orcamentor[0]->save();
 
-$orcamentor[0]->save();
+//var_dump($orcamentor);
 
-$orcamentor[0]->save();
 
-$orcamentor[0]->save();
 
-$orcamentor[0]->save();
 
-var_dump($orcamentor);*/
 
-Facade::criar_perfil("FUDIAD", array ("criar_usuario", "criar_perfil", "aprovar_orcamento"));
 
-$perfil = Perfil::getRecords();
 
-Facade::criar_perfil("FUDIAD", array ("criar_usuario", "criar_perfil", "aprovar_orcamento"));
+
+/*$data1 = new DateTime('2000-11-2 14:30:00');
+
+$data2 = new DateTime('2000-11-2 23:30:00');
+
+$dacta = array (new Data($data1, $data2));
+
+$agenda = new Agenda($dacta);
+
+$dota1 = new DateTime('2000-11-2 15:00:00');
+
+$dota2 = new DateTime('2000-11-2 17:30:00');
+
+$docta = new Data($dota1, $dota2);
+
+$agenda->cadastrar_consulta($docta);
+
+$dita1 = new DateTime('2000-11-2 16:00:00');
+
+$dita2 = new DateTime('2000-11-2 18:00:00');
+
+$dicta = new Data($dita1, $dita2);
+
+try
+{
+  $agenda->cadastrar_consulta($dicta);
+}
+catch (Throwable $t)
+{
+  echo $t->getMessage();
+}
+
+$agengda = Agenda::getRecords();
+
+$agengda[0]->save();
+
+$agennda = Agenda::getRecords();
+
+var_dump($agennda);*/
+
+$array = array(array('14:00', '16:30'));
+
+$mes = "2";
+
+$ano = date("Y");
+
+$data = new DateTime(date('Y') . "-$mes-01");
+
+var_dump((int)$data->format('w'));
+
+
 ?>
