@@ -4,13 +4,29 @@ require_once "global.php";
 class Cartao extends Forma_De_Pagamento
 {
   protected static $local_filename = "Cartao.txt";
-  protected ?float $taxa_cartao;
+  protected float $taxa_cartao;
   protected ?int $parcelas;
 
-  function __construct(string $forma_pagamento, int $parcelas = NULL)
+  function __construct(string $forma_pagamento, ?int $parcelas = NULL)
   {
-    parent::__construct($forma_pagamento);
-    $this->parcelas = $parcelas;
+    if($forma_pagamento == "Cartão de Crédito" && $parcelas >=1 && $parcelas <=6)
+    {
+      parent::__construct($forma_pagamento);
+      $this->parcelas = $parcelas;
+      $lista = Lista_Taxas_Cartao::getRecords()[0];
+      $this->taxa_cartao = $lista->get_taxas_credito()[$parcelas-1];
+    }
+    else if($forma_pagamento == "Cartão de Débito" && $parcelas == NULL)
+    {
+      parent::__construct($forma_pagamento);
+      $this->parcelas = $parcelas;
+      $lista = Lista_Taxas_Cartao::getRecords()[0];
+      $this->taxa_cartao = $lista->get_taxa_debito();
+    }
+    else
+    {
+      throw (new Exception("Você não pode parcelar um pagamento em cartão de crédito, nem parcelar um cartão de crédito em mais de 6 vezes."));
+    }
   }
 
   static public function getFilename()

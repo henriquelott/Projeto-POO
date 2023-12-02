@@ -25,7 +25,8 @@ class Perfil extends persist
     "criar_procedimento" => false,
     "criar_especialidade" => false, 
     "cadastrar_especialidade" => false,
-    "realizar_pagamento" => false
+    "realizar_pagamento" => false,
+    "calcular_resultado_mensal" => false
   );
 
   function __construct(?bool $eh_admin = NULL)

@@ -196,21 +196,19 @@ class Facade
 
       $tratamento = self::encontrar_instancia($tratamento_parametro);  
       $procedimento = self::encontrar_instancia($procedimento_parametro);    
-      
+
       $data_inicio = new DateTime($data);
       $interval = DateInterval::createFromDateString("$duracao_minutos minutes");
       $data_fim = $data_inicio->add($interval);
       $data_consulta = new Data($data_inicio, $data_fim);
 
-      $tratamento->cadastar_consulta()
-      
+      $tratamento->cadastar_consulta($data_consulta, $procedimento);
     }
     catch(Throwable $t)
     {
       echo $t->getMessage();
       return false;
     }
-
     return true;
   }
 
@@ -539,30 +537,40 @@ class Facade
   }
 
 
-  public static function calcular_resultado_mensal()
+  public static function calcular_resultado_mensal() : bool
   {
-    $tratamentos = Tratamento::getRecords();
-    $dentistas_parceiros = Dentista_Parceiro::getRecords();
-    $dentistas_funcionarios = Dentista_Funcionario::getRecords();
-
-    $resultado_mensal = 0;
-    foreach($tratamentos as $tratamento)
+    try
     {
-      $resultado_mesal += $tratmento->calcular_receita();
-    }
+      self::possui_funcionalidade(__FUNCTION__);
+      
+      $tratamentos = Tratamento::getRecords();
+      $dentistas_parceiros = Dentista_Parceiro::getRecords();
+      $dentistas_funcionarios = Dentista_Funcionario::getRecords();
+  
+      $resultado_mensal = 0;
+      foreach($tratamentos as $tratamento)
+      {
+        $resultado_mesal += $tratmento->calcular_receita();
+      }
+  
+      foreach($dentistas_parceiros as $dentista_parceiro)
+      {
+        $resultado_mesal -= $dentista_parceiro->comissao;
+      }
+  
+      foreach($dentistas_funcionarios as $dentista_funcionario)
+      {
+        $resultado_mesal -= $dentista_funcionario->salario;
+      }
 
-    foreach($dentistas_parceiros as $dentista_parceiro)
+      echo "\nResultado mensal: $resultado_mensal\n";
+      return true;
+    }
+    catch(Throwable $t)
     {
-      $resultado_mesal -= $dentista_parceiro->comissao;
+      echo $t->getMessage();
+      return false;
     }
-
-    foreach($dentistas_funcionarios as $dentista_funcionario)
-    {
-      $resultado_mesal -= $dentista_funcionario->salario;
-    }
-
-    return $resultado_mensal;
-  }
 }
 
 ?>

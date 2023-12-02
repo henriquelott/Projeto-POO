@@ -50,7 +50,7 @@
       return $this->agenda;
     }
 
-    public function cadastrar_consulta(Data $data, Procedimento &$procedimento)
+    public function cadastrar_consulta(Data $data)
     {
       if($this->agenda != NULL)
       {
@@ -59,7 +59,7 @@
       }
       else
       {
-        throw (new Exception("\nO dentista $this->nome() não possui agenda cadastrada\n"));
+        throw (new Exception("\nO dentista $this->nome não possui agenda cadastrada\n"));
       }
     }
   }
