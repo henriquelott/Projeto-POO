@@ -76,31 +76,23 @@ class Procedimento extends persist
 
   public function cadastrar_consulta($data, &$dentista, $duracao)
   {
-    foreach($this->consultas as $consultas_existentes)
-    {
-      
-
-      
-    }
-    $dentista->get_agenda()->cadastrar_consulta($data);
-
     $consulta_nova = new Consulta($data, $dentista);
-  
-    array_push($this->consultas, $consulta_nova);
+    $this->consultas[] = $consulta_nova;
 
-    return $consulta_nova;
+    $this->save();
+    $consulta_nova->save();
   }
 
   public function cancelar_consulta_paciente(Consulta $consulta)
   {
-      foreach ($this->consultas as $consult)
+    foreach ($this->consultas as $consult)
+    {
+      if($consult == $consulta)
       {
-          if($consult == $consulta)
-          {
-            $consult->cancelar_consulta_paciente();
-            return;
-          }
+        $consult->cancelar_consulta_paciente();
+        return;
       }
+    }
     
       throw (new Exception("Consulta nao consta no procedimento"));
   }

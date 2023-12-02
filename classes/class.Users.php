@@ -22,7 +22,7 @@ class Users extends persist
       }
       else
       {
-        throw (new Exception("\nEste perfil não está cadastrado"));
+        throw (new Exception("\nEste perfil não está cadastrado\n"));
       }
     }
 

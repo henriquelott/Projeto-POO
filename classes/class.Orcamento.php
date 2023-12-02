@@ -6,7 +6,7 @@
     protected static $local_filename = "Orcamento.txt";
     protected Paciente $paciente;
     protected Dentista $dentista_responsavel;
-    protected $procedimentos;
+    protected array $procedimentos;
     protected float $valor_total;
 
     function __construct(Paciente $Paciente, Dentista $Dentista_Responsavel, array $procedimentos)

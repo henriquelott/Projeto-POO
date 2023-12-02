@@ -18,7 +18,7 @@ class Tratamento extends Orcamento
       return get_called_class()::$local_filename;
     }
 
-    public function cadastar_consulta(Data $data, Procedimento &$procedimento, Consulta &$consulta)
+    public function cadastar_consulta(Data $data, Procedimento &$procedimento)
     {
       if(in_array($procedimento, $this->procedimentos))
       {
@@ -32,7 +32,7 @@ class Tratamento extends Orcamento
       }
       else
       {
-        throw (new Exception("\nProcedimento " . $procedimento->get_tipo_procedimento() . " não cadastrado"));
+        throw (new Exception("\nProcedimento " . $procedimento->get_tipo_procedimento() . " não cadastrado neste tratamento"));
       }
     }
     

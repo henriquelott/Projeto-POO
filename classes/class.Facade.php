@@ -188,24 +188,22 @@ class Facade
   }
 
 
-  public static function cadastrar_consulta(Tratamento $Tratamento, Procedimento $procedimento, string $data, int $duracao_minutos)
+  public static function cadastrar_consulta(Tratamento $tratamento_parametro, Procedimento $procedimento_parametro, string $data, int $duracao_minutos)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
 
-      $tratamento = self::encontrar_instancia($Tratamento);
-      $paciente = $tratamento->get_paciente();
-      $dentista = $tratamento->get_dentista();        
+      $tratamento = self::encontrar_instancia($tratamento_parametro);  
+      $procedimento = self::encontrar_instancia($procedimento_parametro);    
       
       $data_inicio = new DateTime($data);
       $interval = DateInterval::createFromDateString("$duracao_minutos minutes");
       $data_fim = $data_inicio->add($interval);
       $data_consulta = new Data($data_inicio, $data_fim);
 
-      $dentista->editar_agenda("cadastrar consulta", $data_consulta);
-      $consulta = new Consulta($data_consulta, $dentista);
-      $paciente->cadastrar_consulta($consulta);
+      $tratamento->cadastar_consulta()
+      
     }
     catch(Throwable $t)
     {
@@ -224,13 +222,13 @@ class Facade
     
   }
 
-  public static function editar_agenda(Dentista $dentista_parametro, string $data)
+  public static function editar_agenda(Dentista $dentista_parametro, string $data, string $comando)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
       $dentista = self::encontrar_instancia($dentista_parametro);
-      $dentista->editar_agenda("", $data);
+      $dentista->editar_agenda($comando, $data);
     }
     catch(Throwable $t)
     {

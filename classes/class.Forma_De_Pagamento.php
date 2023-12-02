@@ -4,7 +4,7 @@ require_once "global.php";
 abstract class Forma_De_Pagamento extends persist
 {
   protected static $local_filename = "Forma_De_Pagamento.txt";
-  protected $forma_pagamento;
+  protected string $forma_pagamento;
 
   function __construct ($forma_pagamento)
   {
