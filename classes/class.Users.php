@@ -4,18 +4,17 @@ require_once "global.php";
 class Users extends persist
   {
     protected static $local_filename = "Users.txt";
-    public $login;
-    public $senha;
-    public $email;
-    public Perfil $perfil;
+    protected string $login;
+    protected string $senha;
+    protected string $email;
+    protected Perfil $perfil;
 
-    public function __construct($login, $senha, $email, $perfil)
+    public function __construct(string $login, string $senha, string $email, Perfil $perfil)
     {
       $this->login = $login;
       $this->senha = $senha;
       $this->email = $email;
       $this->perfil = $perfil;
-
       $this->save();
     }
 
@@ -24,22 +23,22 @@ class Users extends persist
       return get_called_class()::$local_filename;
     }
 
-    public function get_login()
+    public function get_login()  :  string 
     {
       return $this->login;
     }
 
-    public function get_senha()
+    public function get_senha()  :  string 
     {
       return $this->senha;
     }
 
-    public function get_email()
+    public function get_email()  :  string 
     {
       return $this->email;
     }
 
-    public function get_perfil()
+    public function &get_perfil()  :  Perfil 
     {
       return $this->perfil;
     }

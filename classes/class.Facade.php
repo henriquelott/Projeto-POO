@@ -3,17 +3,15 @@ require_once "global.php";
 
 class Facade
 {
-
-  public static function realizar_login($user, $pass)
+  public static function realizar_login($login, $senha)
   {
     try
     {   
-      $cadastro = Users::getRecordsByField("login", $user);
-      $nome_perfil = $cadastro[0]->perfil->nome_perfil;
+      $cadastro = Users::getRecordsByField("login", $login);
 
-      if($cadastro[0]->senha == $pass)
+      if($cadastro[0]->get_senha() == $senha)
       {
-        $Usuario = Usuario::construct($cadastro[0]->login, $cadastro[0]->senha, $cadastro[0]->email, $cadastro[0]->perfil->nome_perfil);
+        $Usuario = Usuario::construct($cadastro[0]->get_login(), $cadastro[0]->get_senha(), $cadastro[0]->get_email(), $cadastro[0]->get_perfil());
         
         if($Usuario == null)
           throw (new Exception("\nUsuário já logado\n"));
@@ -21,15 +19,17 @@ class Facade
         else
           $Usuario->save();
       }
-
       else
+      {
         throw (new Exception("\nUsuário e/ou senha inválido(s), Tente novamente!\n"));
+      }
     }
     catch(Throwable $t)
     {
       echo $t->getMessage();
       return false;
     }
+    return true;
   }
 
 
@@ -41,36 +41,31 @@ class Facade
     {
       throw (new Exception("\nNenhum usuário logado\n"));
     }
-    else if($usuario->get_perfil()->possui_funcionalidade($funcionalidade) == true)
+    else 
     {
-      return;
-    }
-    else
-    {
-      throw (new Exception("\nEste perfil não possui essa funcionalidade\n"));
+      $usuario->get_perfil()->possui_funcionalidade($funcionalidade);
     }
   }
 
 
-  public static function criar_perfil($tipo_perfil, $funcionalidades)
+  public static function criar_perfil(string $tipo_perfil, array $funcionalidades)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
       $perfil = new Perfil();
-      $perfil->criar_perfil( $tipo_perfil, $funcionalidades); 
+      $perfil->criar_perfil($tipo_perfil, $funcionalidades);
+      return true;
     }
     catch(Throwable $t)
     {
       echo $t->getMessage();
       return false;
     }
-    $perfil->save();
-    return true;
   }
 
 
-  public static function criar_usuario($login, $senha, $email, $nome_perfil)
+  public static function criar_usuario(string $login, string $senha, string $email, string $nome_perfil)
   {
     try
     {  
@@ -88,7 +83,7 @@ class Facade
         }
         else
         {
-          new Users($login, $senha, $email, $perfil);
+          new Users($login, $senha, $email, $perfil[0]);
           echo "<script>alert('Cadastro criado com sucesso!');</script>";
         }
       }
@@ -110,7 +105,7 @@ class Facade
   {
     try
     {
-      //self::possui_funcionalidade(__FUNCTION__);
+      self::possui_funcionalidade(__FUNCTION__);
       $paciente = self::encontrar_instancia($paciente_parametro);
       $dentista_responsavel = self::encontrar_instancia($dentista_responsavel_parametro);
 
@@ -150,7 +145,7 @@ class Facade
   {
     try
     {
-      //self::possui_funcionalidade(__FUNCTION__);
+      self::possui_funcionalidade(__FUNCTION__);
 
       $orcamento = self::encontrar_instancia($orcamento_parametro);
 
@@ -190,7 +185,6 @@ class Facade
       echo $t->getMessage();
       return false;
     }
-
     return true;
   }
 
@@ -238,6 +232,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    return true;
   }
 
   public static function cadastrar_agenda_padrao(Dentista $dentista)
@@ -250,13 +245,13 @@ class Facade
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
-
     }
     catch(Throwable $t)
     {
       echo $t->getMessage();
       return false;
     }
+    return true;
   }
 
   public static function editar_informacoes_usuario($atributo, $valor)
@@ -400,7 +395,7 @@ class Facade
   {
     try
     {
-      //self::possui_funcionalidade(__FUNCTION__);
+      self::possui_funcionalidade(__FUNCTION__);
       self::encontrar_instancia($procedimento, true);
 
       $lista_procedimentos = Lista_Procedimentos::getRecords()[0];
@@ -442,7 +437,7 @@ class Facade
   {
     try
     {
-      //self::possui_funcionalidade(__FUNCTION__);
+      self::possui_funcionalidade(__FUNCTION__);
 
       self::encontrar_instancia($especialidade, true);
 
@@ -495,12 +490,13 @@ class Facade
   }
 
 
-  public static function realizar_consulta(Paciente $paciente_parametro, string $data)  :  bool
+  public static function realizar_consulta(Tratamento $tratamento_parametro, string $data)  :  bool
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
-      $paciente = self::encontrar_instancia($paciente_parametro);
+      $tratamento = self::encontrar_instancia($tratamento_parametro);
+      $paciente = $tratamento->get_paciente();
       $date_time = new DateTime($data);
       $paciente->realizar_consulta($date_time);
     }
@@ -539,6 +535,5 @@ class Facade
     return $instancia;
   }
 }
-
 
 ?>

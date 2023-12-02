@@ -23,22 +23,22 @@ class Perfil extends persist
     "cadastrar_paciente" => false,
     "cadastrar_procedimento" => false,
     "criar_procedimento" => false,
+    "criar_especialidade" => false, 
     "cadastrar_especialidade" => false,
     "realizar_pagamento" => false
   );
 
   function __construct()
   {
-    
   }
 
-  function criar_perfil($nome_perfil, $lista_funcionalidades)
+  public function criar_perfil(string $nome_perfil, array $lista_funcionalidades)
   {
     if(Perfil::getRecordsByField("nome_perfil", $nome_perfil) != null)
     {
-      throw(new Exception("Perfil $nome_perfil já cadastrado"));
+      throw (new Exception("Perfil $nome_perfil já cadastrado"));
     }
-    
+
     foreach ($lista_funcionalidades as $funcionalidade)
     {
       $achou = false;
@@ -65,13 +65,12 @@ class Perfil extends persist
 
   public function possui_funcionalidade($funcionalidade)
   {
-    foreach(array_keys($this->lista_funcionalidades) as $key)
-    {  
-      if($key == $funcionalidade)
-        return $this->lista_funcionalidades[$funcionalidade];
+    if($this->lista_funcionalidades[$funcionalidade])
+    {
+      return;
     }
     
-    throw (new Exception("\nFuncionalidade $funcionalidade não encontrada\n"));
+    throw (new Exception("\nEste perfil não possui a funcionalidade $funcionalidade\n"));
   }
 
   public function get_nome_perfil()

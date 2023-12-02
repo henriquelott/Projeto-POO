@@ -4,13 +4,13 @@
   class Usuario extends persist
   {
     protected static $local_filename = "Usuario.txt";
-    protected $login;
-    protected $senha;
-    protected $email;
+    protected string $login;
+    protected string $senha;
+    protected string $email;
     protected Perfil $perfil;
-    protected static ?Usuario $instance;
+    protected static ?Usuario $instance = NULL;
   
-    private function __construct($login, $senha, $email, $perfil)
+    private function __construct(string $login, string $senha, string $email, Perfil $perfil)
     {
       $this->login = $login;
       $this->senha = $senha;
@@ -43,7 +43,7 @@
         return self::$instance;
       }
 
-      return null;
+      return self::$instance;
     }
 
     static function get_instance()
@@ -72,17 +72,22 @@
       }
     }
 
-    public function get_login()
+    public function get_login() : string
     {
       return $this->login;
     }
 
-    public function get_email()
+    public function get_senha() : string
+    {
+      return $this->senha;  
+    }
+
+    public function get_email() : string
     {
       return $this->email;
     }
 
-    public function get_perfil()
+    public function get_perfil() : Perfil
     {
       return $this->perfil;
     }

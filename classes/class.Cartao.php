@@ -5,9 +5,9 @@ class Cartao extends Forma_De_Pagamento
 {
   protected static $local_filename = "Cartao.txt";
   protected ?float $taxa_cartao;
-  protected int $parcelas;
+  protected ?int $parcelas;
 
-  function __construct(string $forma_pagamento, int $parcelas = 1)
+  function __construct(string $forma_pagamento, int $parcelas = NULL)
   {
     parent::__construct($forma_pagamento);
     $this->parcelas = $parcelas;

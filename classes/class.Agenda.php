@@ -5,34 +5,46 @@ require_once "global.php";
   class Agenda extends persist
   {
     protected static $local_filename = "Agenda.txt";
-    protected array $datas_disponiveis;
-    protected array $datas_marcadas;
+    protected array $datas_disponiveis = array();
+    protected array $datas_marcadas = array();
+    protected array $agenda_padrao = array();
 
-    function __construct(array $datas_disponiveis)
+    function __construct(array $agenda, string $mes)
     {
-      $this->construir_agenda_padrao($datas_disponiveis);
+      $this->datas_marcadas = array();
+      $this->agenda_padrao = $agenda;
+      $this->datas_disponiveis = array();
+      $this->construir_agenda_padrao($agenda, $mes);
     }
 
-    function construir_agenda_padrao(array $agenda, string $mes)
+    public function construir_agenda_padrao(array $agenda, string $mes)
     {
+      unset($this->datas_disponiveis);
+      $this->agenda_padrao = $agenda;
       $intervalo = DateInterval::createFromDateString("1 day");
-      $data1 = new DateTime(date('Y') . "-$mes-01");
+      $data_iterador = new DateTime(date('Y') . "-$mes-01");
+      $array = array();
 
-      for ((int)$data1->format("w"); ((int)$data1->format("w")) < 7; $data1->add($intervalo))
+      for ((int)$data_iterador->format("d"); ((int)$data_iterador->format("d")) < ((int)$data_iterador->format("t")); $data_iterador->add($intervalo))
       {
-
-      }
-
-      foreach($this->datas_disponiveis as $data_disponivel)
-      {
-        foreach($agenda as $dia_semana => $data_a_cadastrar)
+        if(!empty($agenda[((int)$data_iterador->format("w"))]))
         {
-          $data1 = new DateTime(date('Y') . "-$mes-01");
+          $data_inicio = new DateTime($data_iterador->format("Y") . "-" . $mes ."-". $data_iterador->format("d") . " " . $agenda[((int)$data_iterador->format("w"))][0]);
+          $data_fim = new DateTime($data_iterador->format("Y") . "-" . $mes ."-". $data_iterador->format("d") . " " . $agenda[((int)$data_iterador->format("w"))][1]);
+          $data = new Data($data_inicio, $data_fim);
+          array_push($array, $data);
         }
       }
+      $this->datas_disponiveis = $array;
+      $this->save();
     }
 
-
+    public function atualizar_agenda()
+    {
+      $data = new DateTime("now");
+      $mes = $data->format("m");
+      $this->construir_agenda_padrao($this->agenda_padrao, $mes);
+    }
     
     static public function getFilename()
     {
@@ -54,7 +66,7 @@ require_once "global.php";
         $data_agenda_inicio = $data_agenda->get_data_inicio();
         $data_agenda_fim = $data_agenda->get_data_fim();
 
-        if($data_inicio->format('Y-m-d') == $data_agenda_inicio->format('Y-m-d')) 
+        if($data_inicio->format('Y-m-d') == $data_agenda_inicio->format('Y-m-d'))
         {
           if(($data_inicio >= $data_agenda_inicio && $data_inicio <= $data_agenda_fim) || ($data_fim >= $data_agenda_inicio && $data_fim <= $data_agenda_fim))
           {           
@@ -96,7 +108,7 @@ require_once "global.php";
       }
     }*/
 
-    public function adicionar_data($data)
+    public function adicionar_data(Data $data)
     {
       array_push($this->datas_disponiveis, $data);
       $this->save();

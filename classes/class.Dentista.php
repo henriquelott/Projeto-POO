@@ -6,7 +6,7 @@
     protected static $local_filename = "Dentista.txt";
     protected $cro;
     protected array $especialidades;
-    protected Agenda $agenda;
+    protected ?Agenda $agenda = NULL;
 
 
     function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista)
@@ -36,20 +36,9 @@
       $this->save();
     }
 
-    public function criar_agenda(array $datas_disponiveis, array $datas_marcadas)
-    {
-      if(count($datas_marcadas) != 0)
-      {
-        $today = getdate();
-        foreach($datas_marcadas as $datas)
-        {
-
-        }
-      }
-      else
-      {
-        $this->agenda = new Agenda ($datas_disponiveis);
-      }
+    public function criar_agenda(array $agenda, string $mes_geracao_agenda)
+    {     
+      $this->agenda = new Agenda($agenda, $mes_geracao_agenda);
     }
     public function editar_agenda($comando, $data)
     {
@@ -63,8 +52,15 @@
 
     public function cadastrar_consulta(Data $data, Procedimento &$procedimento)
     {
-      $this->agenda->cadastrar_consulta($data);
-      $this->save();
+      if($this->agenda != NULL)
+      {
+        $this->agenda->cadastrar_consulta($data);
+        $this->save();
+      }
+      else
+      {
+        throw (new Exception("\nO dentista $this->nome() não possui agenda cadastrada\n"));
+      }
     }
   }
   ?>

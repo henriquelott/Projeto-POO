@@ -10,7 +10,33 @@ $data_fim = $data_inicio->add($interval);
 
 var_dump($data_fim);*/
 
-/*$lista_especialidades = new Lista_Especialidades();
+$perfil = new Perfil("admin", 
+array (
+"criar_perfil",
+"criar_usuario",
+"cadastrar_orcamento",
+"aprovar_orcamento",
+"cadastrar_consulta_avaliacao",
+"cadastrar_consulta",
+"editar_agenda",
+"editar_informacoes",
+"cadastrar_auxiliar", 
+"cadastrar_secretaria",
+"cadastrar_dentista_funcionario",
+"cadastrar_dentista_parceiro",
+"cadastrar_cliente", 
+"cadastrar_paciente",
+"cadastrar_procedimento",
+"criar_procedimento",
+"criar_especialidade",
+"cadastrar_especialidade",
+"realizar_pagamento"));
+
+$user = new Users("login", "senha", "email", $perfil);
+
+Facade::realizar_login("login", "senha");
+
+$lista_especialidades = new Lista_Especialidades();
 $lista_especialidades->save();
 
 $lista_procedimentos = new Lista_Procedimentos();
@@ -88,7 +114,7 @@ $agennda = Agenda::getRecords();
 
 var_dump($agennda);*/
 
-$array = array(array('14:00', '16:30'));
+/*$array = array(array('14:00', '16:30'));
 
 $mes = "2";
 
@@ -96,7 +122,41 @@ $ano = date("Y");
 
 $data = new DateTime(date('Y') . "-$mes-01");
 
-var_dump((int)$data->format('w'));
+//var_dump((int)$data->format('w'));
 
+$array = array(array(), array("08:00","16:00"), array("08:00","16:00"), array("08:00","16:00"), array("08:00","16:00"), array("08:00","16:00"), array());
+
+$agenda = new Agenda($array, $mes);
+
+$agenda->construir_agenda_padrao($array, $mes);
+
+/*$data_inicio = new DateTime($data->format("Y") . "-" . $mes ."-". $data->format("d") . " " . $array[((int)$data->format("w"))][0]);
+$data_fim = new DateTime($data->format("Y") . "-" . $mes ."-". $data->format("d") . " " . $array[((int)$data->format("w"))][1]);
+$data = new Data($data_inicio, $data_fim);
+       
+var_dump($data);
+
+/*function funciones(array $agenda, string $mes)
+{
+  unset($datas_disponiveis);
+  $agenda_padrao = $agenda;
+  $intervalo = DateInterval::createFromDateString("1 day");
+  $data_iterador = new DateTime(date('Y') . "-$mes-01");
+
+  for ((int)$data_iterador->format("d"); ((int)$data_iterador->format("d")) < ((int)$data_iterador->format("t")) ; $data_iterador->add($intervalo))
+  {
+    if(!empty($agenda[((int)$data_iterador->format("w"))]))
+    {
+      $data_inicio = new DateTime($data_iterador->format("Y") . "-" . $mes ."-". $data_iterador->format("d") . " " . $agenda[((int)$data_iterador->format("w"))][0]);
+      $data_fim = new DateTime($data_iterador->format("Y") . "-" . $mes ."-". $data_iterador->format("d") . " " . $agenda[((int)$data_iterador->format("w"))][1]);
+      $data = new Data($data_inicio, $data_fim);
+    }
+    array_push($datas_disponiveis, $data);
+  }
+
+  return $datas_disponiveis;
+}
+
+$datas_disponiveis = funciones($array, $mes);*/
 
 ?>
