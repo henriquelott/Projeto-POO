@@ -23,7 +23,7 @@ class Procedimento extends persist
 
   static public function getFilename()
   {
-    return get_called_class()::$local_filename;
+    return self::$local_filename;
   }
 
   public function verificar_destista($dentista, $tipo_procedimento)

@@ -18,7 +18,7 @@ class Dentista_Parceiro extends Dentista
 
   static public function getFilename()
   {
-    return get_called_class()::$local_filename;
+    return self::$local_filename;
   }
 
   public function calc_comissao(Procedimento $procedimento)

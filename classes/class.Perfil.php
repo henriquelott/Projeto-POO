@@ -28,8 +28,27 @@ class Perfil extends persist
     "realizar_pagamento" => false
   );
 
-  function __construct()
+  function __construct(?bool $eh_admin = NULL)
   {
+    if($eh_admin)
+    {
+      $perfil = Perfil::getRecordsByField("nome_perfil", "admin");
+
+      if(empty($perfil))
+      {
+        $this->nome_perfil = "admin";
+        foreach($this->lista_funcionalidades as $key => &$value)
+        {
+          $value = true;
+        }
+        $this->save();
+      }
+      else
+      {
+        $this->nome_perfil = $perfil[0]->get_nome_perfil();
+        $this->lista_funcionalidades = $perfil[0]->get_lista_funcionalidades();
+      }
+    }
   }
 
   public function criar_perfil(string $nome_perfil, array $lista_funcionalidades)
@@ -76,6 +95,11 @@ class Perfil extends persist
   public function get_nome_perfil()
   {
     return $this->nome_perfil;
+  }
+
+  public function get_lista_funcionalidades()  :  array
+  {
+    return $this->lista_funcionalidades;
   }
 }
 

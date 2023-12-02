@@ -18,6 +18,11 @@
       $this->nascimento = $nascimento;
     }
 
+    static public function getFilename()
+    {
+      return self::$local_filename;
+    }
+
     public function remover_consultas_realizadas(Consulta $consulta)
     {
       $key = array_search($consulta, $this->consultas);

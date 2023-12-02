@@ -10,29 +10,9 @@ $data_fim = $data_inicio->add($interval);
 
 var_dump($data_fim);*/
 
-$perfil = new Perfil("admin", 
-array (
-"criar_perfil",
-"criar_usuario",
-"cadastrar_orcamento",
-"aprovar_orcamento",
-"cadastrar_consulta_avaliacao",
-"cadastrar_consulta",
-"editar_agenda",
-"editar_informacoes",
-"cadastrar_auxiliar", 
-"cadastrar_secretaria",
-"cadastrar_dentista_funcionario",
-"cadastrar_dentista_parceiro",
-"cadastrar_cliente", 
-"cadastrar_paciente",
-"cadastrar_procedimento",
-"criar_procedimento",
-"criar_especialidade",
-"cadastrar_especialidade",
-"realizar_pagamento"));
+//$perfil = new Perfil(true);
 
-$user = new Users("login", "senha", "email", $perfil);
+$user = new Users("login", "senha", "email", "admin");
 
 Facade::realizar_login("login", "senha");
 
@@ -46,9 +26,9 @@ $procedimentos = array (new Procedimento("descricao", "tipo_procedimento", 100, 
 
 $especialidades = array(new Especialidade("especialidade", $procedimentos, 10));
 
-Facade::criar_procedimento($procedimentos[0]);
+//Facade::criar_procedimento($procedimentos[0]);
 
-Facade::criar_especialidade($especialidades[0]);
+//Facade::criar_especialidade($especialidades[0]);
 
 $array_especialidades = array(new Especialidade("especialidade", $procedimentos, 10));
 
@@ -61,7 +41,7 @@ $paciente->save();
 $orcamento = new Orcamento($paciente, $dentista, $procedimentos);
 $orcamento->save();
 
-Facade::aprovar_orcamento($orcamento,"Cartão de débito");
+Facade::aprovar_orcamento($orcamento,"Pix");
 
 $orcamentor = Orcamento::getRecordsByField("paciente", $paciente);
 
@@ -114,9 +94,9 @@ $agennda = Agenda::getRecords();
 
 var_dump($agennda);*/
 
-/*$array = array(array('14:00', '16:30'));
+/*$array = array(array('14:00', '16:30'));*/
 
-$mes = "2";
+/*$mes = "2";
 
 $ano = date("Y");
 

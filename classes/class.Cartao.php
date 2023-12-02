@@ -11,13 +11,11 @@ class Cartao extends Forma_De_Pagamento
   {
     parent::__construct($forma_pagamento);
     $this->parcelas = $parcelas;
-
-    var_dump($this);
   }
 
   static public function getFilename()
   {
-    return get_called_class()::$local_filename;
+    return "Cartao.txt";
   }
 
   public function cadastrar_taxa_cartao($valortotal)
@@ -43,13 +41,12 @@ class Cartao extends Forma_De_Pagamento
   }
   
   public function calcular_valor($valortotal)
-    {
-      return $valortotal - $this->taxa_cartao; 
-    }
+  {
+    return $valortotal - $this->taxa_cartao; 
+  }
 
   public function get_taxa()
-  {
-    
+  {    
     return $this->taxa_cartao;
   }
 

@@ -12,7 +12,7 @@ class Lista_Procedimentos extends persist
 
   static public function getFilename()
   {
-    return get_called_class()::$local_filename;
+    return self::$local_filename;
   }
 
   public function cadastrar_procedimento(Procedimento &$procedimento)

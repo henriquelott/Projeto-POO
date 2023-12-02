@@ -77,12 +77,12 @@
 
         public function __toString()
         {
-            return print_r($this);
+          return '';
         }
 
-        static public function getFilename()
-        {
-          return get_called_class() . ".txt";
-        }
+        abstract static public function getFilename();
+        /*{
+          return (get_called_class() . ".txt");
+        }*/
     }
   ?>

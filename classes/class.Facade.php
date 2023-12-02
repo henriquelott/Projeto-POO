@@ -52,16 +52,16 @@ class Facade
   {
     try
     {
-      self::possui_funcionalidade(__FUNCTION__);
+      //self::possui_funcionalidade(__FUNCTION__);
       $perfil = new Perfil();
       $perfil->criar_perfil($tipo_perfil, $funcionalidades);
-      return true;
     }
     catch(Throwable $t)
     {
       echo $t->getMessage();
       return false;
     }
+    return true;
   }
 
 
@@ -161,7 +161,6 @@ class Facade
     return true;
   }
   
-
   public static function cadastrar_consulta_de_avaliacao(Usuario $Usuario, Dentista $Dentista, Paciente $Paciente, string $data)
   {    
     try
@@ -217,6 +216,13 @@ class Facade
     return true;
   }
 
+  public function cadastrar_taxa_cartao(string $tipo_cartao, float $taxa_cartao, ?array $num_parcelas = NULL)
+  {
+    self::possui_funcionalidade(__FUNCTION__);
+    $lista_taxas = Lista_Taxas_Cartao::getRecords();
+    $lista_taxas[0]->cadastrar_taxa($tipo_cartao, $taxa_cartao, $num_parcelas);
+    
+  }
 
   public static function editar_agenda(Dentista $dentista_parametro, string $data)
   {
@@ -224,7 +230,6 @@ class Facade
     {
       self::possui_funcionalidade(__FUNCTION__);
       $dentista = self::encontrar_instancia($dentista_parametro);
-
       $dentista->editar_agenda("", $data);
     }
     catch(Throwable $t)

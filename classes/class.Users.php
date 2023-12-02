@@ -9,13 +9,21 @@ class Users extends persist
     protected string $email;
     protected Perfil $perfil;
 
-    public function __construct(string $login, string $senha, string $email, Perfil $perfil)
+    public function __construct(string $login, string $senha, string $email, string $tipo_perfil)
     {
-      $this->login = $login;
-      $this->senha = $senha;
-      $this->email = $email;
-      $this->perfil = $perfil;
-      $this->save();
+      $perfil = Perfil::getRecordsByField("nome_perfil", $tipo_perfil);
+      if(!empty($perfil))
+      {
+        $this->login = $login;
+        $this->senha = $senha;
+        $this->email = $email;
+        $this->perfil = $perfil[0];
+        $this->save();
+      }
+      else
+      {
+        throw (new Exception("\nEste perfil não está cadastrado"));
+      }
     }
 
     static public function getFilename()
@@ -38,7 +46,7 @@ class Users extends persist
       return $this->email;
     }
 
-    public function &get_perfil()  :  Perfil 
+    public function &get_perfil()  :  ?Perfil
     {
       return $this->perfil;
     }

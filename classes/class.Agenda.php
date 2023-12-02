@@ -32,10 +32,10 @@ require_once "global.php";
           $data_inicio = new DateTime($data_iterador->format("Y") . "-" . $mes ."-". $data_iterador->format("d") . " " . $agenda[((int)$data_iterador->format("w"))][0]);
           $data_fim = new DateTime($data_iterador->format("Y") . "-" . $mes ."-". $data_iterador->format("d") . " " . $agenda[((int)$data_iterador->format("w"))][1]);
           $data = new Data($data_inicio, $data_fim);
-          array_push($array, $data);
+          $this->datas_disponiveis[] = $data;
         }
       }
-      $this->datas_disponiveis = $array;
+      //$this->datas_disponiveis = $array;
       $this->save();
     }
 
