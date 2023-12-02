@@ -14,6 +14,7 @@
       $this->paciente = $Paciente;
       $this->dentista_responsavel = $Dentista_Responsavel;
       $this->procedimentos = $procedimentos;
+      $this->calcular_orcamento();
     }
 
     static public function getFilename()
@@ -78,7 +79,13 @@
       }
 
       $tratamento = new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);
-      $this->save();
+
+      foreach($this->procedimentos as $procedimento)
+      {
+        $tratamento->dentista_responsavel->calc_comissao($procedimento);
+      }
+
+      $tratamento->dentista_responsavel->save();
       $tratamento->save();
     }
 

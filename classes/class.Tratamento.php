@@ -55,5 +55,25 @@ class Tratamento extends Orcamento
       
     }
 
+    public function calcular_valor_faturado() : float
+    {
+      return $this->valor_total;
+    }
+
+    public function calcular_taxa_cartao() : float
+    {
+      
+    }
+
+    public function calcular_impostos() : float
+    {
+      return $this->valor_total * 0.2;
+    }
+
+    public function calcular_receita() : float
+    {
+      return $this->calcular_valor_faturado() - $this->calcular_taxa_cartao() - $this->calcular_impostos();
+    }
+
   }
 ?>

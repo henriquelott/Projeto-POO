@@ -537,6 +537,32 @@ class Facade
 
     return $instancia;
   }
+
+
+  public static function calcular_resultado_mensal()
+  {
+    $tratamentos = Tratamento::getRecords();
+    $dentistas_parceiros = Dentista_Parceiro::getRecords();
+    $dentistas_funcionarios = Dentista_Funcionario::getRecords();
+
+    $resultado_mensal = 0;
+    foreach($tratamentos as $tratamento)
+    {
+      $resultado_mesal += $tratmento->calcular_receita();
+    }
+
+    foreach($dentistas_parceiros as $dentista_parceiro)
+    {
+      $resultado_mesal -= $dentista_parceiro->comissao;
+    }
+
+    foreach($dentistas_funcionarios as $dentista_funcionario)
+    {
+      $resultado_mesal -= $dentista_funcionario->salario;
+    }
+
+    return $resultado_mensal;
+  }
 }
 
 ?>
