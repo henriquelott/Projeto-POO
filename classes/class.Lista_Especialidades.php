@@ -35,12 +35,12 @@
 
     public function cadastrar_especialidade(Especialidade &$especialidade)
     {
-      array_push($this->especialidades, $especialidade);
+      $this->especialidades[] = $especialidade;
       $especialidade->save();
       $this->save();
     }
 
-    public function especialidade_existe(Especialidade $especialidade)  :  void
+    public function especialidade_existe(Especialidade &$especialidade)  :  void
     {
       foreach($this->especialidades as $especialidade_atual)
       {

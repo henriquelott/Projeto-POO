@@ -1,5 +1,32 @@
 <?php
 
-echo "\n funciona ou nao\nvamos ver agora\n";
+require_once("global.php");
+
+$paciente = new Paciente("nome", "esmail", "telefonnummar", "rj", "2023-02-12");
+$paciente->save();
+$paciente->save();
+$paciente->save();
+$paciente->save();
+
+var_dump($paciente);
+
+$pacientico = Paciente::getRecordsByField("email", "esmail")[0];
+$pacientico->save();
+$pacientico->save();
+$pacientico->save();
+$pacientico->save();
+$pacientico->save();
+$pacientico->save();
+
+
+//$pacientico->save();
+
+$pacientalho = Paciente::getRecords()[0];
+
+
+//var_dump($pacientico);
+//var_dump($pacientalho);
+
+var_dump( $pacientico == $pacientalho );
 
 ?>

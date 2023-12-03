@@ -36,6 +36,25 @@
     
     public function aprovar_orcamento(string $forma_pagamento, int $num_parcelas = 0)  : void
     {
+      echo "\nO DUDU OOO DUDU OOOOOO DUDU\n";
+      $pagamento = $this->cadastrar_forma_pagamento($forma_pagamento, $num_parcelas);
+
+      $tratamento = new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);
+
+      if(get_class($this->dentista_responsavel) == "Dentista_Parceiro")
+      {
+        foreach($this->procedimentos as $procedimento)
+        {
+          $this->dentista_responsavel->calc_salario_comissao($procedimento);
+        }
+      }
+
+      $tratamento->dentista_responsavel->save();
+      $tratamento->save();
+    }
+
+    public function &cadastrar_forma_pagamento(string $forma_pagamento, int $num_parcelas = 0)  :  Forma_De_Pagamento
+    {
       if(($forma_pagamento == "Dinheiro" || $forma_pagamento == "Pix") && $num_parcelas == 0)
       {
         $pagamento = new A_Vista($forma_pagamento);
@@ -78,15 +97,7 @@
         throw (new Exception("Forma de pagamento inválida"));
       }
 
-      $tratamento = new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);
-
-      foreach($this->procedimentos as $procedimento)
-      {
-        $tratamento->dentista_responsavel->calc_comissao($procedimento);
-      }
-
-      $tratamento->dentista_responsavel->save();
-      $tratamento->save();
+      return $pagamento;
     }
 
     public function verificar_procedimento(Procedimento $procedimento)

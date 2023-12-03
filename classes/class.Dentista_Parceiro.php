@@ -7,9 +7,9 @@ class Dentista_Parceiro extends Dentista
   protected static $local_filename = "Dentista_Parceiro.txt";
   protected float $comissao;
 
-  function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista)
+  function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades)
   {
-    parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $especialidades, $lista);
+    parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $especialidades);
     
     $this->comissao = 0.0;
     $this->save();
@@ -21,7 +21,7 @@ class Dentista_Parceiro extends Dentista
     return self::$local_filename;
   }
 
-  public function calc_comissao(Procedimento $procedimento)
+  public function calc_salario_comissao(Procedimento $procedimento)
   {
     foreach($this->especialidades as $especialidade)
       {

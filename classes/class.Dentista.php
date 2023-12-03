@@ -9,12 +9,17 @@
     protected ?Agenda $agenda = NULL;
 
 
-    function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista)
+    function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades)
     {
       parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep);
 
       $this->cro = $cro;
-      $this->especialidades = $especialidades;
+      
+      $lista_especialidades = Lista_Especialidades::getRecords()[0];
+      foreach($especialidades as $especialidade)
+      {
+        $this->cadastrar_especialidade($lista_especialidades, $especialidade);
+      }
     }
 
     static public function getFilename()
@@ -31,7 +36,7 @@
     {
       $lista->especialidade_existe($especialidade);
 
-      array_push($this->especialidades, $especialidade);
+      $this->especialidades[] = $especialidade;
       $especialidade->save();
       $this->save();
     }
@@ -62,5 +67,7 @@
         throw (new Exception("\nO dentista $this->nome não possui agenda cadastrada\n"));
       }
     }
+
+    abstract public function calc_salario_comissao(?Procedimento $procedimento = NULL);
   }
   ?>

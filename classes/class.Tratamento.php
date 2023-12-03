@@ -23,7 +23,7 @@ class Tratamento extends Orcamento
       if(in_array($procedimento, $this->procedimentos))
       {
         $dentista = $this->get_dentista_responsavel();
-        $dentista->cadastrar_consulta($data, $procedimento);
+        $dentista->cadastrar_consulta($data);
 
         $paciente = $this->get_paciente();
         $paciente->cadastrar_consulta($consulta);

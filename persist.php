@@ -2,7 +2,7 @@
     include_once('container.php');
     abstract class persist {
         private ?string $filename;
-        private ?int $index = null;
+        private ?int $index = null; 
         public function __construct() {        
             if (func_num_args()==1) {
                 $this->filename = func_get_arg(0);	                		
@@ -77,12 +77,8 @@
 
         public function __toString()
         {
-          return '';
+            return print_r($this);
         }
 
         abstract static public function getFilename();
-        /*{
-          return (get_called_class() . ".txt");
-        }*/
     }
-  ?>

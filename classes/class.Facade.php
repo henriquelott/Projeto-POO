@@ -212,12 +212,20 @@ class Facade
     return true;
   }
 
-  public function cadastrar_taxa_cartao(string $tipo_cartao, float $taxa_cartao, ?array $num_parcelas = NULL)
+  public static function cadastrar_taxa_cartao(string $tipo_cartao, ?float $taxa_cartao, ?array $num_parcelas = NULL)
   {
-    self::possui_funcionalidade(__FUNCTION__);
-    $lista_taxas = Lista_Taxas_Cartao::getRecords();
-    $lista_taxas[0]->cadastrar_taxa($tipo_cartao, $taxa_cartao, $num_parcelas);
-    
+    try
+    {
+      self::possui_funcionalidade(__FUNCTION__);
+      $lista_taxas = Lista_Taxas_Cartao::getRecords();
+      $lista_taxas[0]->cadastrar_taxa($tipo_cartao, $taxa_cartao, $num_parcelas);
+    }
+    catch(Throwable $t)
+    {
+      echo $t->getMessage();
+      return false;
+    }
+    return true;
   }
 
   public static function editar_agenda(Dentista $dentista_parametro, string $data, string $comando)
@@ -434,7 +442,7 @@ class Facade
     }
   }
 
-  public static function criar_especialidade(Especialidade $especialidade)
+  public static function criar_especialidade(Especialidade &$especialidade)
   {
     try
     {
@@ -510,7 +518,7 @@ class Facade
     return true;
   }
 
-  private static function &encontrar_instancia($instancia, bool $eh_cadastro = false)  :  ?object
+  private static function &encontrar_instancia(&$instancia, bool $eh_cadastro = false)  :  ?object
   {
     $objeto = get_class($instancia);
 
@@ -550,7 +558,7 @@ class Facade
       $resultado_mensal = 0;
       foreach($tratamentos as $tratamento)
       {
-        $resultado_mesal += $tratmento->calcular_receita();
+        $resultado_mesal += $tratamento->calcular_receita();
       }
   
       foreach($dentistas_parceiros as $dentista_parceiro)
@@ -571,6 +579,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+  }
 }
 
 ?>

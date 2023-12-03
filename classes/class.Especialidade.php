@@ -9,7 +9,7 @@ class Especialidade extends persist
   protected array $procedimentos_possiveis;
   protected float $percentual;
 
-  public function __construct(string $nome_especialidade, array $procedimentos_possiveis, float $percentual,)
+  public function __construct(string $nome_especialidade, array $procedimentos_possiveis, float $percentual)
   {
     $this->nome_especialidade = $nome_especialidade;
     $this->procedimentos_possiveis = $procedimentos_possiveis;

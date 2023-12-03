@@ -10,7 +10,7 @@ $data_fim = $data_inicio->add($interval);
 
 var_dump($data_fim);*/
 
-//$perfil = new Perfil(true);
+$perfil = new Perfil(true);
 
 $user = new Users("login", "senha", "email", "admin");
 
@@ -22,31 +22,40 @@ $lista_especialidades->save();
 $lista_procedimentos = new Lista_Procedimentos();
 $lista_procedimentos->save();
 
+$lista_taxas = new Lista_Taxas_Cartao();
+$lista_taxas->save();
+
+$taxa_credito = array(0.04, 0.04, 0.04, 0.07, 0.07, 0.07);
+
+$array_proc = array ("tipo_procedimento");
+
 $procedimentos = array (new Procedimento("descricao", "tipo_procedimento", 100, "detalhe"));
 
-$especialidades = array(new Especialidade("especialidade", $procedimentos, 10));
+$especialidades = array(new Especialidade("especialidade", $array_proc, 10)); 
 
-//Facade::criar_procedimento($procedimentos[0]);
+Facade::criar_procedimento($procedimentos[0]);
 
-//Facade::criar_especialidade($especialidades[0]);
+Facade::criar_especialidade($especialidades[0]);
 
-$array_especialidades = array(new Especialidade("especialidade", $procedimentos, 10));
+Facade::cadastrar_taxa_cartao("Cartão de crédito", NULL, $taxa_credito);
 
-$dentista = new Dentista_Funcionario("Roberval", "robs@gmail.com", "15997763823", "39102060850", "Flor de  Fogo", "65", "Liberdade", "Village", "31270217", "XXX", $array_especialidades, $lista_especialidades);
-$dentista->save();
+$dentista = new Dentista_Funcionario("Roberval", "robs@gmail.com", "15997763823", "39102060850", "Flor de  Fogo", "65", "Liberdade", "Village", "31270217", "XXX", $especialidades, 50000);
+
+Facade::cadastrar_dentista_funcionario($dentista);
 
 $paciente = new Paciente("Paciente", "email", "telefone", "rg", "2000-3-12");
-$paciente->save();
+
+Facade::cadastrar_paciente($paciente);
 
 $orcamento = new Orcamento($paciente, $dentista, $procedimentos);
-$orcamento->save();
 
-Facade::aprovar_orcamento($orcamento,"Pix");
+Facade::cadastrar_orcamento($paciente, $dentista, $procedimentos);
+
+Facade::aprovar_orcamento($orcamento,"Cartão de crédito");
 
 $orcamentor = Orcamento::getRecordsByField("paciente", $paciente);
 
-
-//var_dump($orcamentor);
+var_dump($orcamentor);
 
 
 
@@ -138,5 +147,20 @@ var_dump($data);
 }
 
 $datas_disponiveis = funciones($array, $mes);*/
+
+/*$taxa_credito = array(0.04, 0.04, 0.04, 0.07, 0.07, 0.07);
+
+$lista_taxas = new Lista_Taxas_Cartao();
+
+$lista_taxas->cadastrar_taxa("Cartão de crédito", NULL, $taxa_credito);
+
+$taxa1 = Lista_Taxas_Cartao::getRecords()[0];
+
+$taxa1->save();
+
+$taxa2 =Lista_Taxas_Cartao::getRecords();
+
+
+var_dump($taxa2);*/
 
 ?>

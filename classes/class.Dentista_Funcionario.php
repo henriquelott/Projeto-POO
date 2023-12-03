@@ -6,15 +6,20 @@
     protected static $local_filename = "Dentista.txt";
     protected float $salario;
     
-    function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, Lista_Especialidades $lista, float $salario)
+    function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, float $salario)
     {
-      parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $especialidades, $lista);
+      parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $especialidades);
       $this->salario = $salario;
     }
 
     static public function getFilename()
     {
       return self::$local_filename;
+    }
+
+    public function calc_salario_comissao(?Procedimento $procedimento = NULL)
+    {
+      return $this->salario;
     }
   }
 

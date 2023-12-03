@@ -26,6 +26,7 @@ class Perfil extends persist
     "criar_especialidade" => false, 
     "cadastrar_especialidade" => false,
     "realizar_pagamento" => false,
+    "cadastrar_taxa_cartao" => false,
     "calcular_resultado_mensal" => false
   );
 
