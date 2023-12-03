@@ -35,6 +35,7 @@ require_once "global.php";
           $this->datas_disponiveis[] = $data;
         }
       }
+     // var_dump($this->datas_disponiveis);
       //$this->datas_disponiveis = $array;
       $this->save();
     }

@@ -47,9 +47,23 @@ $paciente = new Paciente("Paciente", "email", "telefone", "rg", "2000-3-12");
 
 Facade::cadastrar_paciente($paciente);
 
+$agenda = array(array(), array("08:00","16:00"), array("08:00","16:00"), array("08:00","16:00"), array("08:00","16:00"), array("08:00","16:00"), array());
+
+Facade::cadastrar_agenda_padrao($dentista, $agenda, "11");
+
+Facade::cadastrar_consulta_de_avaliacao($dentista, $paciente, "2023-11-6 14:00:00");
+
+echo "\n\necho\n\n";
+
+//var_dump($paciente);
+
+Facade::realizar_consulta("2023-11-6 14:00:00", $paciente);
+
+//var_dump($paciente->get_consultas()[0]->get_data_inicio());
+
 $orcamento = new Orcamento($paciente, $dentista, $procedimentos);
 
-Facade::cadastrar_orcamento($paciente, $dentista, $procedimentos);
+Facade::cadastrar_orcamento($orcamento);
 
 Facade::aprovar_orcamento($orcamento,"Cartão de crédito");
 

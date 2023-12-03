@@ -42,8 +42,9 @@
     }
 
     public function criar_agenda(array $agenda, string $mes_geracao_agenda)
-    {     
+    {       
       $this->agenda = new Agenda($agenda, $mes_geracao_agenda);
+      $this->save();
     }
     public function editar_agenda($comando, $data)
     {

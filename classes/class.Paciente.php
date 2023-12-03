@@ -16,6 +16,7 @@
       $this->nascimento = $nascimento;
       $this->rg = $rg;
       $this->nascimento = $nascimento;
+      $this->consultas = array();
     }
 
     static public function getFilename()
@@ -66,13 +67,29 @@
       {
         if($consulta->get_data()->get_data_inicio() == $data)
         {
-          $consulta->foi_realizada();
-          unset($this->consultas[$key]);
+          $consulta->consulta_realizada();
+          if(get_class($consulta) != "Consulta_Avalicao")
+          {
+            unset($this->consultas[$key]);
+          }
           $this->save();
           return;
         }
       }
       throw(new Exception("Nenhuma consulta marcada para este paciente nesta data e horário"));
+    }
+
+    public function realizar_consulta_avaliacao()
+    {
+      foreach ($this->consultas as $key=>$consulta)
+      {
+        if(get_class($consulta) == "Consulta_Avaliacao")
+        {
+          unset($this->consultas[$key]);
+          $this->save();
+          return;
+        } 
+      }
     }
 
     public function set_nome($nome)

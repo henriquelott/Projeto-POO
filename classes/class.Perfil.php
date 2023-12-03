@@ -27,7 +27,10 @@ class Perfil extends persist
     "cadastrar_especialidade" => false,
     "realizar_pagamento" => false,
     "cadastrar_taxa_cartao" => false,
-    "calcular_resultado_mensal" => false
+    "calcular_resultado_mensal" => false, 
+    "cadastrar_agenda_padrao" => false,
+    "cadastrar_consulta_de_avaliacao"=> false,
+    "realizar_consulta" => false,
   );
 
   function __construct(?bool $eh_admin = NULL)

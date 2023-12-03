@@ -43,9 +43,9 @@ class Procedimento extends persist
 
   public function realizar_consulta(DateTime $data)
   {
-    foreach($this->consultas as $consulta)
+    foreach($this->consultas as &$consulta)
     {
-      if($consulta->get_data()->get_data_inicio() = $data)
+      if($consulta->get_data()->get_data_inicio() == $data)
       {
         $consulta->consulta_realizada();
         return;

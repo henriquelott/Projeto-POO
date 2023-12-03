@@ -9,12 +9,12 @@
     protected array $procedimentos;
     protected float $valor_total;
 
-    function __construct(Paciente $Paciente, Dentista $Dentista_Responsavel, array $procedimentos)
+    function __construct(Paciente &$Paciente, Dentista &$Dentista_Responsavel, array $procedimentos)
     {
       $this->paciente = $Paciente;
       $this->dentista_responsavel = $Dentista_Responsavel;
       $this->procedimentos = $procedimentos;
-      $this->calcular_orcamento();
+      //$this->calcular_orcamento();
     }
 
     static public function getFilename()
@@ -30,8 +30,6 @@
       {
         $this->valor_total += $procedimento->get_valor();
       }
-
-      return $this->valor_total;
     }
     
     public function aprovar_orcamento(string $forma_pagamento, int $num_parcelas = 0)  : void
@@ -161,7 +159,7 @@
       return $this->dentista_responsavel;
     }
     
-    public function get_procedimentos()
+    public function &get_procedimentos()
     {
       return $this->procedimentos;
     }
