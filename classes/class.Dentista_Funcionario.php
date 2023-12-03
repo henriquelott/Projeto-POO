@@ -17,6 +17,11 @@
       return self::$local_filename;
     }
 
+    public function get_salario()
+    {
+      return $this->salario;
+    }
+    
     public function calc_salario_comissao(?Procedimento $procedimento = NULL)
     {
       return $this->salario;

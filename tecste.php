@@ -26,6 +26,7 @@ $lista_taxas = new Lista_Taxas_Cartao();
 $lista_taxas->save();
 
 $taxa_credito = array(0.04, 0.04, 0.04, 0.07, 0.07, 0.07);
+$taxa_debito = 0.03;
 
 $array_proc = array ("tipo_procedimento");
 
@@ -37,7 +38,7 @@ Facade::criar_procedimento($procedimentos[0]);
 
 Facade::criar_especialidade($especialidades[0]);
 
-Facade::cadastrar_taxa_cartao("Cartão de crédito", NULL, $taxa_credito);
+Facade::cadastrar_taxa_cartao($taxa_debito, $taxa_credito);
 
 $dentista = new Dentista_Funcionario("Roberval", "robs@gmail.com", "15997763823", "39102060850", "Flor de  Fogo", "65", "Liberdade", "Village", "31270217", "XXX", $especialidades, 50000);
 
@@ -71,7 +72,7 @@ Facade::aprovar_orcamento($orcamento,"Cartão de crédito", 2);
 
 $orcamentor = Orcamento::getRecordsByField("paciente", $paciente);
 
-var_dump($orcamentor);
+//var_dump($orcamentor);
 
 
 

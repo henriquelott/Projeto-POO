@@ -45,12 +45,12 @@
       
     }
 
-    public function get_clientes()
+    public function &get_clientes()
     {
       return $this->clientes;
     }
 
-    public function get_consultas()
+    public function &get_consultas()
     {
       return $this->consultas;
     }

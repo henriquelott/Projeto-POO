@@ -14,7 +14,6 @@ class Cliente extends Pessoa
     
     $this->rg = $rg;
     $this->cpf = $cpf;
-    $this->save();
   }
 
   static public function getFilename()

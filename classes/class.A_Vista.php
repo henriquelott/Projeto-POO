@@ -8,6 +8,7 @@ class A_Vista extends Forma_De_Pagamento
     function __construct ($forma_pagamento)
     {
       parent::__construct($forma_pagamento);
+      $this->calculo_desconto = new Desconto_A_Vista();
     }
 
     static public function getFilename()
@@ -16,9 +17,9 @@ class A_Vista extends Forma_De_Pagamento
     }
 
     public function calcular_valor($valortotal)
-      {
-        return $valortotal;
-      }
+    {
+      return this->$calculo_desconto->calcular_desconto($valortotal);
+    }
   }
 
 ?>

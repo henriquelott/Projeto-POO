@@ -21,6 +21,11 @@ class Dentista_Parceiro extends Dentista
     return self::$local_filename;
   }
 
+  public function get_comissao()
+  {
+    return $this->comissao;
+  }
+  
   public function calc_salario_comissao(Procedimento $procedimento)
   {
     foreach($this->especialidades as $especialidade)

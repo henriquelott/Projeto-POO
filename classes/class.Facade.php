@@ -227,13 +227,13 @@ class Facade
     return true;
   }
 
-  public static function cadastrar_taxa_cartao(string $tipo_cartao, ?float $taxa_cartao, ?array $num_parcelas = NULL)
+  public static function cadastrar_taxa_cartao(float $taxa_debito, array $taxas_credito)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
       $lista_taxas = Lista_Taxas_Cartao::getRecords();
-      $lista_taxas[0]->cadastrar_taxa($tipo_cartao, $taxa_cartao, $num_parcelas);
+      $lista_taxas[count($lista_taxas)-1]->cadastrar_taxa($taxa_debito, $taxas_credito);
     }
     catch(Throwable $t)
     {
@@ -510,17 +510,29 @@ class Facade
   }
 
 
-  public static function realizar_pagamento()
+  public static function realizar_pagamento(Tratamento $tratamento, Cliente $cliente, array formas_de_pagamento)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
+      $tratamento = self::encontrar_instancia($tratamento);
+      foreach($formas_de_pagamento as $forma_pagamento => $porcentagem_valor_total)
+      {
+        $forma_pagamento = self::encontrar_instancia($forma_pagamento);
+      }
+      
+      $cliente = self::encontrar_instancia($cliente);
+
+      $tratamento->realizar_pagamento($cliente, $formas_de_pagamento);
+      $tratamento->save();
     }
     catch(Throwable $t)
     {
       echo $t->getMessage();
       return false;
     }
+
+    return true;
   }
 
 
@@ -597,17 +609,17 @@ class Facade
       $resultado_mensal = 0;
       foreach($tratamentos as $tratamento)
       {
-        $resultado_mesal += $tratamento->calcular_receita();
+        $resultado_mensal += $tratamento->get_registro_pagamento()->get_receita();
       }
   
       foreach($dentistas_parceiros as $dentista_parceiro)
       {
-        $resultado_mesal -= $dentista_parceiro->comissao;
+        $resultado_mensal -= $dentista_parceiro->get_comissao();
       }
   
       foreach($dentistas_funcionarios as $dentista_funcionario)
       {
-        $resultado_mesal -= $dentista_funcionario->salario;
+        $resultado_mensal -= $dentista_funcionario->get_salario();
       }
 
       echo "\nResultado mensal: $resultado_mensal\n";

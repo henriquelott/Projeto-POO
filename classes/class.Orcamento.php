@@ -9,12 +9,12 @@
     protected array $procedimentos;
     protected float $valor_total;
 
-    function __construct(Paciente &$Paciente, Dentista &$Dentista_Responsavel, array $procedimentos)
+    function __construct(Paciente &$Paciente, Dentista &$Dentista_Responsavel, array $procedimentos, ?float $valor_total = 0.0 )
     {
       $this->paciente = $Paciente;
       $this->dentista_responsavel = $Dentista_Responsavel;
       $this->procedimentos = $procedimentos;
-      //$this->calcular_orcamento();
+      $this->valor_total = $valor_total;
     }
 
     static public function getFilename()
@@ -28,16 +28,15 @@
 
       foreach($this->procedimentos as $procedimento)
       {
-        $this->valor_total += $procedimento->get_valor();
+        $this->valor_total += $procedimento->get_preco();
       }
     }
     
     public function aprovar_orcamento(string $forma_pagamento, int $num_parcelas = 0)  : void
     {
-      echo "\nO DUDU OOO DUDU OOOOOO DUDU\n";
       $pagamento = $this->cadastrar_forma_pagamento($forma_pagamento, $num_parcelas);
-
-      $tratamento = new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento);
+      $this->calcular_orcamento();
+      $tratamento = new Tratamento($this->paciente, $this->dentista_responsavel, $this->procedimentos, $pagamento, $this->valor_total);
 
       if(get_class($this->dentista_responsavel) == "Dentista_Parceiro")
       {
