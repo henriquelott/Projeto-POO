@@ -109,12 +109,19 @@ class Facade
       $paciente = self::encontrar_instancia($paciente_parametro);
       $dentista_responsavel = self::encontrar_instancia($dentista_responsavel_parametro);
 
-      foreach($paciente->get_consultas() as $consultas_nao_realizadas)
+      if(!empty($paciente->get_consultas()))
       {
-        if(get_class($consultas_nao_realizadas) == "Consulta_Avaliacao")
+        foreach($paciente->get_consultas() as $consultas_nao_realizadas)
         {
-          throw(new Exception("\nA consulta de avaliacao do paciente ainda não foi realizada\n"));
+          if(get_class($consultas_nao_realizadas) == "Consulta_Avaliacao")
+          {
+            throw(new Exception("\nA consulta de avaliacao do paciente ainda não foi realizada\n"));
+          }
         }
+      }
+      else
+      {
+        throw (new Exception("\nO paciente deve cadastrar uma consulta de avaliação para o cadastro de um orçamento\n"));
       }
       
       foreach($tipo_procedimentos as $tipo_procedimento)
@@ -161,7 +168,7 @@ class Facade
     return true;
   }
   
-  public static function cadastrar_consulta_de_avaliacao(Usuario $Usuario, Dentista $Dentista, Paciente $Paciente, string $data)
+  public static function cadastrar_consulta_de_avaliacao(Dentista $Dentista, Paciente $Paciente, string $data)
   {    
     try
     {
@@ -175,7 +182,7 @@ class Facade
       $data_fim = $data_inicio->add($interval);
       $data_consulta = new Data($data_inicio, $data_fim);
       
-      $dentista->editar_agenda("cadastrar consulta", $data_consulta);
+      $dentista->cadastrar_consulta($data_consulta);
       $consulta_avaliacao = new Consulta_Avaliacao($data_consulta, $Dentista);
       $paciente->cadastrar_consulta($consulta_avaliacao);
     }
@@ -499,14 +506,29 @@ class Facade
   }
 
 
-  public static function realizar_consulta(Tratamento $tratamento_parametro, string $data)  :  bool
+  public static function realizar_consulta(string $data, ?Paciente $paciente_parametro = NULL, ?Tratamento $tratamento_parametro = NULL, ?Procedimento $procedimento_parametro = NULL)  :  bool
   {
     try
     {
+      $paciente = null;
       self::possui_funcionalidade(__FUNCTION__);
-      $tratamento = self::encontrar_instancia($tratamento_parametro);
-      $paciente = $tratamento->get_paciente();
       $date_time = new DateTime($data);
+
+      if(func_num_args() == 2 && $paciente_parametro != NULL)
+      {
+        $paciente = self::encontrar_instancia($paciente_parametro);
+      }
+      else if(func_num_args() == 3 && $tratamento_parametro != NULL)
+      {
+        $tratamento = self::encontrar_instancia($tratamento_parametro);
+        $paciente = $tratamento->get_paciente();
+        $tratamento->realizar_consulta($procedimento_parametro, $date_time);
+      }
+      else
+      {
+        throw (new Exception("\nParâmetros inválido\n"));
+      }
+
       $paciente->realizar_consulta($date_time);
     }
     catch(Throwable $t)

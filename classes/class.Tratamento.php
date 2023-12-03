@@ -50,9 +50,17 @@ class Tratamento extends Orcamento
       throw(new Exception('Esse cliente nao esta cadastrado'));
     }
 
-    public function realizar_consulta(Datetime $data, Consulta $consulta)
+    public function realizar_consulta(Procedimento &$procedimento, DateTime $data)
     {
-      
+      foreach($this->procedimentos as $procedimento_atual)
+      {
+        if($procedimento->get_detalhe() == $procedimento_atual->get_detalhe() && $procedimento->get_tipo_procedimento() == $procedimento_atual->get_tipo_procedimento())
+        {
+          $procedimento->realizar_consulta($data);
+          return;
+        }
+      }
+      throw(new Exception("\nEste procedimento não consta neste tratamento\n"));
     }
 
     public function calcular_valor_faturado() : float

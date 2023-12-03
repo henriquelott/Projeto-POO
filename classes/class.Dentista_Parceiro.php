@@ -29,7 +29,7 @@ class Dentista_Parceiro extends Dentista
           {
             if($procedimento_possivel == $procedimento)
             {
-              $valor_comissao = $procedimento->get_valor() * $especialidade->get_percentual();
+              $valor_comissao = $procedimento->get_preco() * $especialidade->get_percentual();
               $this->comissao += $valor_comissao;
               $this->save();
               return;

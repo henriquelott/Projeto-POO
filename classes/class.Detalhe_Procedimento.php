@@ -21,6 +21,11 @@ class Detalhe_Procedimento extends persist
     {
       array_push($this->orcamentos, $orcamento);
     }
+
+    public function get_detalhamento()
+    {
+      return $this->detalhamento_procedimento;
+    }
   }
 
 ?>

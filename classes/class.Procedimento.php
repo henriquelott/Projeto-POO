@@ -41,17 +41,17 @@ class Procedimento extends persist
     return false;
   }
 
-  public function realizar_consulta(Consulta $consulta_realizada)
+  public function realizar_consulta(DateTime $data)
   {
-      $key = array_search($consulta_realizada, $this->consultas);
-      if($key !== NULL)
+    foreach($this->consultas as $consulta)
+    {
+      if($consulta->get_data()->get_data_inicio() = $data)
       {
-        $this->consultas[$key]->consulta_realizada();
-      } 
-      else
-      {
-        throw (new Exception ('Consulta nao consta no procedimento'));
+        $consulta->consulta_realizada();
+        return;
       }
+    }
+    throw (new Exception ("Consulta nao consta no procedimento"));
   }
 
   public function get_tipo_procedimento()  :  string
@@ -69,9 +69,19 @@ class Procedimento extends persist
     return $this->tipo_procedimento;
   }
 
-  public function get_valor()
+  public function get_preco()
   {
     return $this->preco;
+  }
+
+  public function get_tipo()
+  {
+    return $this->tipo_procedimento;
+  }
+
+  public function get_detalhe()
+  {
+    return $this->detalhamento->get_detalhamento();
   }
 
   public function cadastrar_consulta($data, &$dentista, $duracao)
