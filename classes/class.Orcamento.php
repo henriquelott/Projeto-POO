@@ -124,6 +124,7 @@
 
     private function realizar_cadastro_procedimento(Lista_procedimentos $lista, Procedimento &$procedimento)
     {
+      echo "\n\nMANO VC CHEGOU AQUI\n\n";
       $lista->procedimento_existe($procedimento);
 
       $this->dentista_pode_realizar_procedimento($procedimento);

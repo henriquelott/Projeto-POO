@@ -1,7 +1,7 @@
  <?php 
 require_once "global.php";
 
-class Detalhe_Procedimento extends persist
+class Detalhe_Procedimento 
   {
     protected static $local_filename = "Detalhe_Procedimento.txt";
     protected string $detalhamento_procedimento;

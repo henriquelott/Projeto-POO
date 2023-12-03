@@ -108,16 +108,18 @@ class Facade
       self::possui_funcionalidade(__FUNCTION__);
       $paciente = $orcamento->get_paciente();
       $dentista = $orcamento->get_dentista_responsavel();
-      //$procedimentos = $orcamento->get_procedimentos();
+
+      $procedimentos = $orcamento->get_procedimentos();
 
       $paciente = self::encontrar_instancia($paciente);
       $dentista = self::encontrar_instancia($dentista);
-     // foreach($procedimentos as &$procedimento)
-    //  {
-   //     array_push($lista, self::encontrar_procedimento($procedimento));
-  //    }
 
-  var_dump($paciente->get_consultas());
+      //var_dump($paciente->get_consultas());
+
+      foreach($procedimentos as &$procedimento)
+      {
+        self::encontrar_procedimento($procedimento);
+      }
 
       if(!empty($paciente->get_consultas()))
       {
@@ -126,10 +128,7 @@ class Facade
           if(get_class($consulta) == "Consulta_Avaliacao" && $consulta->get_foi_realizada() == true)
           {
             $paciente->realizar_consulta_avaliacao();
-           // foreach($lista as &$procedimento)
-           // {
-          //    $procedimento->save();
-         //   }
+            $orcamento->save();
           }
           else
           {
@@ -149,13 +148,11 @@ class Facade
     }
     return true;
   }
-  private static function encontrar_procedimento(string $tipo_procedimento)
+  private static function encontrar_procedimento(Procedimento &$procedimento)
   {
     $lista_procedimentos = Lista_Procedimentos::getRecords();
-    $procedimento = $lista_procedimentos[0]->get_procedimento_pelo_tipo($tipo_procedimento);
-    return $procedimento;
+    $lista_procedimentos[count($lista_procedimentos)-1]->procedimento_existe($procedimento);
   }
-  
 
   public static function aprovar_orcamento(Orcamento &$orcamento, string $forma_pagamento, int $num_parcelas = 0)
   {

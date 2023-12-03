@@ -65,7 +65,9 @@ $orcamento = new Orcamento($paciente, $dentista, $procedimentos);
 
 Facade::cadastrar_orcamento($orcamento);
 
-Facade::aprovar_orcamento($orcamento,"Cartão de crédito");
+echo "\nchega ate aqui\n";
+
+Facade::aprovar_orcamento($orcamento,"Cartão de crédito", 2);
 
 $orcamentor = Orcamento::getRecordsByField("paciente", $paciente);
 

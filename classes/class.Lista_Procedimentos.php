@@ -38,12 +38,13 @@ class Lista_Procedimentos extends persist
     return $this->procedimentos;
   }
 
-  public function procedimento_existe(Procedimento $procedimento) : void
+  public function procedimento_existe(Procedimento &$procedimento) : void
   {
     foreach($this->procedimentos as $procedimento_atual)
     {
-      if(($procedimento_atual->get_tipo_procedimento() == $procedimento->get_tipo_procedimento()) && ($procedimento_atual->get_descricao() == $procedimento->get_descricao()) && ($procedimento_atual->get_valor() == $procedimento->get_descricao()))
+      if(($procedimento_atual->get_tipo_procedimento() == $procedimento->get_tipo_procedimento()) && ($procedimento_atual->get_descricao() == $procedimento->get_descricao()) && ($procedimento_atual->get_preco() == $procedimento->get_preco()))
       {
+        $procedimento->save();
         return;
       }
     }

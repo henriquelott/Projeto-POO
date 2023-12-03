@@ -68,7 +68,7 @@
         if($consulta->get_data()->get_data_inicio() == $data)
         {
           $consulta->consulta_realizada();
-          if(get_class($consulta) != "Consulta_Avalicao")
+          if(get_class($consulta) != "Consulta_Avaliacao")
           {
             unset($this->consultas[$key]);
           }
