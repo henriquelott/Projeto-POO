@@ -510,7 +510,7 @@ class Facade
   }
 
 
-  public static function realizar_pagamento(Tratamento $tratamento, Cliente $cliente, array formas_de_pagamento)
+  public static function realizar_pagamento(Tratamento $tratamento, Cliente $cliente, array $formas_de_pagamento)
   {
     try
     {

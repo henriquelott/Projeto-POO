@@ -54,8 +54,6 @@ Facade::cadastrar_agenda_padrao($dentista, $agenda, "11");
 
 Facade::cadastrar_consulta_de_avaliacao($dentista, $paciente, "2023-11-6 14:00:00");
 
-echo "\n\necho\n\n";
-
 //var_dump($paciente);
 
 Facade::realizar_consulta("2023-11-6 14:00:00", $paciente);
@@ -65,8 +63,6 @@ Facade::realizar_consulta("2023-11-6 14:00:00", $paciente);
 $orcamento = new Orcamento($paciente, $dentista, $procedimentos);
 
 Facade::cadastrar_orcamento($orcamento);
-
-echo "\nchega ate aqui\n";
 
 Facade::aprovar_orcamento($orcamento,"Cartão de crédito", 2);
 
