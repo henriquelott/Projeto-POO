@@ -17,7 +17,7 @@
       return get_called_class()::$local_filename;
     }
 
-    public function get_salatrio()
+    public function get_salario()
     {
       return $this->salario;
     }

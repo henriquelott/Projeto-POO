@@ -591,49 +591,60 @@ class Facade
   }
 
 
-  public static function calcular_
+  private static function calcular_resultado_mensal_iterado(string $classe)  :  float
+  {
+    $classes = $classe::getRecords();
+
+    $resultado_mensal = 0;
+
+    foreach($classes as $objeto)
+    {
+      if($objeto->get_registro_pagamento() != NULL)
+      {
+        foreach($array_index as $index)
+        {
+          if($objeto->get_index() == $index)
+          {
+            break;
+          }
+          $array_index[] = $objeto->get_index();
+          $objeto_x = $classe::getRecordsByField("index", $index);
+          switch($classe)
+          {
+            case "Tratamento":
+              $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_registro_pagamento()->get_receita();
+              break;
+
+            case "Dentista_Parceiro":
+              $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_comissao();
+              break;
+
+            default:
+            $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_salario();
+          }
+
+          $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_registro_pagamento()->get_receita(); 
+        }
+      }
+    }
+
+    return $resultado_mensal;
+  }
 
   public static function calcular_resultado_mensal() : bool
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
+
+      $array = array("Tratamento", "Dentista_Parceiro", "Dentista_Funcionario", "Secretaria", "Auxiliar");
+
+      foreach ($array as $classe)
+      {
+        $resultado += self::calcular_resultado_mensal_iterado($classe);
+      }
       
-      $tratamentos = Tratamento::getRecords();
-
-      var_dump($tratamentos);
-      $dentistas_parceiros = Dentista_Parceiro::getRecords();
-      $dentistas_funcionarios = Dentista_Funcionario::getRecords();
-  
-      $resultado_mensal = 0;
-      foreach($tratamentos as $tratamento)
-      {
-        if($tratamento->get_registro_pagamento() != NULL)
-        {
-          foreach($array_index as $index)
-          {
-            if($tratamento->get_index() == $index)
-            {
-              break;
-            }
-            $array_index[] = $tratamento->get_index();
-            $tratamento_x = Tratamento::getRecordsByField("index", $index);
-            $resultado_mensal += $tratamento_x[count($tratamento_x)-1]->get_registro_pagamento()->get_receita(); 
-          }
-        }
-      }
-  
-      foreach($dentistas_parceiros as $dentista_parceiro)
-      {
-        $resultado_mensal -= $dentista_parceiro->get_comissao();
-      }
-  
-      foreach($dentistas_funcionarios as $dentista_funcionario)
-      {
-        $resultado_mensal -= $dentista_funcionario->get_salario();
-      }
-
-      echo "\nResultado mensal: $resultado_mensal\n";
+      echo "\nResultado mensal: $resultado\n";
       return true;
     }
     catch(Throwable $t)
