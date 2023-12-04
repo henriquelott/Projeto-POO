@@ -3,7 +3,7 @@
 
   class Dentista_Funcionario extends Dentista
   {
-    protected static $local_filename = "Dentista.txt";
+    protected static $local_filename = "Dentista_Funcionario.txt";
     protected float $salario;
     
     function __construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, array $especialidades, float $salario)

@@ -9,6 +9,8 @@ class Facade
     {   
       $cadastro = Users::getRecordsByField("login", $login);
 
+      //var_dump(Users::getRecords());
+
       if($cadastro[0]->get_senha() == $senha)
       {
         $Usuario = Usuario::construct($cadastro[0]->get_login(), $cadastro[0]->get_senha(), $cadastro[0]->get_email(), $cadastro[0]->get_perfil());
@@ -96,7 +98,7 @@ class Facade
       if(!empty($perfil))
       {
         $user = Users::getRecordsByField("login", $login);
-        if($user != null)
+        if(!empty($user))
         {
          // echo "<script>alert('Nome de usuário já existe!');</script>";
           throw (new Exception("\nNome de usuário já existe\n"));
@@ -251,8 +253,17 @@ class Facade
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
-      $lista_taxas = Lista_Taxas_Cartao::getRecords();
-      $lista_taxas[count($lista_taxas)-1]->cadastrar_taxa($taxa_debito, $taxas_credito);
+
+      if(empty(Lista_Taxas_Cartao::getRecords()))
+      {
+        $lista_taxas = new Lista_Taxas_Cartao($taxa_debito, $taxas_credito);
+      }
+      else
+      {
+        $lista_taxas = Lista_Taxas_Cartao::getRecords();
+        $lista_taxas = $lista_taxas[count($lista_taxas) -1];
+      }
+      $lista_taxas->cadastrar_taxa($taxa_debito, $taxas_credito);
     }
     catch(Throwable $t)
     {
@@ -363,7 +374,7 @@ class Facade
   }
 
 
-  public static function cadastrar_dentista(Dentista &$dentista)
+  public static function cadastrar_dentista_funcionario(Dentista_Funcionario &$dentista)
   {
     try
     {
@@ -371,11 +382,53 @@ class Facade
 
       self::encontrar_instancia($dentista, true);
 
-      $lista = Lista_Especialidades::getRecords();
-      $lista = $lista[count($lista) -1];
-      foreach ($lista as $especialidade)
+      if(empty(Lista_Especialidades::getRecords()))
       {
-        $lista->especialidade_existe($especialidade);
+        $lista_especialidades = new Lista_Especialidades();
+      }
+      else
+      {
+        $lista_especialidades = Lista_Especialidades::getRecords();
+        $lista_especialidades = $lista_especialidades[count($lista_especialidades)-1];
+      }
+
+      foreach ($lista_especialidades as $especialidade)
+      {
+        $lista_especialidades->especialidade_existe($especialidade);
+      }
+
+      $dentista->save();
+    }
+    catch(Throwable $t)
+    {
+      echo $t->getMessage();
+      return false;
+    }
+
+    return true;
+  }
+
+  public static function cadastrar_dentista_parceiro(Dentista_Parceiro &$dentista)
+  {
+    try
+    {
+      self::possui_funcionalidade(__FUNCTION__);
+
+      self::encontrar_instancia($dentista, true);
+
+      if(empty(Lista_Especialidades::getRecords()))
+      {
+        $lista_especialidades = new Lista_Especialidades();
+      }
+      else
+      {
+        $lista_especialidades = Lista_Especialidades::getRecords();
+        $lista_especialidades = $lista_especialidades[count($lista_especialidades)-1];
+      }
+
+      foreach ($lista_especialidades as $especialidade)
+      {
+        $lista_especialidades->especialidade_existe($especialidade);
       }
 
       $dentista->save();
@@ -399,6 +452,8 @@ class Facade
       self::encontrar_instancia($cliente, true);
 
       $paciente->cadastrar_cliente($cliente);
+
+      $cliente->save();
     }
     catch(Throwable $t)
     {
@@ -417,6 +472,11 @@ class Facade
       self::possui_funcionalidade(__FUNCTION__);
 
       self::encontrar_instancia($paciente, true);
+
+      foreach($paciente->get_clientes() as &$cliente)
+      {
+        $cliente->save();
+      }
 
       $paciente->save();
     }
@@ -438,8 +498,15 @@ class Facade
       self::possui_funcionalidade(__FUNCTION__);
       self::encontrar_instancia($procedimento, true);
 
-      $lista_procedimentos = Lista_Procedimentos::getRecords();
-      $lista_procedimentos = $lista_procedimentos[count($lista_procedimentos) -1];
+      if(empty(Lista_Procedimentos::getRecords()))
+      {
+        $lista_procedimentos = new Lista_Procedimentos();
+      }
+      else
+      {
+        $lista_procedimentos = Lista_Procedimentos::getRecords();
+        $lista_procedimentos = $lista_procedimentos[count($lista_procedimentos) -1];
+      }
 
       $lista_procedimentos->cadastrar_procedimento($procedimento);
     }
@@ -454,7 +521,7 @@ class Facade
   }
 
 
-  public static function cadastrar_procedimento(Procedimento &$procedimento, Orcamento &$orcamento)
+  public static function cadastrar_procedimento(?Procedimento &$procedimento = NULL, ?Orcamento &$orcamento = NULL)
   {
     try
     {
@@ -462,8 +529,15 @@ class Facade
 
       $procedimento = self::encontrar_instancia($procedimento);
       $orcamento = self::encontrar_instancia($orcamento);
-      $lista_procedimentos = Lista_Procedimentos::getRecords();
-      $lista_procedimentos = $lista_procedimentos[count($lista_procedimentos) -1];
+      if(empty(Lista_Procedimentos::getRecords()))
+      {
+        $lista_procedimentos = new Lista_Procedimentos();
+      }
+      else
+      {
+        $lista_procedimentos = Lista_Procedimentos::getRecords();
+        $lista_procedimentos = $lista_procedimentos[count($lista_procedimentos) -1];
+      }
 
       $orcamento->cadastrar_procedimento($procedimento, $lista_procedimentos);
 
@@ -483,8 +557,15 @@ class Facade
 
       self::encontrar_instancia($especialidade, true);
 
-      $lista_especialidades = Lista_Especialidades::getRecords();
-      $lista_especialidades = $lista_especialidades[count($lista_especialidades) -1];
+      if(empty(Lista_Especialidades::getRecords()))
+      {
+        $lista_especialidades = new Lista_Especialidades();
+      }
+      else
+      {
+        $lista_especialidades = Lista_Especialidades::getRecords();
+        $lista_especialidades = $lista_especialidades[count($lista_especialidades)-1];
+      }
 
       $lista_especialidades->cadastrar_especialidade($especialidade);
     }
@@ -506,7 +587,15 @@ class Facade
 
       $especialidade = self::encontrar_instancia($especialidade);
       $dentista = self::encontrar_instancia($dentista);
-      $lista_especialidades = Lista_Especialidades::getRecords()[0];
+      if(empty(Lista_Especialidades::getRecords()))
+      {
+        $lista_especialidades = new Lista_Especialidades();
+      }
+      else
+      {
+        $lista_especialidades = Lista_Especialidades::getRecords();
+        $lista_especialidades = $lista_especialidades[count($lista_especialidades)-1];
+      }
 
       $dentista->cadastrar_especialidade($especialidade, $lista_especialidades);
 

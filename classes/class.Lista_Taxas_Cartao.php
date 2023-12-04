@@ -7,7 +7,12 @@ class Lista_Taxas_Cartao extends persist
   protected array $taxas_credito = array();
   protected float $taxa_debito;
 
-  public function __construct(){}
+  public function __construct(float $taxa_debito, array $taxas_credito)
+  {
+    $this->taxas_credito = $taxas_credito;
+    $this->taxa_debito = $taxa_debito;
+    $this->save();
+  }
   public static function getFilename()
   {
     return get_called_class()::$local_filename;

@@ -17,7 +17,8 @@ class Perfil extends persist
     "editar_informacoes" => false,
     "cadastrar_auxiliar" => false, 
     "cadastrar_secretaria" => false,
-    "cadastrar_dentista"  => false,
+    "cadastrar_dentista_parceiro" => false,
+    "cadastrar_dentista_funcionario" => false,
     "cadastrar_cliente" => false, 
     "cadastrar_paciente" => false,
     "cadastrar_procedimento" => false,
@@ -93,7 +94,7 @@ class Perfil extends persist
       return;
     }
     
-    throw (new Exception("\nEste perfil não possui a funcionalidade $funcionalidade\n"));
+    throw (new Exception("\nO perfil $this->nome_perfil não possui a funcionalidade $funcionalidade\n"));
   }
 
   public function get_nome_perfil()

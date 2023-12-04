@@ -8,6 +8,7 @@ class Lista_Procedimentos extends persist
   function __construct()
   {
     $this->procedimentos = Procedimento::getRecords();
+    $this->save();
   }
 
   static public function getFilename()

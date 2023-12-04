@@ -11,9 +11,7 @@ class Dentista_Parceiro extends Dentista
   {
     parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep, $cro, $especialidades);
     
-    $this->comissao = 0.0;
-    $this->save();
-    
+    $this->comissao = 0.0;    
   }
 
   static public function getFilename()
