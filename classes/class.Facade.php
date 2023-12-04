@@ -52,7 +52,7 @@ class Facade
   {
     try
     {
-      //self::possui_funcionalidade(__FUNCTION__);
+      self::possui_funcionalidade(__FUNCTION__);
       $perfil = new Perfil();
       $perfil->criar_perfil($tipo_perfil, $funcionalidades);
     }
@@ -605,8 +605,8 @@ class Facade
       {
         if($objeto->get_index() == $index)
         {
-          break;
           $var = false;
+          break;
         }
       }
 
