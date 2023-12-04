@@ -591,6 +591,8 @@ class Facade
   }
 
 
+  public static function calcular_
+
   public static function calcular_resultado_mensal() : bool
   {
     try
@@ -608,8 +610,16 @@ class Facade
       {
         if($tratamento->get_registro_pagamento() != NULL)
         {
-          if($tratamento->get_index() == )
-          $resultado_mensal += $tratamento->get_registro_pagamento()->get_receita();
+          foreach($array_index as $index)
+          {
+            if($tratamento->get_index() == $index)
+            {
+              break;
+            }
+            $array_index[] = $tratamento->get_index();
+            $tratamento_x = Tratamento::getRecordsByField("index", $index);
+            $resultado_mensal += $tratamento_x[count($tratamento_x)-1]->get_registro_pagamento()->get_receita(); 
+          }
         }
       }
   
