@@ -30,7 +30,7 @@ $taxa_debito = 0.03;
 
 $array_proc = array ("tipo_procedimento");
 
-$procedimento = new Procedimento("descricao", "tipo_procedimento", 100, "detalhe");
+$procedimento = new Procedimento("descricao", "tipo_procedimento", 101, "detalhe");
 
 $procedimentos = array ($procedimento);
 

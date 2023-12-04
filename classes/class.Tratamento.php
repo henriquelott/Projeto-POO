@@ -89,6 +89,7 @@ class Tratamento extends Orcamento
         throw(new Exception("\nEsse cliente nao está cadastrado para este paciente\n"));
       }
 
+      $this->dentista_responsavel->calc_salario_comissao();
       $this->registro_pagamento = new Registro_Pagamento($forma_pagamento, $this->valor_total, $cliente_requerido);
       return;
     }
@@ -107,10 +108,18 @@ class Tratamento extends Orcamento
     throw(new Exception("\nEste procedimento não consta neste tratamento\n"));
   }
 
-public function get_registro_pagamento()
-{
-  return $this->registro_pagamento;    
-}
+
+  public function get_receita()
+  {
+    if($this->registro_pagamento == NULL)
+    {
+      return 0;
+    }
+    else
+    {
+      $this->registro_pagamento->get_receita();
+    }
+  }
   
 }
 ?>

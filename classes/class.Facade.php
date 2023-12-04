@@ -599,31 +599,33 @@ class Facade
 
     foreach($classes as $objeto)
     {
-      if($objeto->get_registro_pagamento() != NULL)
+      $array_index = array();
+      $var = true;
+      foreach($array_index as $index)
       {
-        foreach($array_index as $index)
+        if($objeto->get_index() == $index)
         {
-          if($objeto->get_index() == $index)
-          {
+          break;
+          $var = false;
+        }
+      }
+
+      if($var == true)
+      {
+        $array_index[] = $objeto->get_index();
+        $objeto_x = $classe::getRecordsByField("index", $objeto->get_index());
+        switch($classe)
+        {
+          case "Tratamento":
+            $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_receita();
             break;
-          }
-          $array_index[] = $objeto->get_index();
-          $objeto_x = $classe::getRecordsByField("index", $index);
-          switch($classe)
-          {
-            case "Tratamento":
-              $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_registro_pagamento()->get_receita();
-              break;
 
-            case "Dentista_Parceiro":
-              $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_comissao();
-              break;
+          case "Dentista_Parceiro":
+            $resultado_mensal -= $objeto_x[count($objeto_x)-1]->get_comissao();
+            break;
 
-            default:
-            $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_salario();
-          }
-
-          $resultado_mensal += $objeto_x[count($objeto_x)-1]->get_registro_pagamento()->get_receita(); 
+          default:
+          $resultado_mensal -= $objeto_x[count($objeto_x)-1]->get_salario();
         }
       }
     }
@@ -637,6 +639,7 @@ class Facade
     {
       self::possui_funcionalidade(__FUNCTION__);
 
+      $resultado = 0;
       $array = array("Tratamento", "Dentista_Parceiro", "Dentista_Funcionario", "Secretaria", "Auxiliar");
 
       foreach ($array as $classe)
