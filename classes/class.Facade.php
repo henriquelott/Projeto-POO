@@ -32,7 +32,28 @@ class Facade
     return true;
   }
 
+  public static function realizar_logout()
+  {
+    try
+    {
+      $usuario = Usuario::get_instance();
+      if($usuario == NULL)
+      {
+        throw (new Exception("\nNenhum usuário logado\n"));
+      }
+      else
+      {
+        $usuario->destruct();
+      }
 
+      return false;
+    }
+    catch(Throwable $t)
+    {
+      echo $t->getMessage();
+      return false;
+    }
+  }
   private static function possui_funcionalidade(string $funcionalidade)
   {
     $usuario = Usuario::get_instance();
@@ -48,13 +69,21 @@ class Facade
   }
 
 
-  public static function criar_perfil(string $tipo_perfil, array $funcionalidades)
+  public static function criar_perfil(string $tipo_perfil, ?array $funcionalidades = NULL, ?bool $eh_admin = false)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
-      $perfil = new Perfil();
-      $perfil->criar_perfil($tipo_perfil, $funcionalidades);
+      if(func_get_arg(1) == true)
+      {
+        $perfil = new Perfil($eh_admin);
+      }
+      else
+      {
+        $perfil = new Perfil();
+        $perfil->criar_perfil($tipo_perfil, $funcionalidades);
+      }
+      $perfil->save();
     }
     catch(Throwable $t)
     {
@@ -343,15 +372,22 @@ class Facade
   }
 
 
-  public static function cadastrar_dentista_funcionario(Dentista_Funcionario &$dentista_funcionario)
+  public static function cadastrar_dentista(Dentista &$dentista)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
 
-      self::encontrar_instancia($dentista_funcionario, true);
+      self::encontrar_instancia($dentista, true);
 
-      $dentista_funcionario->save();
+      $lista = Lista_Especialidades::getRecords();
+      $lista = $lista[count($lista) -1];
+      foreach ($lista as $especialidade)
+      {
+        $lista->especialidade_existe($especialidade);
+      }
+
+      $dentista->save();
     }
     catch(Throwable $t)
     {
@@ -361,27 +397,6 @@ class Facade
 
     return true;
   }
-
-
-  public static function cadastrar_dentista_parceiro(Dentista_Parceiro &$dentista_parceiro)
-  {
-    try
-    {
-      self::possui_funcionalidade(__FUNCTION__);
-
-      self::encontrar_instancia($dentista_parceiro, true);
-
-      $dentista_parceiro->save();
-    }
-    catch(Throwable $t)
-    {
-      echo $t->getMessage();
-      return false;
-    }
-
-    return true;
- }
-  
 
   public static function cadastrar_cliente(Paciente &$paciente, Cliente &$cliente)
   {  
@@ -432,7 +447,8 @@ class Facade
       self::possui_funcionalidade(__FUNCTION__);
       self::encontrar_instancia($procedimento, true);
 
-      $lista_procedimentos = Lista_Procedimentos::getRecords()[0];
+      $lista_procedimentos = Lista_Procedimentos::getRecords();
+      $lista_procedimentos = $lista_procedimentos[count($lista_procedimentos) -1];
 
       $lista_procedimentos->cadastrar_procedimento($procedimento);
     }
@@ -455,7 +471,8 @@ class Facade
 
       $procedimento = self::encontrar_instancia($procedimento);
       $orcamento = self::encontrar_instancia($orcamento);
-      $lista_procedimentos = Lista_Procedimentos::getRecords()[0];
+      $lista_procedimentos = Lista_Procedimentos::getRecords();
+      $lista_procedimentos = $lista_procedimentos[count($lista_procedimentos) -1];
 
       $orcamento->cadastrar_procedimento($procedimento, $lista_procedimentos);
 
@@ -475,7 +492,8 @@ class Facade
 
       self::encontrar_instancia($especialidade, true);
 
-      $lista_especialidades = Lista_Especialidades::getRecords()[0];
+      $lista_especialidades = Lista_Especialidades::getRecords();
+      $lista_especialidades = $lista_especialidades[count($lista_especialidades) -1];
 
       $lista_especialidades->cadastrar_especialidade($especialidade);
     }
@@ -625,7 +643,7 @@ class Facade
             break;
 
           default:
-          $resultado_mensal -= $objeto_x[count($objeto_x)-1]->get_salario();
+            $resultado_mensal -= $objeto_x[count($objeto_x)-1]->get_salario();
         }
       }
     }

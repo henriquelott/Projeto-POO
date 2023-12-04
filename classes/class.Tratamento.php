@@ -89,9 +89,21 @@ class Tratamento extends Orcamento
         throw(new Exception("\nEsse cliente nao está cadastrado para este paciente\n"));
       }
 
-      $this->dentista_responsavel->calc_salario_comissao();
+      if(get_class($this->dentista_responsavel) == "Dentista_Parceiro")
+      {
+        $this->calc_comissao_dentista();
+      }
       $this->registro_pagamento = new Registro_Pagamento($forma_pagamento, $this->valor_total, $cliente_requerido);
+      $this->save();
       return;
+    }
+  }
+
+  private function calc_comissao_dentista()
+  {
+    foreach($this->procedimentos as $procedimento)
+    {
+      $this->dentista_responsavel->calc_salario_comissao($procedimento);
     }
   }
 
@@ -117,7 +129,7 @@ class Tratamento extends Orcamento
     }
     else
     {
-      $this->registro_pagamento->get_receita();
+      return $this->registro_pagamento->get_receita();
     }
   }
   

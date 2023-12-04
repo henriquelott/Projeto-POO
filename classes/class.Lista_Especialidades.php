@@ -44,7 +44,7 @@
     {
       foreach($this->especialidades as $especialidade_atual)
       {
-        if($especialidade_atual ==  $especialidade)
+        if($especialidade_atual == $especialidade)
         {
           return;
         }

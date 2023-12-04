@@ -10,6 +10,52 @@ $data_fim = $data_inicio->add($interval);
 
 var_dump($data_fim);*/
 
+$perfil_admin = new Perfil(true);
+
+$user = new Users("login", "senha", "email", "admin");
+
+Facade::realizar_login("login", "senha");
+
+Facade::criar_perfil("perfil_teste", 
+array (
+  "criar_perfil",
+  "criar_usuario",
+  "cadastrar_orcamento",
+  "aprovar_orcamento",
+  "cadastrar_consulta_avaliacao",
+  "cadastrar_consulta",
+  "editar_agenda",
+  "editar_informacoes",
+  "cadastrar_auxiliar", 
+  "cadastrar_secretaria",
+  "cadastrar_dentista",
+  "cadastrar_cliente", 
+  "cadastrar_paciente",
+  "criar_procedimento",
+  "criar_especialidade", 
+  "cadastrar_especialidade",
+  "realizar_pagamento",
+  "cadastrar_taxa_cartao",
+  "calcular_resultado_mensal", 
+  "cadastrar_agenda_padrao",
+  "cadastrar_consulta_de_avaliacao",
+  "realizar_consulta",
+));
+
+Facade::criar_usuario("login_teste", "senha_teste", "email_teste")
+
+Facade::calcular_resultado_mensal();
+
+Facade::
+
+
+
+
+
+Facade::criar_perfil();
+
+Facade::criar_usuario("login", "senha", "email", "admin");
+
 $perfil = new Perfil(true);
 
 $user = new Users("login", "senha", "email", "admin");
@@ -30,7 +76,7 @@ $taxa_debito = 0.03;
 
 $array_proc = array ("tipo_procedimento");
 
-$procedimento = new Procedimento("descricao", "tipo_procedimento", 101, "detalhe");
+$procedimento = new Procedimento("descricao", "tipo_procedimento", 100000, "detalhe");
 
 $procedimentos = array ($procedimento);
 
@@ -42,9 +88,9 @@ Facade::criar_especialidade($especialidades[0]);
 
 Facade::cadastrar_taxa_cartao($taxa_debito, $taxa_credito);
 
-$dentista = new Dentista_Funcionario("Roberval", "robs@gmail.com", "15997763823", "39102060850", "Flor de  Fogo", "65", "Liberdade", "Village", "31270217", "XXX", $especialidades, 50000);
+$dentista = new Dentista_Funcionario("Roberval", "robs@gmail.com", "15997763823", "39102060850", "Flor de  Fogo", "65", "Liberdade", "Village", "31270217", "XXX", $especialidades, 5000);
 
-Facade::cadastrar_dentista_funcionario($dentista);
+Facade::cadastrar_dentista($dentista);
 
 $cliente = new Cliente("Paciente", "email", "telefone", "rg", "2000-3-12");
 
@@ -85,6 +131,8 @@ Facade::cadastrar_consulta($tratamento, $procedimento, '2023-11-15 09:00:00', 10
 $formas_pagamento = array(array("Pix", 0.5), 3 => array("Cartão de crédito", 0.5));
 
 Facade::realizar_pagamento($tratamento, $cliente, $formas_pagamento);
+
+var_dump($tratamento->get_receita());
 
 Facade::calcular_resultado_mensal();
 

@@ -14,12 +14,7 @@
       parent::__construct($nome, $email, $telefone, $cpf, $rua, $numero, $bairro, $complemento, $cep);
 
       $this->cro = $cro;
-      
-      $lista_especialidades = Lista_Especialidades::getRecords()[0];
-      foreach($especialidades as $especialidade)
-      {
-        $this->cadastrar_especialidade($lista_especialidades, $especialidade);
-      }
+      $this->especialidades = $especialidades;
     }
 
     static public function getFilename()
