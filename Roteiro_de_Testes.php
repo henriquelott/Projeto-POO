@@ -17,6 +17,11 @@ embora não tenhamos encontrado algum problema, se houver algum problema na exec
 O único problema conhecido para execuções repetidas, é que o resultado financeiro da clínica parece mudar de valor, pois o calculo acaba levando
 mais funcionários e tratamentos pagos em cosideração do que o número de instancias criadas duarante 1 execução, por conta de index de mesmas instâncias
 de execuções anteriores, que não foram sobrescritos, mas deveriam ter sido.
+
+OUTRO AVISO IMPORTANTE:
+
+No vscode o código funciona perfeitamente. Testamos no replit e parece funcionar mas também parece ser mais propenso a erros (o replit não gera os arquivos .txt caso apagados, e da um erro na hora de rodar o código se eles não existirem, neste caso, sobre o problema com o resultado mensal, pedimos que esvazie os aquivos caso rode no replit).
+Recomendamos que tente o código no vscode, vc pode clonar do nosso repositório públic no git https://github.com/henriquelott/Projeto-POO.git
 */
 
 
