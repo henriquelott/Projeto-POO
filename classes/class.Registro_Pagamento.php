@@ -47,6 +47,11 @@ class Registro_Pagamento extends persist
   {
     return $this->receita;
   }
+
+  public function get_valor_faturado()
+  {
+    return $this->valor_faturado;
+  }
 }
 
 ?>

@@ -31,6 +31,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    echo "\nLogin realizado com sucesso\n";
     return true;
   }
 
@@ -47,7 +48,7 @@ class Facade
       {
         $usuario->destruct();
       }
-
+      echo "\nLogout realizado com sucesso\n";
       return false;
     }
     catch(Throwable $t)
@@ -83,6 +84,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    echo "\nPerfil $tipo_perfil criado com sucesso\n";
     return true;
   }
 
@@ -119,6 +121,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    echo "\nUsuário $login criado com sucesso\n";
     return true;
   }
 
@@ -168,6 +171,11 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    echo "\nOrcamento cadastrado com sucesso para paciente " . $paciente->get_nome() . " com dentista " . $dentista->get_nome() . " contemplando os procedimentos:\n";
+    foreach($orcamento->get_procedimentos() as $procedimento)
+    {
+      echo "\n" . $procedimento->get_tipo() . "\n";
+    }
     return true;
   }
   private static function encontrar_procedimento(Procedimento &$procedimento)
@@ -191,6 +199,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    echo "\nOrcamento de paciente " . $orcamento->get_paciente()->get_nome() . " com dentista " . $orcamento->get_dentista_responsavel()->get_nome() . " aprovado com sucesso\n";
     return true;
   }
   
@@ -219,6 +228,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    echo "\nConsulta de avaliação de paciente " . $paciente->get_nome() . " cadastrada com sucesso com dentista " . $dentista->get_nome() . " para a data " . $data_inicio->format('Y-m-d H:i:s') . "\n";
     return true;
   }
 
@@ -245,6 +255,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    echo "\nConsulta de paciente " . $tratamento->get_paciente()->get_nome() . " com dentista " . $tratamento->get_dentista_responsavel()->get_nome() . " cadastrada com sucesso para a data ". $data_inicio->format("Y-m-d H:i:s") . "\n";
     return true;
   }
 
@@ -270,6 +281,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
+    echo "\nTaxas de cartão cadastradas com sucesso\n";
     return true;
   }
 
@@ -301,6 +313,7 @@ class Facade
     {
       echo $t->getMessage();
     }
+    echo "\nAgenda padrão para dentista " . $dentista->get_nome() . " cadastrada com sucesso\n";
     return true;
   }
 
@@ -404,7 +417,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
-
+    echo "\nDentista funcionário " . $dentista->get_nome() . " cadastrado com sucesso\n";
     return true;
   }
 
@@ -438,7 +451,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
-
+    echo "\nDentista parceiro " . $dentista->get_nome() . " cadastrado com sucesso\n";
     return true;
   }
 
@@ -486,7 +499,11 @@ class Facade
       echo $t->getMessage();
       return false;
     }
-
+    echo "\nPaciente " . $paciente->get_nome() . " cadastrado com sucesso\n";
+    foreach($paciente->get_clientes() as &$cliente)
+    {
+      echo"\nCliente " . $cliente->get_nome() . " cadastrado com sucesso para o paciente " . $paciente->get_nome() . "\n";
+    }
     return true;
   }
 
@@ -516,7 +533,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
-
+    echo "\nProcedimento " . $procedimento->get_tipo() . " criado com sucesso\n";
     return true;
   }
 
@@ -575,7 +592,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
-
+    echo "\nEspecialidade " . $especialidade->get_nome() . " criada com sucesso\n";
     return true;
   }
 
@@ -624,7 +641,7 @@ class Facade
       echo $t->getMessage();
       return false;
     }
-
+    echo "\nPagamento realizado com sucesso do tratamento de paciente " . $tratamento->get_paciente()->get_nome() . " com dentista " . $tratamento->get_dentista_responsavel()->get_nome() . " por " . $cliente->get_nome() . " no valor de " . $tratamento->get_valor() . " reais\n";
     return true;
   }
 
@@ -658,7 +675,7 @@ class Facade
        echo $t->getMessage();
       return false;
     }
-
+    echo "\nConsulta de paciente " . $paciente->get_nome() . " marcada para a data " . $date_time->format('Y-m-d H:i:s') . " realizada com sucesso\n";
     return true;
   }
 

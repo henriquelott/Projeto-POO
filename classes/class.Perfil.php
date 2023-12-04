@@ -60,7 +60,7 @@ class Perfil extends persist
   {
     if(Perfil::getRecordsByField("nome_perfil", $nome_perfil) != null)
     {
-      throw (new Exception("Perfil $nome_perfil já cadastrado"));
+      throw (new Exception("\nPerfil $nome_perfil já cadastrado\n"));
     }
 
     foreach ($lista_funcionalidades as $funcionalidade)

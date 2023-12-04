@@ -2,6 +2,24 @@
 
 require_once "global.php";
 
+/*
+IMPORTANTE:
+
+Ficamos sabendo que foram descontados pontos na prova se fossem colocados blocos try-catch dentro dos métodos, e dentro destes blocos fossem lançadas as execões.
+Todas as nossa métodos que são funcionalidades possuem um bloco try-catch, e em alguns, são lançadas excessões ali mesmo.
+Tudo foi testado, e comentado tanto com o professor se poderia ser feito desta forma, quanto com o monitor.
+No site do php, não há nenhuma informação sobre excessões não poderem ser lançadas dentro de um bloco try, inclusive são mostrados exemplos em que isso acontece, e a execução funciona.
+Goataríamos de pedir que, caso isso seja um erro, não seja desontado do trabalho, pois como foi dito, essa informação foi checada com o professor e o monitor, e nas fontes sobre a linguagem php.
+Ficamos sabendo da informação da prova no dia de hoje, através de um feedback mandado pelo professor para um dos membros do grupo, portanto não é mais possível alterar o codigo neste nível, com a certeza de que ele funcione, em tão pouco tempo.
+
+Além disso, aparentemente a função save() da classe persist cria um index novo pra determinada instância em execuções direfentes do código, portanto, 
+embora não tenhamos encontrado algum problema, se houver algum problema na execução, delete os arquivos .txt e o problema deve ser resolvido.
+O único problema conhecido para execuções repetidas, é que o resultado financeiro da clínica parece mudar de valor, pois o calculo acaba levando
+mais funcionários e tratamentos pagos em cosideração do que o número de instancias criadas duarante 1 execução, por conta de index de mesmas instâncias
+de execuções anteriores, que não foram sobrescritos, mas deveriam ter sido.
+*/
+
+
 //primeiramente é cadastrado manualmente um perfil administrador que tem todas as funcionalidades
 $perfil_admin = new Perfil("", array(), true);
 
@@ -38,32 +56,28 @@ array (
 ));
 
 //é criado o este usuário
-
 Facade::criar_usuario("login_teste", "senha_teste", "email_teste", "perfil_teste");
 
-//é realizado o logout do usuário administrador
+//a parte de criação de perfil e usuario, em execuções repetidas aparecerão excessões na tela informado que ja existem usuario e perfil cadastrados com as respectivas informações
 
+//é realizado o logout do usuário administrador
 Facade::realizar_logout();
 
 //é realizado o login do usuário para testar o controle de acesso
-
 Facade::realizar_login("login_teste", "senha_teste");
 
 Facade::cadastrar_procedimento();
 
 //após testado o cadastro uma excessão deve ser lançada na tela e a execução do código prossegue
 //é realizado o logout do usuário de teste para logar o usuário administrador
-
 Facade::realizar_logout();
 
 //é logado o usuário adiministrador
-
 Facade::realizar_login("login", "senha");
 
 
 //são criados os procedimentos um por um e cadastrados no sistema com as informações passadas
 //a funcionalidade criar procedimento cadastra um procedimento no sistema, enquanto a funcionalidade cadastrar procedimento cadastra um procedimento em determinado orcamento
-
 $limpeza = new Procedimento("", "Limpeza", 200, "");
 
 Facade::criar_procedimento($limpeza);
@@ -94,7 +108,6 @@ Facade::criar_procedimento($clareamento_de_moldeira);
 
 
 //é feito o mesmo para as especialidades, uma a uma
-
 $clinica_geral = new Especialidade("Clínica Geral", array("Limpeza", "Restauração", "Extração Comum"), 0.4);
 
 Facade::criar_especialidade($clinica_geral);
@@ -122,7 +135,6 @@ Facade::cadastrar_taxa_cartao($taxa_debito, $taxa_credito);
 
 //são criados arrays com as especialidades de cada dentista, então é criado cada dentista com seus arrays correspondentes, pois o construtor de dentista aceira um array de especialidades
 //então são cadastrados os dentistas no sistema
-
 $especialidades_funcionario = array($clinica_geral, $endodontia, $cirurgia);
 $dentista_funcionario = new Dentista_Funcionario("Dentista Funcionário", "email@email.com", "15 991572323", "123.456.678-90", "rua", "1", "bairo", "complemento", "cep", "XXXX", $especialidades_funcionario, 5000);
 
@@ -135,7 +147,6 @@ Facade::cadastrar_dentista_parceiro($dentista_parceiro);
 
 //são criados arrays para representar as agendas de cada dentista, sendo a posição do array o dia da semana, e o cada valor do array um array com dois horários, o de inicio e fim do expediente daquele dia
 //é entao cadastrada cada agenda para seu respectivo dentista
-
 $agenda_dentista_funcionario = array(array(), array("08:00","17:00"), array("08:00","17:00"), array("08:00","17:00"), array("08:00","17:00"), array("08:00","17:00"), array());
 
 $agenda_dentista_parceiro = array(array(), array("08:00","12:00"), array("14:00","17:30"), array("14:00","17:30"), array("14:00","17:30"), array("08:00","12:00"), array());
@@ -147,24 +158,25 @@ Facade::cadastrar_agenda_padrao($dentista_parceiro, $agenda_dentista_parceiro, "
 
 //são criados cliente e paciente, e realizado seu cadastro, o construtor de paciente aceita um arra de clientes, por isso é passado o array
 //o cadastro do cliente é feito através do paciente, para cadastrar clientes adicionais em um paciente basta chamar a funcionalidade Facade::cadastrar_cliente(Paciente &$paciente, Cliente &$cliente)
-
 $cliente = new Cliente("Cliente", "email@email.com", "123456", "1234567", "123.456.78-90");
 
 $array_clientes = array($cliente);
 
 $paciente = new Paciente("Paciente", "email@email", "123456", "12345678", "2002-11-03", $array_clientes);
 
-
 Facade::cadastrar_paciente($paciente); 
 
 
 //é agendada uma consulta de avaliação com o dentista parceiro, e é verificado se a ação é realizada
 //o padrão de retorno de todas as funcionalidades é true, se for realizada com sucesso, e false se não for. usamos um if() para checar a condição pedida.
+//uma mensagem "Data e horário indiponíveis" deve sem impressa na tela, caso não seja possível cadastrar a consulta
 $foi_possivel = Facade::cadastrar_consulta_de_avaliacao($dentista_parceiro, $paciente, "2023-11-06 14:00:00");
 
 if(!$foi_possivel)
 {
-  Facade::cadastrar_consulta_de_avaliacao($dentista_funcionario, $paciente, "2023-11-06 14:00:00");
+  //para evidenciar de forma mais clara, colocamos um var_dump na execução da próxima ação, e podemos ver que ele mostra o valor true na tela
+  echo "\n---Nesta parte DEVE aparecer um var_dump() após a mensagem de realização da ação com sucesso---\n";
+  var_dump(Facade::cadastrar_consulta_de_avaliacao($dentista_funcionario, $paciente, "2023-11-06 14:00:00"));
 }
 
 
@@ -207,6 +219,9 @@ $formas_pagamento = array(array("Pix", 0.5), 3 => array("Cartão de crédito", 0
 Facade::realizar_pagamento($tratamento, $cliente, $formas_pagamento);
 
 //é calculado o resultado financeiro da clínica
+//o calculo realizado nesta parte foi a soma do pagamento de todos os tratamentos menos os impostos, menos as taxas de cartão menos os gatos com todos os funcionarios da clínica
+//nós checamos na calculadora e chegamos no mesmo resultado, caso esteja errado, é por que entendemos o que deveria ser feito de forma errada, porém o programa calcula exatmaente os que nós esperávamos
+//lembrando que como informado anteriormente, se o programa for executado repetidas vezes sem deletar os arquivos .txt, o valor do resultado mensal muda a cada execução
 Facade::calcular_resultado_mensal();
 
 

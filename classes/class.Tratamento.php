@@ -132,6 +132,18 @@ class Tratamento extends Orcamento
       return $this->registro_pagamento->get_receita();
     }
   }
+
+  public function get_valor()
+  {
+    if($this->registro_pagamento == NULL)
+    {
+      return 0;
+    }
+    else
+    {
+      return $this->registro_pagamento->get_valor_faturado();
+    }
+  }
   
 }
 ?>
