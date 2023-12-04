@@ -7,6 +7,7 @@
     protected Paciente $paciente;
     protected Dentista $dentista_responsavel;
     protected array $procedimentos;
+    protected Forma_De_Pagamento $forma_de_pagamento; 
     protected float $valor_total;
 
     function __construct(Paciente &$Paciente, Dentista &$Dentista_Responsavel, array $procedimentos, ?float $valor_total = 0.0 )
@@ -45,7 +46,7 @@
           $this->dentista_responsavel->calc_salario_comissao($procedimento);
         }
       }
-
+      $this->save();
       $tratamento->dentista_responsavel->save();
       $tratamento->save();
     }
@@ -55,6 +56,8 @@
       if(($forma_pagamento == "Dinheiro" || $forma_pagamento == "Pix") && $num_parcelas == 0)
       {
         $pagamento = new A_Vista($forma_pagamento);
+        $this->forma_de_pagamento = $pagamento;
+        $this->save();
         $pagamento->save(); 
       }
       else if ($forma_pagamento == "Cartão de crédito" || $forma_pagamento == "Cartão de débito")
@@ -65,6 +68,8 @@
             if($num_parcelas >= 1 && $num_parcelas <= 6)
             {
               $pagamento = new Cartao($forma_pagamento, $num_parcelas);
+              $this->forma_de_pagamento = $pagamento;
+              $this->save();
               $pagamento->save();
             }
             else
@@ -77,6 +82,8 @@
             if($num_parcelas == 0)
             {
               $pagamento = new Cartao($forma_pagamento);
+              $this->forma_de_pagamento = $pagamento;
+              $this->save();
               $pagamento->save();
             }
             else 
@@ -167,6 +174,11 @@
     public function get_valor_total()
     {
       return $this->valor_total;
+    }
+
+    public function get_forma_pagamento()
+    {
+      return $this->forma_de_pagamento;
     }
   }
 ?>

@@ -5,7 +5,6 @@ abstract class Forma_De_Pagamento extends persist
 {
   protected static $local_filename = "Forma_De_Pagamento.txt";
   protected string $forma_pagamento;
-  protected Calculo_Desconto $calculo_desconto;
 
   function __construct ($forma_pagamento)
   {

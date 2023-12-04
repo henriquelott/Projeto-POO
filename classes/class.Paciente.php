@@ -9,13 +9,14 @@
     protected array $clientes;
     protected array $consultas;
 
-    function __construct($nome, $email, $telefone, $rg, string $nascimento)
+    function __construct($nome, $email, $telefone, $rg, string $nascimento, array $clientes)
     {
       parent::__construct($nome, $email, $telefone);
       $nascimento = new DateTime($nascimento);
       $this->nascimento = $nascimento;
       $this->rg = $rg;
       $this->nascimento = $nascimento;
+      $this->clientes = $clientes;
       $this->consultas = array();
     }
 
@@ -33,11 +34,6 @@
         return;
       }
       throw(new Exception("Consulta não encontrada"));
-    }
-
-    public function cadastrar_cliente($cliente)
-    {
-      array_push($this->clientes, $cliente);
     }
     
     public function confirmar_pagamento($recibo, $cliente)
@@ -59,6 +55,8 @@
     {
       array_push($this->consultas, $consulta);
       $this->save();
+
+      //var_dump($consulta);
     }
 
     public function realizar_consulta(DateTime $data)
@@ -90,6 +88,13 @@
           return;
         } 
       }
+    }
+
+    public function cadastrar_cliente(cliente &$cliente)
+    {
+      $this->clientes[] = $cliente;
+      $cliente->save();
+      $this->save();
     }
 
     public function set_nome($nome)

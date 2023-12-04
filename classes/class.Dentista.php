@@ -69,6 +69,6 @@
       }
     }
 
-    abstract public function calc_salario_comissao(?Procedimento $procedimento = NULL);
+    abstract public function calc_salario_comissao(?Procedimento $procedimento);
   }
   ?>

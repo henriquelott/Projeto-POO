@@ -169,8 +169,6 @@ class Facade
       echo $t->getMessage();
       return false;
     }
-
-    echo "funcionas";
     return true;
   }
   
@@ -213,8 +211,9 @@ class Facade
       $procedimento = self::encontrar_instancia($procedimento);    
 
       $data_inicio = new DateTime($data);
+      $data_fim = new DateTime($data);
       $interval = DateInterval::createFromDateString("$duracao_minutos minutes");
-      $data_fim = $data_inicio->add($interval);
+      $data_fim->add($interval);
       $data_consulta = new Data($data_inicio, $data_fim);
 
       $tratamento->cadastar_consulta($data_consulta, $procedimento);
@@ -384,15 +383,16 @@ class Facade
  }
   
 
-  public static function cadastrar_cliente(Cliente &$cliente)
+  public static function cadastrar_cliente(Paciente &$paciente, Cliente &$cliente)
   {  
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
 
+      $paciente = self::encontrar_instancia($paciente);
       self::encontrar_instancia($cliente, true);
 
-      $cliente->save();
+      $paciente->cadastrar_cliente($cliente);
     }
     catch(Throwable $t)
     {
@@ -510,17 +510,12 @@ class Facade
   }
 
 
-  public static function realizar_pagamento(Tratamento $tratamento, Cliente $cliente, array $formas_de_pagamento)
+  public static function realizar_pagamento(Tratamento &$tratamento, Cliente &$cliente, ?array $formas_de_pagamento = NULL)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
       $tratamento = self::encontrar_instancia($tratamento);
-      foreach($formas_de_pagamento as $forma_pagamento => $porcentagem_valor_total)
-      {
-        $forma_pagamento = self::encontrar_instancia($forma_pagamento);
-      }
-      
       $cliente = self::encontrar_instancia($cliente);
 
       $tratamento->realizar_pagamento($cliente, $formas_de_pagamento);
@@ -603,13 +598,19 @@ class Facade
       self::possui_funcionalidade(__FUNCTION__);
       
       $tratamentos = Tratamento::getRecords();
+
+      var_dump($tratamentos);
       $dentistas_parceiros = Dentista_Parceiro::getRecords();
       $dentistas_funcionarios = Dentista_Funcionario::getRecords();
   
       $resultado_mensal = 0;
       foreach($tratamentos as $tratamento)
       {
-        $resultado_mensal += $tratamento->get_registro_pagamento()->get_receita();
+        if($tratamento->get_registro_pagamento() != NULL)
+        {
+          if($tratamento->get_index() == )
+          $resultado_mensal += $tratamento->get_registro_pagamento()->get_receita();
+        }
       }
   
       foreach($dentistas_parceiros as $dentista_parceiro)

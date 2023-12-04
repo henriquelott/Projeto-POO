@@ -2,7 +2,7 @@
     include_once('container.php');
     abstract class persist {
         private ?string $filename;
-        private ?int $index = null; 
+        protected ?int $index = null; 
         public function __construct() {        
             if (func_num_args()==1) {
                 $this->filename = func_get_arg(0);	                		
@@ -78,6 +78,11 @@
         public function __toString()
         {
             return print_r($this);
+        }
+
+        public function get_index()
+        {
+          return $this->index;
         }
 
         abstract static public function getFilename();

@@ -33,7 +33,7 @@ class Cartao extends Forma_De_Pagamento
   
   public function calcular_valor($valortotal)
   {
-    return this->$calculo_desconto->calcular_desconto($valortotal, $this->taxa_cartao); 
+    return $valortotal * $this->taxa_cartao; 
   }
 
   public function get_taxa()

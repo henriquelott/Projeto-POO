@@ -30,7 +30,9 @@ $taxa_debito = 0.03;
 
 $array_proc = array ("tipo_procedimento");
 
-$procedimentos = array (new Procedimento("descricao", "tipo_procedimento", 100, "detalhe"));
+$procedimento = new Procedimento("descricao", "tipo_procedimento", 100, "detalhe");
+
+$procedimentos = array ($procedimento);
 
 $especialidades = array(new Especialidade("especialidade", $array_proc, 10)); 
 
@@ -44,7 +46,13 @@ $dentista = new Dentista_Funcionario("Roberval", "robs@gmail.com", "15997763823"
 
 Facade::cadastrar_dentista_funcionario($dentista);
 
-$paciente = new Paciente("Paciente", "email", "telefone", "rg", "2000-3-12");
+$cliente = new Cliente("Paciente", "email", "telefone", "rg", "2000-3-12");
+
+$cliente->save(); 
+
+$clientes = array($cliente);
+
+$paciente = new Paciente("Paciente", "email", "telefone", "rg", "2000-3-12", $clientes);
 
 Facade::cadastrar_paciente($paciente);
 
@@ -66,9 +74,19 @@ Facade::cadastrar_orcamento($orcamento);
 
 Facade::aprovar_orcamento($orcamento,"Cartão de crédito", 2);
 
-$orcamentor = Orcamento::getRecordsByField("paciente", $paciente);
+//var_dump($orcamento);
 
-//var_dump($orcamentor);
+$tratamento = Tratamento::getRecordsByField("paciente", $paciente);
+
+$tratamento = $tratamento[count($tratamento)-1];
+
+Facade::cadastrar_consulta($tratamento, $procedimento, '2023-11-15 09:00:00', 100);
+
+$formas_pagamento = array(array("Pix", 0.5), 3 => array("Cartão de crédito", 0.5));
+
+Facade::realizar_pagamento($tratamento, $cliente, $formas_pagamento);
+
+Facade::calcular_resultado_mensal();
 
 
 
