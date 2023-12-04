@@ -69,21 +69,12 @@ class Facade
   }
 
 
-  public static function criar_perfil(string $tipo_perfil, ?array $funcionalidades = NULL, ?bool $eh_admin = false)
+  public static function criar_perfil(string $tipo_perfil, array $funcionalidades)
   {
     try
     {
       self::possui_funcionalidade(__FUNCTION__);
-      if(func_get_arg(1) == true)
-      {
-        $perfil = new Perfil($eh_admin);
-      }
-      else
-      {
-        $perfil = new Perfil();
-        $perfil->criar_perfil($tipo_perfil, $funcionalidades);
-      }
-      $perfil->save();
+      $perfil = new Perfil($tipo_perfil, $funcionalidades);
     }
     catch(Throwable $t)
     {
@@ -107,13 +98,13 @@ class Facade
         $user = Users::getRecordsByField("login", $login);
         if($user != null)
         {
-          echo "<script>alert('Nome de usuário já existe!');</script>";
+         // echo "<script>alert('Nome de usuário já existe!');</script>";
           throw (new Exception("\nNome de usuário já existe\n"));
         }
         else
         {
-          new Users($login, $senha, $email, $perfil[0]);
-          echo "<script>alert('Cadastro criado com sucesso!');</script>";
+          new Users($login, $senha, $email, $nome_perfil);
+         // echo "<script>alert('Cadastro criado com sucesso!');</script>";
         }
       }
       else

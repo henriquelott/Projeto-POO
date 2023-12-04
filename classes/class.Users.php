@@ -12,6 +12,7 @@ class Users extends persist
     public function __construct(string $login, string $senha, string $email, string $tipo_perfil)
     {
       $perfil = Perfil::getRecordsByField("nome_perfil", $tipo_perfil);
+
       if(!empty($perfil))
       {
         $this->login = $login;

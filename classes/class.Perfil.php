@@ -4,7 +4,7 @@ require_once "global.php";
 class Perfil extends persist 
 {
   protected static string $local_filename = "Perfil.txt";
-  protected string $nome_perfil;
+  protected ?string $nome_perfil = NULL;
   protected array $lista_funcionalidades = array
   (
     "criar_perfil" => false,
@@ -32,8 +32,9 @@ class Perfil extends persist
     "realizar_consulta" => false,
   );
 
-  function __construct(?bool $eh_admin = NULL)
+  function __construct(string $nome_perfil, array $funcionalidades, ?bool $eh_admin = false)
   {
+    $this->nome_perfil = NULL;
     if($eh_admin)
     {
       $perfil = Perfil::getRecordsByField("nome_perfil", "admin");
@@ -47,15 +48,14 @@ class Perfil extends persist
         }
         $this->save();
       }
-      else
-      {
-        $this->nome_perfil = $perfil[0]->get_nome_perfil();
-        $this->lista_funcionalidades = $perfil[0]->get_lista_funcionalidades();
-      }
+    }
+    else
+    {
+      $this->criar_perfil($nome_perfil, $funcionalidades);
     }
   }
 
-  public function criar_perfil(string $nome_perfil, array $lista_funcionalidades)
+  private function criar_perfil(string $nome_perfil, array $lista_funcionalidades)
   {
     if(Perfil::getRecordsByField("nome_perfil", $nome_perfil) != null)
     {
