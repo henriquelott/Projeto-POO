@@ -18,17 +18,23 @@ O único problema conhecido para execuções repetidas, é que o resultado finan
 mais funcionários e tratamentos pagos em cosideração do que o número de instancias criadas duarante 1 execução, por conta de index de mesmas instâncias
 de execuções anteriores, que não foram sobrescritos, mas deveriam ter sido.
 
+Para demonstrar este problema das execuções repetidas, nós criamos um arquivo chamado teste.php, que cria um cliente e salva ele, em seguida é feito uma var_dump()
+de Cliente::getRecods. Basta executar o código várias vezes para ver que a cada execução o array retornado aumenta de tamanho, salvando varias vezes o mesmo cliente.
+
 OUTRO AVISO IMPORTANTE:
 
 No vscode o código funciona perfeitamente. Testamos no replit e parece funcionar mas também parece ser mais propenso a erros (o replit não gera os arquivos .txt caso apagados, e da um erro na hora de rodar o código se eles não existirem, neste caso, sobre o problema com o resultado mensal, pedimos que esvazie os aquivos caso rode no replit).
 Recomendamos que tente o código no vscode, vc pode clonar do nosso repositório públic no git https://github.com/henriquelott/Projeto-POO.git
 */
 
+//primeiramente tentamos acessar uma funcionalidade sem que haja nenhum usuário logado, o sistema deve jogar uma exceção.
+Facade::calcular_resultado_mensal();
 
-//primeiramente é cadastrado manualmente um perfil administrador que tem todas as funcionalidades
-$perfil_admin = new Perfil("", array(), true);
+//em seguida é cadastrado manualmente um perfil administrador que tem todas as funcionalidades
+$perfil_admin = new Perfil("", array(), true);//a forma como são passados os parâmetros nesta criação são dessa forma para que a classe perfil crie automaticamente um perfil com todas as fncionalidades
 
 $user = new Users("login", "senha", "email", "admin");
+
 
 //é realizado o login do usuario administrador e é criado um perfil com todas as funcionalidades, exceto cadastrar procedimento
 Facade::realizar_login("login", "senha");
