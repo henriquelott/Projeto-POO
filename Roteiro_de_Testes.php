@@ -6,10 +6,10 @@ require_once "global.php";
 IMPORTANTE:
 
 Ficamos sabendo que foram descontados pontos na prova se fossem colocados blocos try-catch dentro dos métodos, e dentro destes blocos fossem lançadas as execões.
-Todas as nossa métodos que são funcionalidades possuem um bloco try-catch, e em alguns, são lançadas excessões ali mesmo.
+Todas os nossos métodos que são funcionalidades possuem um bloco try-catch, e em alguns, são lançadas excessões ali mesmo.
 Tudo foi testado, e comentado tanto com o professor se poderia ser feito desta forma, quanto com o monitor.
 No site do php, não há nenhuma informação sobre excessões não poderem ser lançadas dentro de um bloco try, inclusive são mostrados exemplos em que isso acontece, e a execução funciona.
-Goataríamos de pedir que, caso isso seja um erro, não seja desontado do trabalho, pois como foi dito, essa informação foi checada com o professor e o monitor, e nas fontes sobre a linguagem php.
+Gostaríamos de pedir que, caso isso seja um erro, não seja desontado do trabalho, pois como foi dito, essa informação foi checada com o professor e o monitor, e nas fontes sobre a linguagem php.
 Ficamos sabendo da informação da prova no dia de hoje, através de um feedback mandado pelo professor para um dos membros do grupo, portanto não é mais possível alterar o codigo neste nível, com a certeza de que ele funcione, em tão pouco tempo.
 
 Além disso, aparentemente a função save() da classe persist cria um index novo pra determinada instância em execuções direfentes do código, portanto, 
@@ -19,19 +19,26 @@ mais funcionários e tratamentos pagos em cosideração do que o número de inst
 de execuções anteriores, que não foram sobrescritos, mas deveriam ter sido.
 
 Para demonstrar este problema das execuções repetidas, nós criamos um arquivo chamado teste.php, que cria um cliente e salva ele, em seguida é feito uma var_dump()
-de Cliente::getRecods. Basta executar o código várias vezes para ver que a cada execução o array retornado aumenta de tamanho, salvando varias vezes o mesmo cliente.
+de Cliente::getRecords. Basta executar o código várias vezes para ver que a cada execução o array retornado aumenta de tamanho, salvando várias vezes o mesmo cliente.
+Vale ressaltar que nós não alteramos em absolutamente nada as classes persist e container.
 
 OUTRO AVISO IMPORTANTE:
 
-No vscode o código funciona perfeitamente. Testamos no replit e parece funcionar mas também parece ser mais propenso a erros (o replit não gera os arquivos .txt caso apagados, e da um erro na hora de rodar o código se eles não existirem, neste caso, sobre o problema com o resultado mensal, pedimos que esvazie os aquivos caso rode no replit).
-Recomendamos que tente o código no vscode, vc pode clonar do nosso repositório públic no git https://github.com/henriquelott/Projeto-POO.git
+No vscode o código funciona perfeitamente. Testamos no replit e parece funcionar mas também parece ser mais propenso a erros (o replit não gera os arquivos .txt caso apagados, 
+e da um erro na hora de rodar o código se eles não existirem, neste caso, sobre o problema com o resultado mensal, pedimos que esvazie os aquivos caso rode no replit).
+Recomendamos que tente rodar o código no vscode, vc pode clonar do nosso repositório públic no git https://github.com/henriquelott/Projeto-POO.git
 */
+
+
+//------------------------------------------------ROTEIRO DE TESTES------------------------------------------------------
+
 
 //primeiramente tentamos acessar uma funcionalidade sem que haja nenhum usuário logado, o sistema deve jogar uma exceção.
 Facade::calcular_resultado_mensal();
 
+
 //em seguida é cadastrado manualmente um perfil administrador que tem todas as funcionalidades
-$perfil_admin = new Perfil("", array(), true);//a forma como são passados os parâmetros nesta criação são dessa forma para que a classe perfil crie automaticamente um perfil com todas as fncionalidades
+$perfil_admin = new Perfil("", array(), true);//a forma como são passados os parâmetros nesta criação é assim para que a classe perfil crie automaticamente um perfil com todas as fncionalidades
 
 $user = new Users("login", "senha", "email", "admin");
 
@@ -79,9 +86,11 @@ Facade::realizar_login("login_teste", "senha_teste");
 
 Facade::cadastrar_procedimento();
 
+
 //após testado o cadastro uma excessão deve ser lançada na tela e a execução do código prossegue
 //é realizado o logout do usuário de teste para logar o usuário administrador
 Facade::realizar_logout();
+
 
 //é logado o usuário adiministrador
 Facade::realizar_login("login", "senha");
@@ -221,13 +230,14 @@ Facade::cadastrar_consulta($tratamento, $restauracao, "2023-11-21 08:00:00", 120
 Facade::cadastrar_consulta($tratamento, $restauracao, "2023-11-27 13:00:00", 120);
 
 
-
 //para realizar o pagamento, é criado um array com as formas de pagamento e o percentual que cada uma representa do total pago
 //foram passadas novas formas de pagamento como foi solicitado, mas caso não fosse passada nenhuma, a forma de pagamento registrada seria a que foi cadastrada no orcamento em sua aprovação
 $formas_pagamento = array(array("Pix", 0.5), 3 => array("Cartão de crédito", 0.5));
 
+
 //é realizado o pagamento
 Facade::realizar_pagamento($tratamento, $cliente, $formas_pagamento);
+
 
 //é calculado o resultado financeiro da clínica
 //o calculo realizado nesta parte foi a soma do pagamento de todos os tratamentos menos os impostos, menos as taxas de cartão menos os gatos com todos os funcionarios da clínica

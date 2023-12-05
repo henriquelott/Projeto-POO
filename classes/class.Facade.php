@@ -762,7 +762,7 @@ class Facade
         $resultado += self::calcular_resultado_mensal_iterado($classe);
       }
       
-      echo "\nResultado mensal: $resultado\n";
+      echo "\nResultado mensal: $resultado reais\n";
       return true;
     }
     catch(Throwable $t)
